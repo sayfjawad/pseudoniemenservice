@@ -48,5 +48,3 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: ${{ github.event_name != 'pull_request' }}
-        run: |
-          docker push --all-tags ghcr.io/${{ github.repository }}
