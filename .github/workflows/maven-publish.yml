@@ -60,5 +60,4 @@ jobs:
       - name: Push docker image
         if: github.event_name != 'pull_request'
         run: |
-          docker load < result
           docker push ghcr.io/ictu/pseudoniemenservice:latest
