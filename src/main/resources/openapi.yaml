@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Pseudoniemen Service
+  version: 0.1.0
+servers:
+  - url: http://localhost/v1
+paths:
+  /getToken:
+    post:
+      summary: get a token
+      operationId: getToken
+      requestBody:
+        $ref: '#/components/requestBodies/getTokenRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/getTokenResponse'
+  /exchangeToken/{token}:
+    post:
+      summary: get an identifier
+      operationId: exchangeTokenForIdentifier
+      parameters:
+        - name: token
+          in: path
+          description: a token to exchange
+          required: true
+          schema:
+            $ref: '#/components/schemas/token'
+      requestBody:
+        $ref: '#/components/requestBodies/exchangeTokenRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/exchangeTokenResponse'
+components:
+  schemas:
+    token:
+      type: string
+    identifier:
+      type: object
+      properties:
+        identifierValue:
+          type: string
+        identifierType:
+          $ref: '#/components/schemas/identifierTypes'
+    identifierTypes:
+      type: string
+      nullable: false
+      enum:
+        - BSN
+        - SECTOR_PSEUDO
+        - ORGANISATION_PSEUDO
+  responses:
+    getTokenResponse:
+      description: Get a token Response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/token'
+    exchangeTokenResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/identifier'
+  requestBodies:
+    getTokenRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/identifier'
+    exchangeTokenRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/identifierTypes'
