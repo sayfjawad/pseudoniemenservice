@@ -14,22 +14,24 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/getTokenResponse'
-  /exchangeToken/{token}:
+  /exchangeToken:
     post:
       summary: get an identifier
       operationId: exchangeTokenForIdentifier
-      parameters:
-        - name: token
-          in: path
-          description: a token to exchange
-          required: true
-          schema:
-            $ref: '#/components/schemas/token'
       requestBody:
         $ref: '#/components/requestBodies/exchangeTokenRequest'
       responses:
         '200':
           $ref: '#/components/responses/exchangeTokenResponse'
+  /exchangeIdentifier:
+    post:
+      summary: get an identifier
+      operationId: exchangeIdentifierForIdentifier
+      requestBody:
+        $ref: '#/components/requestBodies/exchangeIdentifierRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/exchangeIdentifierResponse'
 components:
   schemas:
     token:
@@ -61,6 +63,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/identifier'
+    exchangeIdentifierResponse:
+      description: successful operation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/identifier'
   requestBodies:
     getTokenRequest:
       required: true
@@ -73,4 +81,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/identifierTypes'
+            properties:
+              token:
+                $ref: '#/components/schemas/token'
+              identifierType:
+                $ref: '#/components/schemas/identifierTypes'
+    exchangeIdentifierRequest:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/identifier'
