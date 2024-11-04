@@ -36,6 +36,11 @@ components:
   schemas:
     token:
       type: string
+    oin:
+      type: string
+      pattern: '^\d{20}$'
+      minLength: 20
+      maxLength: 20
     identifier:
       type: object
       properties:
@@ -75,7 +80,11 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/identifier'
+            properties:
+              identifier:
+                $ref: '#/components/schemas/identifier'
+              oin:
+                $ref: '#/components/schemas/oin'
     exchangeTokenRequest:
       required: true
       content:
@@ -91,4 +100,8 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/identifier'
+            properties:
+              identifier:
+                $ref: '#/components/schemas/identifier'
+              oin:
+                $ref: '#/components/schemas/oin'
