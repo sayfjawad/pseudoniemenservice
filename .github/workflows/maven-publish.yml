@@ -36,7 +36,7 @@ jobs:
 
       - name: Build Native with Maven
         if: github.event_name != 'pull_request'
-        run: mvn -ntp -B clean spring-boot:build-image -Dspring-boot.build-image.imageName=ghcr.io/ictu/pseudoniemenservice:latest
+        run: mvn -Pnative -ntp -B clean install spring-boot:build-image -Dspring-boot.build-image.imageName=ghcr.io/ictu/pseudoniemenservice:latest
 
       - name: Build with Maven
         if: github.event_name == 'pull_request'

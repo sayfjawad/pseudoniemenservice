@@ -59,21 +59,27 @@ components:
     getTokenResponse:
       description: Get a token Response
       content:
-        text/plain:
+        application/json:
           schema:
-            $ref: '#/components/schemas/token'
+            properties:
+              token:
+                $ref: '#/components/schemas/token'
     exchangeTokenResponse:
       description: successful operation
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/identifier'
+            properties:
+              identifier:
+                $ref: '#/components/schemas/identifier'
     exchangeIdentifierResponse:
       description: successful operation
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/identifier'
+            properties:
+              identifier:
+                $ref: '#/components/schemas/identifier'
   requestBodies:
     getTokenRequest:
       required: true
