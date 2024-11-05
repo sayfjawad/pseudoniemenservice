@@ -3,7 +3,7 @@ info:
   title: Pseudoniemen Service
   version: 0.1.0
 servers:
-  - url: http://localhost/v1
+  - url: /v1
 paths:
   /getToken:
     post:
@@ -16,7 +16,7 @@ paths:
           $ref: '#/components/responses/getTokenResponse'
   /exchangeToken:
     post:
-      summary: get an identifier
+      summary: excgange token for an identifier
       operationId: exchangeTokenForIdentifier
       requestBody:
         $ref: '#/components/requestBodies/exchangeTokenRequest'
@@ -25,7 +25,7 @@ paths:
           $ref: '#/components/responses/exchangeTokenResponse'
   /exchangeIdentifier:
     post:
-      summary: get an identifier
+      summary: exchange an identifier for another identifier
       operationId: exchangeIdentifierForIdentifier
       requestBody:
         $ref: '#/components/requestBodies/exchangeIdentifierRequest'
@@ -59,7 +59,7 @@ components:
     getTokenResponse:
       description: Get a token Response
       content:
-        application/json:
+        text/plain:
           schema:
             $ref: '#/components/schemas/token'
     exchangeTokenResponse:

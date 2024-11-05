@@ -1,4 +1,4 @@
-package nl.ictu.controller;
+package nl.ictu.controller.v1;
 
 import nl.ictu.psuedoniemenservice.generated.server.api.ExchangeIdentifierApi;
 import nl.ictu.psuedoniemenservice.generated.server.model.WsGetTokenRequest;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ExchangeIdentifier implements ExchangeIdentifierApi {
+public class ExchangeIdentifier implements ExchangeIdentifierApi, VersionOneController {
     @Override
     public ResponseEntity<WsIdentifier> exchangeIdentifierForIdentifier(WsGetTokenRequest wsGetTokenRequest) {
         final WsIdentifier wsIdentifier = new WsIdentifier().identifierType(WsIdentifierTypes.BSN).identifierValue("476288216");

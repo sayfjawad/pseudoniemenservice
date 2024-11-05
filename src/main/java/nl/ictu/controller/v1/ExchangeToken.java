@@ -1,4 +1,4 @@
-package nl.ictu.controller;
+package nl.ictu.controller.v1;
 
 import nl.ictu.psuedoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.psuedoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ExchangeToken implements ExchangeTokenApi {
+public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
     @Override
     public ResponseEntity<WsIdentifier> exchangeTokenForIdentifier(WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
