@@ -15,6 +15,12 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
 
     steps:
 
@@ -54,7 +60,7 @@ jobs:
             --builder docker.io/paketobuildpacks/builder-jammy-buildpackless-tiny \
             --buildpack gcr.io/paketo-buildpacks/java \
             --path . \
-            --platform linux/arm64 \
+            --platform ${{ matrix.platform }} \
             --report-output-dir ./report.toml \
 #
 #      - name: Set up JDK
