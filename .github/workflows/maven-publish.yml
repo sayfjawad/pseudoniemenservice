@@ -21,33 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
-        if: github.event_name != 'pull_request'
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/ictu/pseudoniemenservice
-
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          java-version: '21'
-          distribution: "liberica"
-          cache: maven
-
-      - name: Build Native with Maven
-        if: github.event_name != 'pull_request'
-        run: mvn -ntp -B clean install spring-boot:build-image -Dspring-boot.build-image.imageName=ghcr.io/ictu/pseudoniemenservice:latest
-
-      - name: Build with Maven
-        if: github.event_name == 'pull_request'
-        run: mvn -ntp -B clean install
+#      - name: Extract metadata (tags, labels) for Docker
+#        id: meta
+#        if: github.event_name != 'pull_request'
+#        uses: docker/metadata-action@v5
+#        with:
+#          images: ghcr.io/ictu/pseudoniemenservice
 
       - name: Login to GHCR
         if: github.event_name != 'pull_request'
@@ -57,6 +36,37 @@ jobs:
           username: ictu
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and publish OCI image
+        if: github.event_name != 'pull_request'
+        run: |
+          pack build ghcr.io/ictu/pseudoniemenservice \
+            --builder docker.io/paketobuildpacks/builder-jammy-buildpackless-tiny \
+            --buildpack gcr.io/paketo-buildpacks/java \
+            --path . \
+            --platform linux/arm64 \
+            --report-output-dir ./report.toml \
+#
+#      - name: Set up JDK
+#        uses: actions/setup-java@v4
+#        with:
+#          java-version: '21'
+#          distribution: "liberica"
+#          cache: maven
+
+#      - name: Build Native with Maven
+#        if: github.event_name != 'pull_request'
+#        run: mvn -ntp -B clean install spring-boot:build-image -Dspring-boot.build-image.imageName=ghcr.io/ictu/pseudoniemenservice:latest
+#
+#      - name: Build with Maven
+#        if: github.event_name == 'pull_request'
+#        run: mvn -ntp -B clean install
+#
       - name: Push docker image
         if: github.event_name != 'pull_request'
         run: |
