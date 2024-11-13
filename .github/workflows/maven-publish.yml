@@ -81,4 +81,4 @@ jobs:
       - name: Push docker image
         if: github.event_name != 'pull_request'
         run: |
-          docker push ghcr.io/ictu/pseudoniemenservice:latest
+          docker push --platform ${{ matrix.platform }} ghcr.io/ictu/pseudoniemenservice:latest
