@@ -62,6 +62,7 @@ jobs:
             --path . \
             --platform ${{ matrix.platform }} \
             --report-output-dir ./report.toml \
+            --publish
 #
 #      - name: Set up JDK
 #        uses: actions/setup-java@v4
@@ -78,7 +79,7 @@ jobs:
 #        if: github.event_name == 'pull_request'
 #        run: mvn -ntp -B clean install
 #
-      - name: Push docker image
-        if: github.event_name != 'pull_request'
-        run: |
-          docker push --platform ${{ matrix.platform }} ghcr.io/ictu/pseudoniemenservice:latest
+#      - name: Push docker image
+#        if: github.event_name != 'pull_request'
+#        run: |
+#          docker push --platform ${{ matrix.platform }} ghcr.io/ictu/pseudoniemenservice:latest
