@@ -57,7 +57,7 @@ jobs:
       - name: Build and publish OCI image
         if: github.event_name != 'pull_request'
         run: |
-          pack build ghcr.io/ictu/pseudoniemenservice \
+          pack build ghcr.io/ictu/pseudoniemenservice-${{ matrix.platform }} \
             --builder docker.io/paketobuildpacks/builder-jammy-buildpackless-tiny \
             --buildpack gcr.io/paketo-buildpacks/java \
             --path . \
