@@ -114,6 +114,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create manifest list and push
-        working-directory: /tmp/digests
         run: |
           docker buildx imagetools create --tag ghcr.io/ictu/pseudoniemenservice ghcr.io/ictu/pseudoniemenservice-amd64 ghcr.io/ictu/pseudoniemenservice-arm64
