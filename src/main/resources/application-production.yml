@@ -1,0 +1,27 @@
+server:
+  compression:
+    enabled: true
+  forward-headers-strategy: framework
+logging:
+  level:
+    ROOT: info
+    nl.ictu: debug
+spring:
+  application:
+    name: Pseudoniemen Service
+management:
+  server:
+    port: 9080
+  endpoints:
+    enabled-by-default: true
+    web:
+      base-path: /monitor
+      exposure:
+        include: 'health, info'
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      probes:
+        enabled: true
