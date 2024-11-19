@@ -31,7 +31,7 @@ class TestingWebApplicationTests {
     public void testActuatorHealthEndpoint() throws Exception {
         assertThat(
             restTemplate
-                .getForObject("http://localhost:" + actuatorPort + "/monitor/health", String.class)
+                .getForObject("http://localhost:" + actuatorPort + "/actuator/health", String.class)
         ).contains("{\"status\":\"UP\"}");
     }
 
