@@ -15,7 +15,7 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>21</java.version>
-        <swaggerui.version>3.38.0</swaggerui.version>
+        <swaggerui.version>3.52.5</swaggerui.version>
     </properties>
     <dependencies>
         <dependency>
