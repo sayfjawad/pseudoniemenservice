@@ -14,12 +14,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Test
+      - name: Setup  Java
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'liberica'
           cache: maven
+
+      - name: Test with Maven
+        run: mvn --batch-mode --update-snapshots verify
 
   build:
     runs-on: ubuntu-latest
