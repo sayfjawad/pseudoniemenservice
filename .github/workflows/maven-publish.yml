@@ -25,6 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'
 
+    needs:
+      - test
+      -
     permissions:
       contents: read
       packages: write
