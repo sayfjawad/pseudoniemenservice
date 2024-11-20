@@ -27,7 +27,7 @@ jobs:
 
     needs:
       - test
-      -
+
     permissions:
       contents: read
       packages: write
