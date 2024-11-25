@@ -57,9 +57,9 @@ components:
     identifier:
       type: object
       properties:
-        identifierValue:
+        value:
           type: string
-        identifierType:
+        type:
           $ref: '#/components/schemas/identifierTypes'
     identifierTypes:
       type: string

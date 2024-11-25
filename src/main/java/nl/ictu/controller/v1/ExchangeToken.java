@@ -1,5 +1,6 @@
 package nl.ictu.controller.v1;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,15 +24,17 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
     private final TokenConverter tokenConverter;
 
+    private final ObjectMapper objectMapper;
+
     @Override
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
 
         final String encodedToken = cryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken());
 
-        log.info("Received token: " + encodedToken);
-
         final Token token = tokenConverter.decode(encodedToken);
+
+        log.info("Received token: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(token));
 
         if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");
@@ -41,8 +44,8 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
         final WsIdentifier wsIdentifier = new WsIdentifier();
 
-        wsIdentifier.setIdentifierType(WsIdentifierTypes.fromValue(token.getIdentifier().getType()));
-        wsIdentifier.setIdentifierValue(token.getIdentifier().getValue());
+        wsIdentifier.setType(WsIdentifierTypes.fromValue(token.getIdentifier().getType()));
+        wsIdentifier.setValue(token.getIdentifier().getValue());
 
         wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifier);
 

@@ -33,8 +33,8 @@ public class GetToken implements GetTokenApi, VersionOneController {
 
         token.setCreationDate(new Date(System.currentTimeMillis()));
         token.setRecipientOIN(wsGetTokenRequest.getRecipientOIN());
-        token.getIdentifier().setType(wsGetTokenRequest.getIdentifier().getIdentifierType().name());
-        token.getIdentifier().setValue(wsGetTokenRequest.getIdentifier().getIdentifierValue());
+        token.getIdentifier().setType(wsGetTokenRequest.getIdentifier().getType().name());
+        token.getIdentifier().setValue(wsGetTokenRequest.getIdentifier().getValue());
 
         final String plainTextToken = tokenConverter.encode(token);
 
