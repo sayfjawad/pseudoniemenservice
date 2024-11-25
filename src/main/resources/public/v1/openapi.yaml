@@ -102,7 +102,7 @@ components:
             properties:
               identifier:
                 $ref: '#/components/schemas/identifier'
-              sinkOIN:
+              recipientOIN:
                 $ref: '#/components/schemas/oin'
     exchangeTokenRequest:
       required: true

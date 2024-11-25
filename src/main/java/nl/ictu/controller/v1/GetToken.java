@@ -29,7 +29,7 @@ public class GetToken implements GetTokenApi, VersionOneController {
         final Token token = new Token();
 
         token.setCreationDate(new Date(System.currentTimeMillis()));
-        token.setRecipientOIN(wsGetTokenRequest.getSinkOIN());
+        token.setRecipientOIN(wsGetTokenRequest.getRecipientOIN());
         token.setIdentifierType(wsGetTokenRequest.getIdentifier().getIdentifierType().name());
         token.setIdentifierValue(wsGetTokenRequest.getIdentifier().getIdentifierValue());
 
