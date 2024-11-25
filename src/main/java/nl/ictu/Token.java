@@ -9,10 +9,9 @@ import java.util.Date;
 
 @Getter
 @Setter
-@ToString
 public final class Token {
     private final String version = "v1";
-    private String sinkOIN;
+    private String recipientOIN;
     private String identifierType;
     private String identifierValue;
     private Date creationDate;

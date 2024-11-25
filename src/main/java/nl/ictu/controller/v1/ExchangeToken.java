@@ -30,7 +30,7 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
         log.info("Received token: " + token.toString());
 
-        if (!callerOIN.equals(token.getSinkOIN())) {
+        if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");
         }
 
