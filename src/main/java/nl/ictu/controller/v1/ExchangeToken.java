@@ -26,9 +26,9 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
         final String encodedToken = cryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken());
 
-        final Token token = TokenHelper.decode(encodedToken);
+        log.info("Received token: " + encodedToken);
 
-        log.info("Received token: " + token.toString());
+        final Token token = TokenHelper.decode(encodedToken);
 
         if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");
