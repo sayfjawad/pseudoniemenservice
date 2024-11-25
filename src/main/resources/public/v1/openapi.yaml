@@ -9,6 +9,8 @@ paths:
     post:
       summary: get a token
       operationId: getToken
+      parameters:
+        - $ref: "#/components/parameters/callerOIN"
       requestBody:
         $ref: '#/components/requestBodies/getTokenRequest'
       responses:
@@ -18,6 +20,8 @@ paths:
     post:
       summary: excgange token for an identifier
       operationId: exchangeTokenForIdentifier
+      parameters:
+        - $ref: "#/components/parameters/callerOIN"
       requestBody:
         $ref: '#/components/requestBodies/exchangeTokenRequest'
       responses:
@@ -27,12 +31,21 @@ paths:
     post:
       summary: exchange an identifier for another identifier
       operationId: exchangeIdentifierForIdentifier
+      parameters:
+        - $ref: "#/components/parameters/callerOIN"
       requestBody:
         $ref: '#/components/requestBodies/exchangeIdentifierRequest'
       responses:
         '200':
           $ref: '#/components/responses/exchangeIdentifierResponse'
 components:
+  parameters:
+    callerOIN:
+      name: callerOIN
+      in: header
+      required: true
+      schema:
+        $ref: '#/components/schemas/oin'
   schemas:
     token:
       type: string
@@ -89,9 +102,7 @@ components:
             properties:
               identifier:
                 $ref: '#/components/schemas/identifier'
-              requesterOin:
-                $ref: '#/components/schemas/oin'
-              receiverOin:
+              sinkOIN:
                 $ref: '#/components/schemas/oin'
     exchangeTokenRequest:
       required: true
@@ -101,10 +112,6 @@ components:
             properties:
               token:
                 $ref: '#/components/schemas/token'
-              requesterOin:
-                $ref: '#/components/schemas/oin'
-              receiverOin:
-                $ref: '#/components/schemas/oin'
               identifierType:
                 $ref: '#/components/schemas/identifierTypes'
     exchangeIdentifierRequest:
@@ -115,5 +122,5 @@ components:
             properties:
               identifier:
                 $ref: '#/components/schemas/identifier'
-              oin:
+              sinkOIN:
                 $ref: '#/components/schemas/oin'

@@ -1,38 +1,36 @@
 package nl.ictu.controller.v1;
 
-import nl.ictu.psuedoniemenservice.generated.server.model.WsGetTokenRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.ictu.Token;
 
-import java.util.StringJoiner;
+import java.io.IOException;
+import java.io.StringWriter;
 
 public final class TokenHelper {
 
-    private static final String DELIMITER = "_";
 
-    public static String encode(final WsGetTokenRequest wsGetTokenRequest) {
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
-        final StringJoiner joiner = new StringJoiner(DELIMITER);
+    public static String encode(final Token token) throws IOException {
 
-        joiner.add(wsGetTokenRequest.getReceiverOin());
-        joiner.add(wsGetTokenRequest.getIdentifier().getIdentifierType() + wsGetTokenRequest.getIdentifier().getIdentifierValue());
+        final StringWriter stringWriter = new StringWriter();
 
-        final String encodedToken = wsGetTokenRequest.getRequesterOin() + DELIMITER + IdentifierHelper.encode(wsGetTokenRequest.getIdentifier()) + DELIMITER + wsGetTokenRequest.getReceiverOin();
+        OBJECT_MAPPER.writeValue(stringWriter, token);
 
-        return encodedToken;
+//        final StringJoiner joiner = new StringJoiner(DELIMITER);
+//
+//        joiner.add(wsGetTokenRequest.getReceiverOin());
+//        joiner.add(wsGetTokenRequest.getIdentifier().getIdentifierType() + wsGetTokenRequest.getIdentifier().getIdentifierValue());
+//
+//        final String encodedToken = wsGetTokenRequest.getRequesterOin() + DELIMITER + IdentifierHelper.encode(wsGetTokenRequest.getIdentifier()) + DELIMITER + wsGetTokenRequest.getReceiverOin();
+
+        return stringWriter.toString();
 
     }
 
-    public static WsGetTokenRequest decode(final String encodedToken) {
-
-        final String[] parts = encodedToken.split(DELIMITER);
-
-        final WsGetTokenRequest wsGetTokenRequest = new WsGetTokenRequest();
-
-        wsGetTokenRequest.setRequesterOin(parts[0]);
-        wsGetTokenRequest.setIdentifier(IdentifierHelper.decode(parts[1]));
-        wsGetTokenRequest.setReceiverOin(parts[2]);
-
-        return wsGetTokenRequest;
-
+    public static Token decode(final String encodedToken) throws JsonProcessingException {
+        return OBJECT_MAPPER.readValue(encodedToken, Token.class);
     }
 
 }
