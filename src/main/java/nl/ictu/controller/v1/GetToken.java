@@ -7,6 +7,7 @@ import nl.ictu.psuedoniemenservice.generated.server.api.GetTokenApi;
 import nl.ictu.psuedoniemenservice.generated.server.model.WsGetToken200Response;
 import nl.ictu.psuedoniemenservice.generated.server.model.WsGetTokenRequest;
 import nl.ictu.service.Cryptographer;
+import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,8 @@ import java.util.Date;
 public class GetToken implements GetTokenApi, VersionOneController {
 
     private final Cryptographer cryptographer;
+
+    private final TokenConverter tokenConverter;
 
     @SneakyThrows
     @Override
@@ -30,10 +33,10 @@ public class GetToken implements GetTokenApi, VersionOneController {
 
         token.setCreationDate(new Date(System.currentTimeMillis()));
         token.setRecipientOIN(wsGetTokenRequest.getRecipientOIN());
-        token.setIdentifierType(wsGetTokenRequest.getIdentifier().getIdentifierType().name());
-        token.setIdentifierValue(wsGetTokenRequest.getIdentifier().getIdentifierValue());
+        token.getIdentifier().setType(wsGetTokenRequest.getIdentifier().getIdentifierType().name());
+        token.getIdentifier().setValue(wsGetTokenRequest.getIdentifier().getIdentifierValue());
 
-        final String plainTextToken = TokenHelper.encode(token);
+        final String plainTextToken = tokenConverter.encode(token);
 
         wsGetToken200Response.token(cryptographer.encrypt(plainTextToken));
 

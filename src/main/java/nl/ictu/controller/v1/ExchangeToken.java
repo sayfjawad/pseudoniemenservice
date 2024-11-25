@@ -10,6 +10,7 @@ import nl.ictu.psuedoniemenservice.generated.server.model.WsExchangeTokenForIden
 import nl.ictu.psuedoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.psuedoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.Cryptographer;
+import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +21,8 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
     private final Cryptographer cryptographer;
 
+    private final TokenConverter tokenConverter;
+
     @Override
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
@@ -28,7 +31,7 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
         log.info("Received token: " + encodedToken);
 
-        final Token token = TokenHelper.decode(encodedToken);
+        final Token token = tokenConverter.decode(encodedToken);
 
         if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");
@@ -38,8 +41,8 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
         final WsIdentifier wsIdentifier = new WsIdentifier();
 
-        wsIdentifier.setIdentifierType(WsIdentifierTypes.fromValue(token.getIdentifierType()));
-        wsIdentifier.setIdentifierValue(token.getIdentifierValue());
+        wsIdentifier.setIdentifierType(WsIdentifierTypes.fromValue(token.getIdentifier().getType()));
+        wsIdentifier.setIdentifierValue(token.getIdentifier().getValue());
 
         wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifier);
 

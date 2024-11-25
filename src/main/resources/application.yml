@@ -9,6 +9,9 @@ logging:
 spring:
   application:
     name: Pseudoniemen Service
+  jackson:
+    time-zone: Europe/Amsterdam
+
 management:
   server:
     port: 9080
