@@ -24,7 +24,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String redirectToSwaggerUi(final HttpServletRequest httpServletRequest) {
-        return "redirect:webjars/swagger-ui/3.38.0/index.html?url=/v1/openapi.yaml";
+        return "redirect:/swagger-ui/index.html";
     }
 
 }

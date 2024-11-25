@@ -89,7 +89,9 @@ components:
             properties:
               identifier:
                 $ref: '#/components/schemas/identifier'
-              oin:
+              requesterOin:
+                $ref: '#/components/schemas/oin'
+              receiverOin:
                 $ref: '#/components/schemas/oin'
     exchangeTokenRequest:
       required: true
@@ -99,6 +101,10 @@ components:
             properties:
               token:
                 $ref: '#/components/schemas/token'
+              requesterOin:
+                $ref: '#/components/schemas/oin'
+              receiverOin:
+                $ref: '#/components/schemas/oin'
               identifierType:
                 $ref: '#/components/schemas/identifierTypes'
     exchangeIdentifierRequest:
