@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 
 @RestController
-public class ExchangeIdentifier implements ExchangeIdentifierApi, VersionOneController {
+public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionOneController {
 
     @Override
-    public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeIdentifierForIdentifier(String callerOIN, WsExchangeIdentifierForIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
+    public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeIdentifierForIdentifier(final String callerOIN, final WsExchangeIdentifierForIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
         return ResponseEntity.status(NOT_IMPLEMENTED).build();
     }
 }

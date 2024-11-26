@@ -1,6 +1,7 @@
 package nl.ictu;
 
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,12 +16,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.util.CollectionUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static java.util.Map.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.data.MapEntry.entry;
 
 @Slf4j
 @ActiveProfiles("test")
@@ -51,15 +52,34 @@ class TestingWebApplicationTests {
     @Test
     public void testIntegration() {
 
-        final Map body = Map.of("recipientOIN", "54321543215432154321", "identifier", Map.of("type", "BSN", "value", "012345679"));
+        final Map getTokenBody = Map.of("recipientOIN", "54321543215432154321", "identifier", Map.of("type", "BSN", "value", "012345679"));
 
-        final HttpEntity httpEntity = new HttpEntity(body, new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("0912345012345012345012345")))));
+        final HttpEntity httpEntityGetToken = new HttpEntity(getTokenBody, new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("0912345012345012345012345")))));
 
-        ResponseEntity<Map> exchange = restTemplate.exchange("http://localhost:" + port + "/v1/getToken", HttpMethod.POST, httpEntity, Map.class);
+        final ResponseEntity<Map> tokenExchange = restTemplate.exchange("/v1/getToken", HttpMethod.POST, httpEntityGetToken, Map.class);
 
-        log.info("map: " + exchange.getBody());
+        assertThat(tokenExchange.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-        assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(tokenExchange)
+            .extracting("body")
+            .asInstanceOf(InstanceOfAssertFactories.map(String.class, Void.class))
+            .containsKey("token");
+
+        final String token = (String) tokenExchange.getBody().get("token");
+
+        final Map exchangeTokenBody = Map.of("token", token, "identifierType", "BSN");
+
+        final HttpEntity httpEntityExchangeToken = new HttpEntity(exchangeTokenBody, new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("54321543215432154321")))));
+
+        final ResponseEntity<Map> identifierExchange = restTemplate.exchange("/v1/exchangeToken", HttpMethod.POST, httpEntityExchangeToken, Map.class);
+
+        assertThat(identifierExchange.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertThat(identifierExchange)
+            .extracting("body")
+            .asInstanceOf(InstanceOfAssertFactories.map(String.class, Map.class))
+            .containsExactly(entry("identifier", Map.of("type", "BSN", "value", "012345679")));
+
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.StringWriter;
 
+@SuppressWarnings("DesignForExtension")
 @Service
 @RequiredArgsConstructor
 public class TokenConverterImpl implements TokenConverter {

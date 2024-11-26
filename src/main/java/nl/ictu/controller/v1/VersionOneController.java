@@ -2,10 +2,12 @@ package nl.ictu.controller.v1;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@SuppressWarnings("checkstyle:InterfaceIsType")
+
 @RequestMapping(VersionOneController.V1)
+@SuppressWarnings("InterfaceIsType")
 public interface VersionOneController {
 
+    @SuppressWarnings({"checkstyle:InterfaceIsType", "checkstyle:interfaceistype"})
     String V1 = "/v1";
 
 }

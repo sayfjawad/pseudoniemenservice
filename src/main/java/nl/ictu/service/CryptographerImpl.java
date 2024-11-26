@@ -17,18 +17,19 @@ import java.util.Base64;
 
 import static nl.ictu.service.AESHelper.IV_LENGTH;
 
+@SuppressWarnings("DesignForExtension")
 @Service
 public class CryptographerImpl implements Cryptographer {
 
-    final static SecretKey secretKey;
+    static final SecretKey SECRET_KEY;
 
-    final static Base64.Encoder base64Encoder = Base64.getEncoder();
+    static final Base64.Encoder BASE_64_ENCODER = Base64.getEncoder();
 
-    final static Base64.Decoder base64Decoder = Base64.getDecoder();
+    static final Base64.Decoder BASE_64_DECODER = Base64.getDecoder();
 
     static {
         try {
-            secretKey = AESHelper.generateKey();
+            SECRET_KEY = AESHelper.generateKey();
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
@@ -41,7 +42,7 @@ public class CryptographerImpl implements Cryptographer {
 
         final GCMParameterSpec gcmParameterSpec = AESHelper.generateIV();
 
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
+        cipher.init(Cipher.ENCRYPT_MODE, SECRET_KEY, gcmParameterSpec);
 
         byte[] ciphertext = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
 
@@ -50,9 +51,7 @@ public class CryptographerImpl implements Cryptographer {
         System.arraycopy(gcmParameterSpec.getIV(), 0, encryptedWithIV, 0, IV_LENGTH);
         System.arraycopy(ciphertext, 0, encryptedWithIV, IV_LENGTH, ciphertext.length);
 
-//        System.out.println("encrytedCyhperText enc:" + new String(new byteciphertext));
-
-        return base64Encoder.encodeToString(encryptedWithIV);
+        return BASE_64_ENCODER.encodeToString(encryptedWithIV);
     }
 
     @Override
@@ -60,14 +59,14 @@ public class CryptographerImpl implements Cryptographer {
 
         final Cipher cipher = AESHelper.createCipher();
 
-        final byte[] encryptedWithIV = base64Decoder.decode(ciphertextWithIv);
+        final byte[] encryptedWithIV = BASE_64_DECODER.decode(ciphertextWithIv);
 
         byte[] iv = Arrays.copyOfRange(encryptedWithIV, 0, IV_LENGTH);
         byte[] ciphertext = Arrays.copyOfRange(encryptedWithIV, IV_LENGTH, encryptedWithIV.length);
 
         final GCMParameterSpec gcmParameterSpec = AESHelper.createIVfromValues(iv);
 
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
+        cipher.init(Cipher.DECRYPT_MODE, SECRET_KEY, gcmParameterSpec);
 
         byte[] decryptedText = cipher.doFinal(ciphertext);
 

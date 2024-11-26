@@ -15,7 +15,7 @@ import java.util.Date;
 
 @RestController
 @RequiredArgsConstructor
-public class GetToken implements GetTokenApi, VersionOneController {
+public final class GetToken implements GetTokenApi, VersionOneController {
 
     private final Cryptographer cryptographer;
 
@@ -23,7 +23,7 @@ public class GetToken implements GetTokenApi, VersionOneController {
 
     @SneakyThrows
     @Override
-    public ResponseEntity<WsGetToken200Response> getToken(final String callerOIN, WsGetTokenRequest wsGetTokenRequest) {
+    public ResponseEntity<WsGetToken200Response> getToken(final String callerOIN, final WsGetTokenRequest wsGetTokenRequest) {
 
         // check is callerOIN allowed to communicatie with sinkOIN
 

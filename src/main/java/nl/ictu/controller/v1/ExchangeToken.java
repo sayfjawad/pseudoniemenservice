@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
+public final class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
     private final Cryptographer cryptographer;
 
@@ -34,7 +34,7 @@ public class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
         final Token token = tokenConverter.decode(encodedToken);
 
-        log.info("Received token: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(token));
+        //log.info("Received token: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(token));
 
         if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");

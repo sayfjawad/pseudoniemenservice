@@ -10,15 +10,18 @@ import java.security.SecureRandom;
 
 public final class AESHelper {
 
-    final private static int KEY_LENGTH = 256;
+    private AESHelper() {
+    }
 
-    final public static int IV_LENGTH = 12;
+    private static final int KEY_LENGTH = 256;
 
-    final private static int TAG_LENGTH = 128;
+    public static final int IV_LENGTH = 12;
 
-    final private static String CIPHER = "AES/GCM/NoPadding";
+    private static final int TAG_LENGTH = 128;
 
-    final private static SecureRandom secureRandom = new SecureRandom();
+    private static final String CIPHER = "AES/GCM/NoPadding";
+
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     // Method to generate a random AES key
     public static SecretKey generateKey() throws NoSuchAlgorithmException {
@@ -30,14 +33,14 @@ public final class AESHelper {
     // Method to generate a random Initialization Vector (IV)
     public static GCMParameterSpec generateIV() {
         byte[] iv = new byte[IV_LENGTH]; // AES block size is 16 bytes
-        secureRandom.nextBytes(iv);
+        SECURE_RANDOM.nextBytes(iv);
 
         final GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
 
         return gcmParameterSpec;
     }
 
-    public static GCMParameterSpec createIVfromValues(byte[] iv) {
+    public static GCMParameterSpec createIVfromValues(final byte[] iv) {
         final GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
         return gcmParameterSpec;
     }
