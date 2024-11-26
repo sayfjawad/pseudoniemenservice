@@ -69,7 +69,7 @@ public class CryptographerImpl implements Cryptographer {
 
         byte[] decryptedText = cipher.doFinal(ciphertext);
 
-        return new String(decryptedText);
+        return new String(decryptedText, StandardCharsets.UTF_8);
 
     }
 

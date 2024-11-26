@@ -18,7 +18,9 @@ public final class Token {
         private String value;
     }
 
-    private final String version = "v1";
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("SS_SHOULD_BE_STATIC")
+    private String version = "v1";
+
     private String recipientOIN;
     private Identifier identifier = new Identifier();
 

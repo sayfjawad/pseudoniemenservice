@@ -44,6 +44,12 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>4.8.6</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -109,7 +115,7 @@
                 <executions>
                     <execution>
                         <id>check</id>
-                        <phase>validate</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
