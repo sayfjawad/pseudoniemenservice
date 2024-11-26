@@ -12,8 +12,8 @@ spring:
 management:
   endpoint:
     info:
-      enabled: true
+      access: read_only
     health:
-      enabled: true
+      access: read_only
       probes:
         enabled: true

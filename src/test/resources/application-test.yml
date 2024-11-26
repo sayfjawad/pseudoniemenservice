@@ -11,7 +11,10 @@ spring:
     name: Pseudoniemen Service
 management:
   endpoints:
-    enabled-by-default: true
+    access:
+      default: read_only
     web:
       exposure:
         include: '*'
+pseudoniemenservice:
+  token-private-key: i4dfBykN5Fjw9p3ADxvpRUhpbFSXepRSOcRGuaiJ4iQ=

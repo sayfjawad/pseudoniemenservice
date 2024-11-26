@@ -3,7 +3,11 @@ package nl.ictu.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -23,22 +27,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 @ActiveProfiles("test")
+@ExtendWith(SpringExtension.class)
+@SpringBootTest
 public class TestCryptographer {
 
-    private CryptographerImpl cryptographer = new CryptographerImpl();
+    @Autowired
+    private Cryptographer cryptographer;
 
     private Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
     @Test
-    public void test() {
+    public void testDifferentStringLengths() {
 
         testStrings.forEach(plain -> {
 
             try {
                 final String crypted = cryptographer.encrypt(plain);
-
-                log.info("encrypted: " + crypted);
-
                 final String actual = cryptographer.decrypt(crypted);
                 assertThat(actual).isEqualTo(plain);
             } catch (IllegalBlockSizeException e) {

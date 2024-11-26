@@ -1,5 +1,6 @@
 package nl.ictu.service;
 
+import nl.ictu.configuration.PseudoniemenServiceProperties;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.BadPaddingException;
@@ -8,6 +9,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -21,18 +23,15 @@ import static nl.ictu.service.AESHelper.IV_LENGTH;
 @Service
 public class CryptographerImpl implements Cryptographer {
 
-    static final SecretKey SECRET_KEY;
+    private SecretKey secretKey;
 
     static final Base64.Encoder BASE_64_ENCODER = Base64.getEncoder();
 
     static final Base64.Decoder BASE_64_DECODER = Base64.getDecoder();
 
-    static {
-        try {
-            SECRET_KEY = AESHelper.generateKey();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+    public CryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServiceProperties) {
+        secretKey = new SecretKeySpec(BASE_64_DECODER.decode(pseudoniemenServiceProperties.getTokenPrivateKey()), "AES");
+        System.out.println("test: " + BASE_64_ENCODER.encodeToString(secretKey.getEncoded()));
     }
 
     @Override
@@ -42,7 +41,7 @@ public class CryptographerImpl implements Cryptographer {
 
         final GCMParameterSpec gcmParameterSpec = AESHelper.generateIV();
 
-        cipher.init(Cipher.ENCRYPT_MODE, SECRET_KEY, gcmParameterSpec);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
 
         byte[] ciphertext = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
 
@@ -66,7 +65,7 @@ public class CryptographerImpl implements Cryptographer {
 
         final GCMParameterSpec gcmParameterSpec = AESHelper.createIVfromValues(iv);
 
-        cipher.init(Cipher.DECRYPT_MODE, SECRET_KEY, gcmParameterSpec);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
 
         byte[] decryptedText = cipher.doFinal(ciphertext);
 

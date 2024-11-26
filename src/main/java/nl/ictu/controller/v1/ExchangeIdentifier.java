@@ -1,8 +1,8 @@
 package nl.ictu.controller.v1;
 
-import nl.ictu.psuedoniemenservice.generated.server.api.ExchangeIdentifierApi;
-import nl.ictu.psuedoniemenservice.generated.server.model.WsExchangeIdentifierForIdentifierRequest;
-import nl.ictu.psuedoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
+import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeIdentifierApi;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierForIdentifierRequest;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -39,6 +39,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -56,8 +61,8 @@
                         <configuration>
                             <inputSpec>${project.basedir}/src/main/resources/public/v1/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
-                            <modelPackage>nl.ictu.psuedoniemenservice.generated.server.model</modelPackage>
-                            <apiPackage>nl.ictu.psuedoniemenservice.generated.server.api</apiPackage>
+                            <modelPackage>nl.ictu.pseudoniemenservice.generated.server.model</modelPackage>
+                            <apiPackage>nl.ictu.pseudoniemenservice.generated.server.api</apiPackage>
                             <generateApiTests>false</generateApiTests>
                             <generateApiDocumentation>false</generateApiDocumentation>
                             <generateModelTests>false</generateModelTests>
