@@ -2,6 +2,7 @@ package nl.ictu.service;
 
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -30,6 +31,11 @@ public class CryptographerImpl implements Cryptographer {
     static final Base64.Decoder BASE_64_DECODER = Base64.getDecoder();
 
     public CryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServiceProperties) {
+
+        if (!StringUtils.hasText(pseudoniemenServiceProperties.getTokenPrivateKey())) {
+            throw new RuntimeException("Please set a private key");
+        }
+
         secretKey = new SecretKeySpec(BASE_64_DECODER.decode(pseudoniemenServiceProperties.getTokenPrivateKey()), "AES");
         System.out.println("test: " + BASE_64_ENCODER.encodeToString(secretKey.getEncoded()));
     }
