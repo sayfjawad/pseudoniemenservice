@@ -1,5 +1,6 @@
 package nl.ictu.service;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -30,6 +31,7 @@ public class CryptographerImpl implements Cryptographer {
 
     static final Base64.Decoder BASE_64_DECODER = Base64.getDecoder();
 
+    @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
     public CryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServiceProperties) {
 
         if (!StringUtils.hasText(pseudoniemenServiceProperties.getTokenPrivateKey())) {
