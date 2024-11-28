@@ -14,6 +14,6 @@ public final class Token {
     private String version = "v1";
     private String bsn;
     private String recipientOIN;
-    private LocalDateTime creationDate;
+    private Long creationDate;
 
 }
