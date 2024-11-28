@@ -12,8 +12,6 @@ import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequiredArgsConstructor
 public final class GetToken implements GetTokenApi, VersionOneController {
