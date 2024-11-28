@@ -6,6 +6,7 @@ import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.api.GetTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetToken200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenRequest;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.Cryptographer;
 import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,12 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
         token.setCreationDate(new Date(System.currentTimeMillis()));
         token.setRecipientOIN(wsGetTokenRequest.getRecipientOIN());
-        token.getIdentifier().setType(wsGetTokenRequest.getIdentifier().getType().name());
-        token.getIdentifier().setValue(wsGetTokenRequest.getIdentifier().getValue());
+
+        if (wsGetTokenRequest.getIdentifier() != null) {
+            if (WsIdentifierTypes.BSN.equals(wsGetTokenRequest.getIdentifier().getType())) {
+                token.setBsn(wsGetTokenRequest.getIdentifier().getValue());
+            }
+        }
 
         final String plainTextToken = tokenConverter.encode(token);
 

@@ -9,11 +9,13 @@ import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.Cryptographer;
 import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
+
+import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -44,8 +46,10 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
         final WsIdentifier wsIdentifier = new WsIdentifier();
 
-        wsIdentifier.setType(WsIdentifierTypes.fromValue(token.getIdentifier().getType()));
-        wsIdentifier.setValue(token.getIdentifier().getValue());
+        if (StringUtils.hasText(token.getBsn())) {
+            wsIdentifier.setType(BSN);
+            wsIdentifier.setValue(token.getBsn());
+        }
 
         wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifier);
 
