@@ -11,6 +11,8 @@ import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIden
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.Cryptographer;
 import nl.ictu.service.TokenConverter;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +30,8 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
     private final ObjectMapper objectMapper;
 
+    private final Environment environment;
+
     @Override
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
@@ -36,7 +40,9 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
         final Token token = tokenConverter.decode(encodedToken);
 
-        //log.info("Received token: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(token));
+        if (environment.acceptsProfiles(Profiles.of("test"))) {
+            log.info("Received token: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(token));
+        }
 
         if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");

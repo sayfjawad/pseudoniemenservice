@@ -1,10 +1,9 @@
 package nl.ictu;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -15,8 +14,6 @@ public final class Token {
     private String version = "v1";
     private String bsn;
     private String recipientOIN;
+    private LocalDateTime creationDate;
 
-    @JsonFormat
-        (shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    private Date creationDate;
 }

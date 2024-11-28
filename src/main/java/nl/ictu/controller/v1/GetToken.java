@@ -12,7 +12,7 @@ import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,7 +32,7 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
         final Token token = new Token();
 
-        token.setCreationDate(new Date(System.currentTimeMillis()));
+        token.setCreationDate(LocalDateTime.now());
         token.setRecipientOIN(wsGetTokenRequest.getRecipientOIN());
 
         if (wsGetTokenRequest.getIdentifier() != null) {
