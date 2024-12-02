@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nl.ictu.Token;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.io.StringWriter;
 @SuppressWarnings("DesignForExtension")
 @Service
 @RequiredArgsConstructor
+@RegisterReflectionForBinding({Token.class})
 public class TokenConverterImpl implements TokenConverter {
 
     private final ObjectMapper objectMapper;
