@@ -10,6 +10,7 @@ import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
 import nl.ictu.service.IdentifierConverter;
@@ -21,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
-import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.SECTOR_PSEUDO;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -75,9 +75,8 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
                 final String encrypt = aesGcmSivCryptographer.encrypt(encode, callerOIN);
 
-                wsIdentifier.setType(SECTOR_PSEUDO);
+                wsIdentifier.setType(WsIdentifierTypes.ORGANISATION_PSEUDO);
                 wsIdentifier.setValue(encrypt);
-
 
             }
             default -> {

@@ -66,7 +66,6 @@ components:
       nullable: false
       enum:
         - BSN
-        - SECTOR_PSEUDO
         - ORGANISATION_PSEUDO
   responses:
     getTokenResponse:
