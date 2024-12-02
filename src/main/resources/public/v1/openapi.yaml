@@ -1,6 +1,7 @@
 openapi: 3.0.3
 info:
-  title: Pseudoniemen Service
+  title: Pseudoniemen Service (@git.commit.id.abbrev@)
+  description: See [PseudoniemenService](https://github.com/ICTU/pseudoniemenservice/commit/@git.commit.id@)
   version: 0.1.0
 servers:
   - url: /v1

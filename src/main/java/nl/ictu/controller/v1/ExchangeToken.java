@@ -1,6 +1,5 @@
 package nl.ictu.controller.v1;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -10,18 +9,16 @@ import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
 import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
-import org.springframework.core.env.Environment;
-import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
+import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -34,10 +31,6 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
     private final TokenConverter tokenConverter;
 
-    private final ObjectMapper objectMapper;
-
-    private final Environment environment;
-
     private final IdentifierConverter identifierConverter;
 
     @Override
@@ -47,10 +40,6 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
         final String encodedToken = aesGcmCryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
 
         final Token token = tokenConverter.decode(encodedToken);
-
-        if (environment.acceptsProfiles(Profiles.of("test"))) {
-            log.info("Received token: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(token));
-        }
 
         if (!callerOIN.equals(token.getRecipientOIN())) {
             throw new RuntimeException("Sink OIN not the same");
@@ -75,7 +64,7 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
                 final String encrypt = aesGcmSivCryptographer.encrypt(encode, callerOIN);
 
-                wsIdentifier.setType(WsIdentifierTypes.ORGANISATION_PSEUDO);
+                wsIdentifier.setType(ORGANISATION_PSEUDO);
                 wsIdentifier.setValue(encrypt);
 
             }

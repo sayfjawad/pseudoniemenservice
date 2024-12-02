@@ -174,6 +174,7 @@
                 <filtering>true</filtering>
                 <includes>
                     <include>banner.txt</include>
+                    <include>public/v1/openapi.yaml</include>
                 </includes>
             </resource>
             <resource>

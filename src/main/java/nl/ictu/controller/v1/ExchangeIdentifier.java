@@ -42,6 +42,10 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
             // from BSN to Org Pseudo
             return ResponseEntity.ok(convertBsnToPseudo(wsIdentifierRequest.getValue(), recipientOIN));
 
+        } else if (ORGANISATION_PSEUDO.equals(wsIdentifierRequest.getType()) && BSN.equals(recipientIdentifierType)) {
+            // from BSN to Org Pseudo
+            return ResponseEntity.ok(convertPseudoToBEsn(wsIdentifierRequest.getValue(), recipientOIN));
+
         } else {
             return ResponseEntity.status(NOT_IMPLEMENTED).build();
         }
@@ -49,7 +53,7 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
     }
 
-    private WsExchangeTokenForIdentifier200Response convertBsnToPseudo(final String bsn, final String recipientOIN) throws IOException, InvalidCipherTextException {
+    private WsExchangeTokenForIdentifier200Response convertBsnToPseudo(final String bsn, final String oin) throws IOException, InvalidCipherTextException {
 
         final Identifier identifier = new Identifier();
 
@@ -57,7 +61,7 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
         final String encode = identifierConverter.encode(identifier);
 
-        final String oinNencyptedIdentifier = aesGcmSivCryptographer.encrypt(encode, recipientOIN);
+        final String oinNencyptedIdentifier = aesGcmSivCryptographer.encrypt(encode, oin);
 
         final WsExchangeTokenForIdentifier200Response wsExchangeTokenForIdentifier200Response = new WsExchangeTokenForIdentifier200Response();
 
@@ -70,6 +74,24 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
         return wsExchangeTokenForIdentifier200Response;
 
+    }
+
+    private WsExchangeTokenForIdentifier200Response convertPseudoToBEsn(final String pseudo, final String oin) throws IOException, InvalidCipherTextException {
+
+        final String encodedIdentifier = aesGcmSivCryptographer.decrypt(pseudo, oin);
+
+        final Identifier identifier = identifierConverter.decode(encodedIdentifier);
+
+        final WsExchangeTokenForIdentifier200Response wsExchangeTokenForIdentifier200Response = new WsExchangeTokenForIdentifier200Response();
+
+        final WsIdentifier wsIdentifierResponse = new WsIdentifier();
+
+        wsIdentifierResponse.setType(BSN);
+        wsIdentifierResponse.setValue(identifier.getBsn());
+
+        wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifierResponse);
+
+        return wsExchangeTokenForIdentifier200Response;
 
     }
 }
