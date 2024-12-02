@@ -41,7 +41,7 @@ jobs:
       matrix:
         platform:
           - amd64
-          - arm64
+#          - arm64
 
     steps:
 
@@ -141,4 +141,5 @@ jobs:
 
       - name: Create manifest list and push
         run: |
-          docker buildx imagetools create --tag ghcr.io/ictu/pseudoniemenservice ghcr.io/ictu/pseudoniemenservice-amd64 ghcr.io/ictu/pseudoniemenservice-arm64
+          docker buildx imagetools create --tag ghcr.io/ictu/pseudoniemenservice ghcr.io/ictu/pseudoniemenservice-amd64
+#          docker buildx imagetools create --tag ghcr.io/ictu/pseudoniemenservice ghcr.io/ictu/pseudoniemenservice-amd64 ghcr.io/ictu/pseudoniemenservice-arm64
