@@ -95,7 +95,8 @@ jobs:
             --platform linux/${{ matrix.platform }} \
             --report-output-dir ./report.toml \
             --publish \
-            --env BP_NATIVE_IMAGE=true
+            --env BP_NATIVE_IMAGE=true \
+            --env BP_MAVEN_ACTIVE_PROFILES=true
   #
   #      - name: Set up JDK
   #        uses: actions/setup-java@v4
