@@ -11,6 +11,7 @@ import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
 import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -52,6 +53,9 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
                     token.setBsn(decodedIdentifier.getBsn());
 
+                }
+                default -> {
+                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
                 }
             }
         }
