@@ -90,13 +90,12 @@ jobs:
         run: |
           pack build ghcr.io/ictu/pseudoniemenservice-${{ matrix.platform }} \
             --builder docker.io/paketobuildpacks/builder-jammy-buildpackless-tiny \
-            --buildpack gcr.io/paketo-buildpacks/java \
+            --buildpack gcr.io/paketo-buildpacks/java-native-image \
             --path . \
             --platform linux/${{ matrix.platform }} \
             --report-output-dir ./report.toml \
             --publish \
-            --env BP_NATIVE_IMAGE=true \
-            --env BP_MAVEN_ACTIVE_PROFILES=native
+            --env BP_NATIVE_IMAGE=true
   #
   #      - name: Set up JDK
   #        uses: actions/setup-java@v4
