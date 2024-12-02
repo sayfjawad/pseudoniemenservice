@@ -67,8 +67,6 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
         final KeyParameter keyParameter = new KeyParameter(base64Decoder.decode(identifierPrivateKey));
 
-        log.info("keylength: " + keyParameter.getKeyLength());
-
         final AEADParameters cipherParameter = new AEADParameters(keyParameter, 128, nonce12);
 
         return cipherParameter;
