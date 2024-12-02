@@ -18,3 +18,4 @@ management:
         include: '*'
 pseudoniemenservice:
   token-private-key: i4dfBykN5Fjw9p3ADxvpRUhpbFSXepRSOcRGuaiJ4iQ=
+  identifier-private-key: b2RPRGh6aThiMmluVEpMWVVJM2lOTGlWekVCU2hDMEU=

@@ -122,5 +122,7 @@ components:
             properties:
               identifier:
                 $ref: '#/components/schemas/identifier'
-              sinkOIN:
+              recipientOIN:
                 $ref: '#/components/schemas/oin'
+              recipientIdentifierType:
+                $ref: '#/components/schemas/identifierTypes'

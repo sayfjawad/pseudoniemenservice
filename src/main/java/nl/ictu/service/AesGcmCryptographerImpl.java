@@ -23,9 +23,13 @@ import java.util.Base64;
 
 import static nl.ictu.service.AESHelper.IV_LENGTH;
 
+/**
+ * Advanced Encryption Standard  Galois/Counter Mode (AES-GCM).
+ */
+
 @SuppressWarnings("DesignForExtension")
 @Service
-public class CryptographerImpl implements Cryptographer {
+public class AesGcmCryptographerImpl implements AesGcmCryptographer {
 
     //private SecretKey secretKey;
 
@@ -38,14 +42,18 @@ public class CryptographerImpl implements Cryptographer {
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
     @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
-    public CryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) throws NoSuchAlgorithmException {
+    public AesGcmCryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) {
 
-        this.pseudoniemenServiceProperties = pseudoniemenServicePropertiesArg;
+        pseudoniemenServiceProperties = pseudoniemenServicePropertiesArg;
 
-        this.sha256Digest = MessageDigest.getInstance("SHA-256");
+        try {
+            sha256Digest = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
         if (!StringUtils.hasText(pseudoniemenServiceProperties.getTokenPrivateKey())) {
-            throw new RuntimeException("Please set a private key");
+            throw new RuntimeException("Please set a private token key");
         }
 
     }
@@ -71,7 +79,7 @@ public class CryptographerImpl implements Cryptographer {
         return base64Encoder.encodeToString(encryptedWithIV);
     }
 
-    private SecretKey createSecretKey(final String salt) throws NoSuchAlgorithmException {
+    private SecretKey createSecretKey(final String salt) {
 
         byte[] keyBytes = base64Decoder.decode(pseudoniemenServiceProperties.getTokenPrivateKey());
 

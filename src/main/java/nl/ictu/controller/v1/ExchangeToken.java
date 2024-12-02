@@ -4,27 +4,32 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import nl.ictu.Identifier;
 import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
-import nl.ictu.service.Cryptographer;
+import nl.ictu.service.AesGcmCryptographer;
+import nl.ictu.service.AesGcmSivCryptographer;
+import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
+import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.SECTOR_PSEUDO;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 public final class ExchangeToken implements ExchangeTokenApi, VersionOneController {
 
-    private final Cryptographer cryptographer;
+    private final AesGcmCryptographer aesGcmCryptographer;
+
+    private final AesGcmSivCryptographer aesGcmSivCryptographer;
 
     private final TokenConverter tokenConverter;
 
@@ -32,11 +37,13 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
     private final Environment environment;
 
+    private final IdentifierConverter identifierConverter;
+
     @Override
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
 
-        final String encodedToken = cryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
+        final String encodedToken = aesGcmCryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
 
         final Token token = tokenConverter.decode(encodedToken);
 
@@ -52,10 +59,28 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
         final WsIdentifier wsIdentifier = new WsIdentifier();
 
-        if (StringUtils.hasText(token.getBsn())) {
-            wsIdentifier.setType(BSN);
-            wsIdentifier.setValue(token.getBsn());
+        switch (wsExchangeTokenForIdentifierRequest.getIdentifierType()) {
+            case BSN -> {
+                wsIdentifier.setType(BSN);
+                wsIdentifier.setValue(token.getBsn());
+            }
+            case ORGANISATION_PSEUDO -> {
+
+                final Identifier identifier = new Identifier();
+
+                identifier.setBsn(token.getBsn());
+
+                final String encode = identifierConverter.encode(identifier);
+
+                final String encrypt = aesGcmSivCryptographer.encrypt(encode, callerOIN);
+
+                wsIdentifier.setType(SECTOR_PSEUDO);
+                wsIdentifier.setValue(encrypt);
+
+
+            }
         }
+
 
         wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifier);
 
