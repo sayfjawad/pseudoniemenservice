@@ -41,7 +41,7 @@ jobs:
       matrix:
         platform:
           - amd64
-#          - arm64
+    #          - arm64
 
     steps:
 
@@ -96,32 +96,6 @@ jobs:
             --report-output-dir ./report.toml \
             --publish \
             --env BP_NATIVE_IMAGE=true
-
-      - name: Build
-        run: |
-          docker push ghcr.io/ictu/pseudoniemenservice-${{ matrix.platform }}
-          
-
-  #
-  #      - name: Set up JDK
-  #        uses: actions/setup-java@v4
-  #        with:
-  #          java-version: '21'
-  #          distribution: "liberica"
-  #          cache: maven
-
-  #      - name: Build Native with Maven
-  #        if: github.event_name != 'pull_request'
-  #        run: mvn -ntp -B clean install spring-boot:build-image -Dspring-boot.build-image.imageName=ghcr.io/ictu/pseudoniemenservice:latest
-  #
-  #      - name: Build with Maven
-  #        if: github.event_name == 'pull_request'
-  #        run: mvn -ntp -B clean install
-  #
-  #      - name: Push docker image
-  #        if: github.event_name != 'pull_request'
-  #        run: |
-  #          docker push --platform ${{ matrix.platform }} ghcr.io/ictu/pseudoniemenservice:lates
 
   merge:
     runs-on: ubuntu-latest
