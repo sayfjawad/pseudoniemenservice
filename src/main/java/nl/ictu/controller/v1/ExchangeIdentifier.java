@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.NOT_IMPLEMENTED;
 
 @RequiredArgsConstructor
 @RestController
@@ -43,7 +43,7 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
             return ResponseEntity.ok(convertBsnToPseudo(wsIdentifierRequest.getValue(), recipientOIN));
 
         } else {
-            return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
+            return ResponseEntity.status(NOT_IMPLEMENTED).build();
         }
 
 
