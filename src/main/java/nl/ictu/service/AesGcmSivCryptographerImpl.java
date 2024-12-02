@@ -30,13 +30,13 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
     private static final int NONCE_LENTH = 12;
 
-    private Base64.Encoder base64Encoder = Base64.getEncoder();
+    private final Base64.Encoder base64Encoder = Base64.getEncoder();
 
-    private Base64.Decoder base64Decoder = Base64.getDecoder();
+    private final Base64.Decoder base64Decoder = Base64.getDecoder();
 
     private final AESEngine aesEngine;
 
-    private MessageDigest sha256Digest;
+    private final MessageDigest sha256Digest;
 
     @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
     public AesGcmSivCryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) {

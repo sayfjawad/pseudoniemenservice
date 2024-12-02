@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.1.0
 info:
   title: Pseudoniemen Service (@git.commit.id.abbrev@)
   description: See [PseudoniemenService](https://github.com/ICTU/pseudoniemenservice/commit/@git.commit.id@)
@@ -49,13 +49,16 @@ components:
         $ref: '#/components/schemas/oin'
   schemas:
     token:
+      nullable: false
       type: string
     oin:
+      nullable: false
       type: string
       pattern: '^\d{20}$'
       minLength: 20
       maxLength: 20
     identifier:
+      nullable: false
       type: object
       properties:
         value:
@@ -63,36 +66,48 @@ components:
         type:
           $ref: '#/components/schemas/identifierTypes'
     identifierTypes:
-      type: string
       nullable: false
+      type: string
       enum:
         - BSN
         - ORGANISATION_PSEUDO
+    getTokenResponse:
+      nullable: false
+      type: object
+      properties:
+        token:
+          $ref: '#/components/schemas/token'
+    exchangeTokenResponse:
+      nullable: false
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/identifier'
+    exchangeIdentifierResponse:
+      nullable: false
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/identifier'
   responses:
     getTokenResponse:
       description: Get a token Response
       content:
         application/json:
           schema:
-            properties:
-              token:
-                $ref: '#/components/schemas/token'
+            $ref: '#/components/schemas/getTokenResponse'
     exchangeTokenResponse:
       description: successful operation
       content:
         application/json:
           schema:
-            properties:
-              identifier:
-                $ref: '#/components/schemas/identifier'
+            $ref: '#/components/schemas/exchangeTokenResponse'
     exchangeIdentifierResponse:
       description: successful operation
       content:
         application/json:
           schema:
-            properties:
-              identifier:
-                $ref: '#/components/schemas/identifier'
+            $ref: '#/components/schemas/exchangeIdentifierResponse'
   requestBodies:
     getTokenRequest:
       required: true

@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import nl.ictu.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeIdentifierApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierForIdentifierRequest;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.AesGcmSivCryptographer;
@@ -30,7 +30,7 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
     @Override
     @SneakyThrows
-    public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeIdentifierForIdentifier(final String callerOIN, final WsExchangeIdentifierForIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
+    public ResponseEntity<WsExchangeIdentifierResponse> exchangeIdentifierForIdentifier(final String callerOIN, final WsExchangeIdentifierForIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
 
         final WsIdentifier wsIdentifierRequest = wsExchangeIdentifierForIdentifierRequest.getIdentifier();
 
@@ -53,7 +53,7 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
     }
 
-    private WsExchangeTokenForIdentifier200Response convertBsnToPseudo(final String bsn, final String oin) throws IOException, InvalidCipherTextException {
+    private WsExchangeIdentifierResponse convertBsnToPseudo(final String bsn, final String oin) throws IOException, InvalidCipherTextException {
 
         final Identifier identifier = new Identifier();
 
@@ -63,7 +63,7 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
         final String oinNencyptedIdentifier = aesGcmSivCryptographer.encrypt(encode, oin);
 
-        final WsExchangeTokenForIdentifier200Response wsExchangeTokenForIdentifier200Response = new WsExchangeTokenForIdentifier200Response();
+        final WsExchangeIdentifierResponse wsExchangeTokenForIdentifier200Response = new WsExchangeIdentifierResponse();
 
         final WsIdentifier wsIdentifierResponse = new WsIdentifier();
 
@@ -76,13 +76,13 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
     }
 
-    private WsExchangeTokenForIdentifier200Response convertPseudoToBEsn(final String pseudo, final String oin) throws IOException, InvalidCipherTextException {
+    private WsExchangeIdentifierResponse convertPseudoToBEsn(final String pseudo, final String oin) throws IOException, InvalidCipherTextException {
 
         final String encodedIdentifier = aesGcmSivCryptographer.decrypt(pseudo, oin);
 
         final Identifier identifier = identifierConverter.decode(encodedIdentifier);
 
-        final WsExchangeTokenForIdentifier200Response wsExchangeTokenForIdentifier200Response = new WsExchangeTokenForIdentifier200Response();
+        final WsExchangeIdentifierResponse wsExchangeTokenForIdentifier200Response = new WsExchangeIdentifierResponse();
 
         final WsIdentifier wsIdentifierResponse = new WsIdentifier();
 

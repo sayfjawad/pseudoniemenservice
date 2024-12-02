@@ -5,8 +5,8 @@ import lombok.SneakyThrows;
 import nl.ictu.Identifier;
 import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.api.GetTokenApi;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsGetToken200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenRequest;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
 import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
 import nl.ictu.service.IdentifierConverter;
@@ -27,13 +27,13 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
     private final IdentifierConverter identifierConverter;
 
-    @SneakyThrows
     @Override
-    public ResponseEntity<WsGetToken200Response> getToken(final String callerOIN, final WsGetTokenRequest wsGetTokenRequest) {
+    @SneakyThrows
+    public ResponseEntity<WsGetTokenResponse> getToken(final String callerOIN, final WsGetTokenRequest wsGetTokenRequest) {
 
         // check is callerOIN allowed to communicatie with sinkOIN
 
-        final WsGetToken200Response wsGetToken200Response = new WsGetToken200Response();
+        final WsGetTokenResponse wsGetToken200Response = new WsGetTokenResponse();
 
         final Token token = new Token();
 

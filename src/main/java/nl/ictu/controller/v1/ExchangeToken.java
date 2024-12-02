@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ictu.Identifier;
 import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifier200Response;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
@@ -35,7 +35,7 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
     @Override
     @SneakyThrows
-    public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
+    public ResponseEntity<WsExchangeTokenResponse> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
 
         final String encodedToken = aesGcmCryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
 
@@ -45,7 +45,7 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
             throw new RuntimeException("Sink OIN not the same");
         }
 
-        final WsExchangeTokenForIdentifier200Response wsExchangeTokenForIdentifier200Response = new WsExchangeTokenForIdentifier200Response();
+        final WsExchangeTokenResponse wsExchangeTokenForIdentifier200Response = new WsExchangeTokenResponse();
 
         final WsIdentifier wsIdentifier = new WsIdentifier();
 

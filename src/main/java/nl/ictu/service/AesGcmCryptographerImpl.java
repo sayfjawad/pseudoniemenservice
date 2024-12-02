@@ -33,11 +33,11 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
 
     //private SecretKey secretKey;
 
-    private Base64.Encoder base64Encoder = Base64.getEncoder();
+    private final Base64.Encoder base64Encoder = Base64.getEncoder();
 
-    private Base64.Decoder base64Decoder = Base64.getDecoder();
+    private final Base64.Decoder base64Decoder = Base64.getDecoder();
 
-    private MessageDigest sha256Digest;
+    private final MessageDigest sha256Digest;
 
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
