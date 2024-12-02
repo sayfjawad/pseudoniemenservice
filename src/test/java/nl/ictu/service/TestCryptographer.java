@@ -42,8 +42,8 @@ public class TestCryptographer {
         testStrings.forEach(plain -> {
 
             try {
-                final String crypted = cryptographer.encrypt(plain);
-                final String actual = cryptographer.decrypt(crypted);
+                final String crypted = cryptographer.encrypt(plain, "helloHowAreyo");
+                final String actual = cryptographer.decrypt(crypted, "helloHowAreyo");
                 assertThat(actual).isEqualTo(plain);
             } catch (IllegalBlockSizeException e) {
                 throw new RuntimeException(e);
@@ -71,8 +71,8 @@ public class TestCryptographer {
         // The same plaintext message
         String plaintext = "This is a test message to ensure ciphertext is different!";
 
-        String encryptedMessage1 = cryptographer.encrypt(plaintext);
-        String encryptedMessage2 = cryptographer.encrypt(plaintext);
+        String encryptedMessage1 = cryptographer.encrypt(plaintext, "aniceSaltGorYu");
+        String encryptedMessage2 = cryptographer.encrypt(plaintext, "aniceSaltGorYu");
 
         // Assert that the two ciphertexts are different
         assertThat(encryptedMessage1).isNotEqualTo(encryptedMessage2);

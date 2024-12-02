@@ -2,6 +2,7 @@ package nl.ictu.service;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
+import nl.ictu.utils.ByteArrayUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -15,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
+import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
@@ -25,29 +27,37 @@ import static nl.ictu.service.AESHelper.IV_LENGTH;
 @Service
 public class CryptographerImpl implements Cryptographer {
 
-    private SecretKey secretKey;
+    //private SecretKey secretKey;
 
-    static final Base64.Encoder BASE_64_ENCODER = Base64.getEncoder();
+    private Base64.Encoder base64Encoder = Base64.getEncoder();
 
-    static final Base64.Decoder BASE_64_DECODER = Base64.getDecoder();
+    private Base64.Decoder base64Decoder = Base64.getDecoder();
+
+    private MessageDigest sha256Digest;
+
+    private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
     @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
-    public CryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServiceProperties) {
+    public CryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) throws NoSuchAlgorithmException {
+
+        this.pseudoniemenServiceProperties = pseudoniemenServicePropertiesArg;
+
+        this.sha256Digest = MessageDigest.getInstance("SHA-256");
 
         if (!StringUtils.hasText(pseudoniemenServiceProperties.getTokenPrivateKey())) {
             throw new RuntimeException("Please set a private key");
         }
 
-        secretKey = new SecretKeySpec(BASE_64_DECODER.decode(pseudoniemenServiceProperties.getTokenPrivateKey()), "AES");
-        System.out.println("test: " + BASE_64_ENCODER.encodeToString(secretKey.getEncoded()));
     }
 
     @Override
-    public String encrypt(final String plaintext) throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public String encrypt(final String plaintext, final String salt) throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
         final Cipher cipher = AESHelper.createCipher();
 
         final GCMParameterSpec gcmParameterSpec = AESHelper.generateIV();
+
+        final SecretKey secretKey = createSecretKey(salt);
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
 
@@ -58,20 +68,37 @@ public class CryptographerImpl implements Cryptographer {
         System.arraycopy(gcmParameterSpec.getIV(), 0, encryptedWithIV, 0, IV_LENGTH);
         System.arraycopy(ciphertext, 0, encryptedWithIV, IV_LENGTH, ciphertext.length);
 
-        return BASE_64_ENCODER.encodeToString(encryptedWithIV);
+        return base64Encoder.encodeToString(encryptedWithIV);
+    }
+
+    private SecretKey createSecretKey(final String salt) throws NoSuchAlgorithmException {
+
+        byte[] keyBytes = base64Decoder.decode(pseudoniemenServiceProperties.getTokenPrivateKey());
+
+        byte[] saltBytes = salt.getBytes(StandardCharsets.UTF_8);
+
+        byte[] salterSecretBytes = ByteArrayUtils.concat(keyBytes, saltBytes);
+
+        byte[] key = sha256Digest.digest(salterSecretBytes);
+
+        final SecretKey secretKey = new SecretKeySpec(key, "AES");
+
+        return secretKey;
     }
 
     @Override
-    public String decrypt(final String ciphertextWithIv) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+    public String decrypt(final String ciphertextWithIv, final String salt) throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
         final Cipher cipher = AESHelper.createCipher();
 
-        final byte[] encryptedWithIV = BASE_64_DECODER.decode(ciphertextWithIv);
+        final byte[] encryptedWithIV = base64Decoder.decode(ciphertextWithIv);
 
         byte[] iv = Arrays.copyOfRange(encryptedWithIV, 0, IV_LENGTH);
         byte[] ciphertext = Arrays.copyOfRange(encryptedWithIV, IV_LENGTH, encryptedWithIV.length);
 
         final GCMParameterSpec gcmParameterSpec = AESHelper.createIVfromValues(iv);
+
+        final SecretKey secretKey = createSecretKey(salt);
 
         cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
 

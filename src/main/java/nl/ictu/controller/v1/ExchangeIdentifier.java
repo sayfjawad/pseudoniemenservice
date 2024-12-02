@@ -13,6 +13,11 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
 
     @Override
     public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeIdentifierForIdentifier(final String callerOIN, final WsExchangeIdentifierForIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
+
+
+
         return ResponseEntity.status(NOT_IMPLEMENTED).build();
+
+
     }
 }

@@ -52,6 +52,8 @@ class TestingWebApplicationTests {
     @Test
     public void testIntegration() {
 
+        // get a token
+
         final Map getTokenBody = Map.of("recipientOIN", "54321543215432154321", "identifier", Map.of("type", "BSN", "value", "012345679"));
 
         final HttpEntity httpEntityGetToken = new HttpEntity(getTokenBody, new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("0912345012345012345012345")))));
@@ -64,6 +66,8 @@ class TestingWebApplicationTests {
             .extracting("body")
             .asInstanceOf(InstanceOfAssertFactories.map(String.class, Void.class))
             .containsKey("token");
+
+        // change token for identifier
 
         final String token = (String) tokenExchange.getBody().get("token");
 

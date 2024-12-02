@@ -41,7 +41,7 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
         final String plainTextToken = tokenConverter.encode(token);
 
-        wsGetToken200Response.token(cryptographer.encrypt(plainTextToken));
+        wsGetToken200Response.token(cryptographer.encrypt(plainTextToken, wsGetTokenRequest.getRecipientOIN()));
 
         return ResponseEntity.ok(wsGetToken200Response);
     }

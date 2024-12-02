@@ -36,7 +36,7 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenForIdentifier200Response> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
 
-        final String encodedToken = cryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken());
+        final String encodedToken = cryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
 
         final Token token = tokenConverter.decode(encodedToken);
 
