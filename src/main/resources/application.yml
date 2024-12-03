@@ -1,4 +1,6 @@
 server:
+  mime-mappings:
+    yaml: application/json
   compression:
     enabled: true
   forward-headers-strategy: framework
