@@ -57,7 +57,7 @@ components:
       pattern: '^\d{20}$'
       minLength: 20
       maxLength: 20
-      example: 01234012340123401234
+      example: 12340123401234012340
     identifier:
       nullable: false
       type: object
