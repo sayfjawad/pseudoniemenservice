@@ -9,6 +9,13 @@ logging:
     ROOT: info
     nl.ictu: debug
 spring:
+  web:
+    resources:
+      cache:
+        cachecontrol:
+          must-revalidate: true
+          max-age: 15m
+          no-cache: true
   application:
     name: Pseudoniemen Service
   jackson:
