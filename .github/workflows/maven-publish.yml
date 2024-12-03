@@ -65,7 +65,7 @@ jobs:
       - name: Build and publish OCI image
         run: |
           pack build ghcr.io/ictu/pseudoniemenservice \
-            --clear-cache \
+            -v --force-color --clear-cache \
             --builder docker.io/paketobuildpacks/builder-jammy-buildpackless-tiny \
             --buildpack gcr.io/paketo-buildpacks/java-native-image \
             --path . \
