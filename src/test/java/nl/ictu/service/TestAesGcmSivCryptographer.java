@@ -1,7 +1,9 @@
 package nl.ictu.service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import nl.ictu.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,7 +22,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class TestAesGcmSivCryptographer {
 
-    private AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographerImpl(new PseudoniemenServiceProperties().setIdentifierPrivateKey("QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="));
+    private AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographerImpl(
+        new PseudoniemenServiceProperties().setIdentifierPrivateKey("QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="),
+        new IdentifierConverterImpl(new ObjectMapper())
+    );
 
     private Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
@@ -30,9 +35,12 @@ public class TestAesGcmSivCryptographer {
         testStrings.forEach(plain -> {
 
             try {
-                final String crypted = aesGcmSivCryptographer.encrypt(plain, "helloHowAreyo12345678");
-                final String actual = aesGcmSivCryptographer.decrypt(crypted, "helloHowAreyo12345678");
-                assertThat(actual).isEqualTo(plain);
+                final Identifier identifier = new Identifier();
+                identifier.setBsn(plain);
+
+                final String crypted = aesGcmSivCryptographer.encrypt(identifier, "helloHowAreyo12345678");
+                final Identifier actual = aesGcmSivCryptographer.decrypt(crypted, "helloHowAreyo12345678");
+                assertThat(actual.getBsn()).isEqualTo(plain);
             } catch (final Exception e) {
                 throw new RuntimeException(e);
             }
@@ -48,8 +56,11 @@ public class TestAesGcmSivCryptographer {
         // The same plaintext message
         String plaintext = "This is a test message to ensure ciphertext is different!";
 
-        String encryptedMessage1 = aesGcmSivCryptographer.encrypt(plaintext, "aniceSaltGorYu");
-        String encryptedMessage2 = aesGcmSivCryptographer.encrypt(plaintext, "aniceSaltGorYu");
+        final Identifier identifier = new Identifier();
+        identifier.setBsn(plaintext);
+
+        String encryptedMessage1 = aesGcmSivCryptographer.encrypt(identifier, "aniceSaltGorYu");
+        String encryptedMessage2 = aesGcmSivCryptographer.encrypt(identifier, "aniceSaltGorYu");
 
         // Assert that the two ciphertexts are different
         assertThat(encryptedMessage1).isEqualTo(encryptedMessage2);

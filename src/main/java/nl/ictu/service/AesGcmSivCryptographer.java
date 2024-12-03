@@ -1,10 +1,14 @@
 package nl.ictu.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import nl.ictu.Identifier;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+
+import java.io.IOException;
 
 public interface AesGcmSivCryptographer {
 
-    String encrypt(String plaintext, String salt) throws InvalidCipherTextException;
+    String encrypt(Identifier identifier, String salt) throws InvalidCipherTextException, IOException;
 
-    String decrypt(String ciphertext, String salt) throws InvalidCipherTextException;
+    Identifier decrypt(String ciphertext, String salt) throws InvalidCipherTextException, JsonProcessingException;
 }

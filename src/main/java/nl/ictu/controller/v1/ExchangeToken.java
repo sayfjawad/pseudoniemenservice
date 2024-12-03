@@ -13,12 +13,12 @@ import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
 import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -60,16 +60,14 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
                 identifier.setBsn(token.getBsn());
 
-                final String encode = identifierConverter.encode(identifier);
-
-                final String encrypt = aesGcmSivCryptographer.encrypt(encode, callerOIN);
+                final String encrypt = aesGcmSivCryptographer.encrypt(identifier, callerOIN);
 
                 wsIdentifier.setType(ORGANISATION_PSEUDO);
                 wsIdentifier.setValue(encrypt);
 
             }
             default -> {
-                return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+                return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
             }
 
         }

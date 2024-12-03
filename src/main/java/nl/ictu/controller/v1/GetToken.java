@@ -11,9 +11,10 @@ import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
 import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,15 +48,13 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
                     final String orgPseudoEncryptedString = wsGetTokenRequest.getIdentifier().getValue();
 
-                    final String orgPseudoString = aesGcmSivCryptographer.decrypt(orgPseudoEncryptedString, wsGetTokenRequest.getRecipientOIN());
-
-                    final Identifier decodedIdentifier = identifierConverter.decode(orgPseudoString);
+                    final Identifier decodedIdentifier = aesGcmSivCryptographer.decrypt(orgPseudoEncryptedString, wsGetTokenRequest.getRecipientOIN());
 
                     token.setBsn(decodedIdentifier.getBsn());
 
                 }
                 default -> {
-                    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+                    return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
                 }
             }
         }

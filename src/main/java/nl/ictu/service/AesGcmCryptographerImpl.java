@@ -1,6 +1,7 @@
 package nl.ictu.service;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.SneakyThrows;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.utils.ByteArrayUtils;
 import org.springframework.stereotype.Service;
@@ -42,15 +43,12 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
     @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
+    @SneakyThrows
     public AesGcmCryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) {
 
         pseudoniemenServiceProperties = pseudoniemenServicePropertiesArg;
 
-        try {
-            sha256Digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+        sha256Digest = MessageDigest.getInstance("SHA-256");
 
         if (!StringUtils.hasText(pseudoniemenServiceProperties.getTokenPrivateKey())) {
             throw new RuntimeException("Please set a private token key");

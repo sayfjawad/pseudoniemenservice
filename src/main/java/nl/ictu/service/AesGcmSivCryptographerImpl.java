@@ -1,7 +1,10 @@
 package nl.ictu.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import nl.ictu.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.engines.AESEngine;
@@ -11,9 +14,9 @@ import org.bouncycastle.crypto.params.KeyParameter;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
 
@@ -38,18 +41,17 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
     private final MessageDigest sha256Digest;
 
+    private final IdentifierConverter identifierConverter;
+
     @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
-    public AesGcmSivCryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) {
+    @SneakyThrows
+    public AesGcmSivCryptographerImpl(final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg, final IdentifierConverter identifierConverterArg) {
 
         pseudoniemenServiceProperties = pseudoniemenServicePropertiesArg;
+        identifierConverter = identifierConverterArg;
 
         aesEngine = new AESEngine();
-
-        try {
-            this.sha256Digest = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
+        sha256Digest = MessageDigest.getInstance("SHA-256");
 
         if (!StringUtils.hasText(pseudoniemenServiceProperties.getIdentifierPrivateKey())) {
             throw new RuntimeException("Please set a private identifier key");
@@ -74,7 +76,9 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
     }
 
     @Override
-    public String encrypt(final String plaintext, final String salt) throws InvalidCipherTextException {
+    public String encrypt(final Identifier identifier, final String salt) throws InvalidCipherTextException, IOException {
+
+        final String plaintext = identifierConverter.encode(identifier);
 
         final GCMSIVBlockCipher cipher = new GCMSIVBlockCipher(aesEngine);
 
@@ -95,7 +99,7 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
     }
 
     @Override
-    public String decrypt(final String ciphertextString, final String salt) throws InvalidCipherTextException {
+    public Identifier decrypt(final String ciphertextString, final String salt) throws InvalidCipherTextException, JsonProcessingException {
 
         final GCMSIVBlockCipher cipher = new GCMSIVBlockCipher(aesEngine);
 
@@ -111,7 +115,11 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
         cipher.reset();
 
-        return new String(plaintext, StandardCharsets.UTF_8);
+        final String encodedIdentifier = new String(plaintext, StandardCharsets.UTF_8);
+
+        final Identifier identifier = identifierConverter.decode(encodedIdentifier);
+
+        return identifier;
 
     }
 
