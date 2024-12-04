@@ -1,5 +1,6 @@
 package nl.ictu;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,7 +8,7 @@ import lombok.Setter;
 @Setter
 public final class Token {
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("SS_SHOULD_BE_STATIC")
+    @SuppressFBWarnings("SS_SHOULD_BE_STATIC")
     private String version = "v1";
     private String bsn;
     private String recipientOIN;
