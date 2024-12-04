@@ -6,12 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ictu.Identifier;
 import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenForIdentifierRequest;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
-import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,11 +30,9 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
 
     private final TokenConverter tokenConverter;
 
-    private final IdentifierConverter identifierConverter;
-
     @Override
     @SneakyThrows
-    public ResponseEntity<WsExchangeTokenResponse> exchangeTokenForIdentifier(final String callerOIN, final WsExchangeTokenForIdentifierRequest wsExchangeTokenForIdentifierRequest) {
+    public ResponseEntity<WsExchangeTokenResponse> exchangeToken(final String callerOIN, final WsExchangeTokenRequest wsExchangeTokenForIdentifierRequest) {
 
         final String encodedToken = aesGcmCryptographer.decrypt(wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
 

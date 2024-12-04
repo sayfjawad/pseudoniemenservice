@@ -4,12 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import nl.ictu.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeIdentifierApi;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierForIdentifierRequest;
+import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
 import nl.ictu.service.AesGcmSivCryptographer;
-import nl.ictu.service.IdentifierConverter;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,13 +23,11 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @RestController
 public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionOneController {
 
-    private final IdentifierConverter identifierConverter;
-
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
 
     @Override
     @SneakyThrows
-    public ResponseEntity<WsExchangeIdentifierResponse> exchangeIdentifierForIdentifier(final String callerOIN, final WsExchangeIdentifierForIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
+    public ResponseEntity<WsExchangeIdentifierResponse> exchangeIdentifier(final String callerOIN, final WsExchangeIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
 
         final WsIdentifier wsIdentifierRequest = wsExchangeIdentifierForIdentifierRequest.getIdentifier();
 

@@ -24,14 +24,12 @@ public final class AESHelper {
         byte[] iv = new byte[IV_LENGTH]; // AES block size is 16 bytes
         SECURE_RANDOM.nextBytes(iv);
 
-        final GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
+        return new GCMParameterSpec(TAG_LENGTH, iv);
 
-        return gcmParameterSpec;
     }
 
     public static GCMParameterSpec createIVfromValues(final byte[] iv) {
-        final GCMParameterSpec gcmParameterSpec = new GCMParameterSpec(TAG_LENGTH, iv);
-        return gcmParameterSpec;
+        return new GCMParameterSpec(TAG_LENGTH, iv);
     }
 
     public static Cipher createCipher() throws NoSuchPaddingException, NoSuchAlgorithmException {

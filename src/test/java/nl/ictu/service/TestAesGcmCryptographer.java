@@ -20,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class TestAesGcmCryptographer {
 
-    private AesGcmCryptographer aesGcmCryptographer = new AesGcmCryptographerImpl(new PseudoniemenServiceProperties().setTokenPrivateKey("bFUyS1FRTVpON0pCSFFRRGdtSllSeUQ1MlRna2txVmI="));
+    private final AesGcmCryptographer aesGcmCryptographer = new AesGcmCryptographerImpl(new PseudoniemenServiceProperties().setTokenPrivateKey("bFUyS1FRTVpON0pCSFFRRGdtSllSeUQ1MlRna2txVmI="));
 
-    private Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
+    private final Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
     @Test
     public void testEncyptDecryptForDifferentStringLengths() {

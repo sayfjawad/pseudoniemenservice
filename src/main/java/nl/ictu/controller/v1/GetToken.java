@@ -9,7 +9,6 @@ import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
 import nl.ictu.service.AesGcmCryptographer;
 import nl.ictu.service.AesGcmSivCryptographer;
-import nl.ictu.service.IdentifierConverter;
 import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +24,6 @@ public final class GetToken implements GetTokenApi, VersionOneController {
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
 
     private final TokenConverter tokenConverter;
-
-    private final IdentifierConverter identifierConverter;
 
     @Override
     @SneakyThrows

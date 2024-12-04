@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class TestAesGcmSivCryptographer {
 
-    private AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographerImpl(
+    private final AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographerImpl(
         new PseudoniemenServiceProperties().setIdentifierPrivateKey("QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="),
         new IdentifierConverterImpl(new ObjectMapper())
     );
 
-    private Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
+    private final Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
     @Test
     public void testEncyptDecryptForDifferentStringLengths() {

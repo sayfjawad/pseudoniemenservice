@@ -8,6 +8,8 @@ servers:
 paths:
   /getToken:
     post:
+      tags:
+        - Token
       summary: get a token
       operationId: getToken
       parameters:
@@ -19,8 +21,11 @@ paths:
           $ref: '#/components/responses/getTokenResponse'
   /exchangeToken:
     post:
+      tags:
+        - Token
+        - Identifier
       summary: excgange token for an identifier
-      operationId: exchangeTokenForIdentifier
+      operationId: exchangeToken
       parameters:
         - $ref: "#/components/parameters/callerOIN"
       requestBody:
@@ -30,8 +35,10 @@ paths:
           $ref: '#/components/responses/exchangeTokenResponse'
   /exchangeIdentifier:
     post:
+      tags:
+        - Identifier
       summary: exchange an identifier for another identifier
-      operationId: exchangeIdentifierForIdentifier
+      operationId: exchangeIdentifier
       parameters:
         - $ref: "#/components/parameters/callerOIN"
       requestBody:

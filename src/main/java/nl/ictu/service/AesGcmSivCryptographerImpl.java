@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ictu.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.bouncycastle.crypto.MultiBlockCipher;
 import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.modes.GCMSIVBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
@@ -29,6 +30,8 @@ import java.util.Base64;
 @Service
 public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
+    public static final int MAC_SIZE = 128;
+
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
     private static final int NONCE_LENTH = 12;
@@ -37,7 +40,7 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
 
-    private final AESEngine aesEngine;
+    private final MultiBlockCipher aesEngine;
 
     private final MessageDigest sha256Digest;
 
@@ -50,7 +53,7 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
         pseudoniemenServiceProperties = pseudoniemenServicePropertiesArg;
         identifierConverter = identifierConverterArg;
 
-        aesEngine = new AESEngine();
+        aesEngine = AESEngine.newInstance();
         sha256Digest = MessageDigest.getInstance("SHA-256");
 
         if (!StringUtils.hasText(pseudoniemenServiceProperties.getIdentifierPrivateKey())) {
@@ -69,9 +72,7 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
         final KeyParameter keyParameter = new KeyParameter(base64Decoder.decode(identifierPrivateKey));
 
-        final AEADParameters cipherParameter = new AEADParameters(keyParameter, 128, nonce12);
-
-        return cipherParameter;
+        return new AEADParameters(keyParameter, MAC_SIZE, nonce12);
 
     }
 
@@ -117,9 +118,7 @@ public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
         final String encodedIdentifier = new String(plaintext, StandardCharsets.UTF_8);
 
-        final Identifier identifier = identifierConverter.decode(encodedIdentifier);
-
-        return identifier;
+        return identifierConverter.decode(encodedIdentifier);
 
     }
 

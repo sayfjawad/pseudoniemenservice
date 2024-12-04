@@ -87,9 +87,8 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
 
         byte[] key = sha256Digest.digest(salterSecretBytes);
 
-        final SecretKey secretKey = new SecretKeySpec(key, "AES");
+        return new SecretKeySpec(key, "AES");
 
-        return secretKey;
     }
 
     @Override
