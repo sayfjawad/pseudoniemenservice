@@ -58,11 +58,11 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
     public String encrypt(final String plaintext, final String salt)
             throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
-        final Cipher cipher = AESHelper.createCipher();
+        final var cipher = AESHelper.createCipher();
 
-        final GCMParameterSpec gcmParameterSpec = AESHelper.generateIV();
+        final var gcmParameterSpec = AESHelper.generateIV();
 
-        final SecretKey secretKey = createSecretKey(salt);
+        final var secretKey = createSecretKey(salt);
 
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
 
@@ -93,7 +93,7 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
     public String decrypt(final String ciphertextWithIv, final String salt)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-        final Cipher cipher = AESHelper.createCipher();
+        final var cipher = AESHelper.createCipher();
 
         final var encryptedWithIV = base64Wrapper.decode(ciphertextWithIv);
 
@@ -101,9 +101,9 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
         final var ciphertext = Arrays.copyOfRange(encryptedWithIV, IV_LENGTH,
                 encryptedWithIV.length);
 
-        final GCMParameterSpec gcmParameterSpec = AESHelper.createIVfromValues(iv);
+        final var gcmParameterSpec = AESHelper.createIVfromValues(iv);
 
-        final SecretKey secretKey = createSecretKey(salt);
+        final var secretKey = createSecretKey(salt);
 
         cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
 
