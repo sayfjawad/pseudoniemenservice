@@ -22,7 +22,7 @@ import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public final class ExchangeToken implements ExchangeTokenApi, VersionOneController {
+public final class ExchangeTokenController implements ExchangeTokenApi, VersionOneController {
 
     private final AesGcmCryptographer aesGcmCryptographer;
 

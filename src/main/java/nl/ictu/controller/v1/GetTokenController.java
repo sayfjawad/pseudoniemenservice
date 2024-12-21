@@ -1,5 +1,7 @@
 package nl.ictu.controller.v1;
 
+import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
+import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,8 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public final class GetToken implements GetTokenApi, VersionOneController {
+public final class GetTokenController implements GetTokenApi, VersionOneController {
 
+    public static final String V_1 = "v1";
     private final AesGcmCryptographer aesGcmCryptographer;
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
     private final TokenConverter tokenConverter;
@@ -32,41 +35,42 @@ public final class GetToken implements GetTokenApi, VersionOneController {
 
         // check is callerOIN allowed to communicatie with sinkOIN
 
-        final WsGetTokenResponse wsGetToken200Response = new WsGetTokenResponse();
-
         final var creationDate = System.currentTimeMillis();
         final var recipientOIN = wsGetTokenRequest.getRecipientOIN();
         final var identifier = wsGetTokenRequest.getIdentifier();
-        final var tokenBuilder = Token.builder();
 
-        if (identifier != null) {
-            switch (identifier.getType()) {
-                case BSN -> tokenBuilder
-                        .bsn(identifier.getValue())
-                        .creationDate(creationDate)
-                        .recipientOIN(recipientOIN);
-                case ORGANISATION_PSEUDO -> tokenBuilder
-                        .bsn(mapDecryptedBsn(identifier.getValue(), recipientOIN))
-                        .creationDate(creationDate)
-                        .recipientOIN(recipientOIN);
-                default -> {
-                    return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
-                }
+        var bsn = "";
+        if (identifier != null
+                && identifier.getValue() != null
+                && (BSN.equals(identifier.getType()) || ORGANISATION_PSEUDO.equals(identifier.getType()))) {
+            final String bsnValue = identifier.getValue();
+            if (BSN.equals(identifier.getType())) {
+                bsn = bsnValue;
+            } else if (ORGANISATION_PSEUDO.equals(identifier.getType())) {
+                bsn = mapDecryptedBsn(bsnValue, recipientOIN);
             }
+            final var token = Token.builder()
+                    .version(V_1)
+                    .bsn(bsn)
+                    .creationDate(creationDate)
+                    .recipientOIN(recipientOIN)
+                    .build();
+            final var plainTextToken = tokenConverter.encode(token);
+            final var encryptedToken = aesGcmCryptographer.encrypt(plainTextToken, recipientOIN);
+            final WsGetTokenResponse wsGetToken200Response = new WsGetTokenResponse();
+            wsGetToken200Response.token(encryptedToken);
+            return ResponseEntity.ok(wsGetToken200Response);
         }
 
-        final var plainTextToken = tokenConverter.encode(tokenBuilder.build());
-        final var encryptedToken = aesGcmCryptographer.encrypt(plainTextToken, recipientOIN);
-        wsGetToken200Response.token(encryptedToken);
-        return ResponseEntity.ok(wsGetToken200Response);
+        return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
+
     }
 
     private String mapDecryptedBsn(final String bsnValue, final String recipientOIN)
             throws InvalidCipherTextException, JsonProcessingException {
 
-        final var orgPseudoEncryptedString = bsnValue;
         final var decodedIdentifier = aesGcmSivCryptographer.decrypt(
-                orgPseudoEncryptedString,
+                bsnValue,
                 recipientOIN);
         return decodedIdentifier.getBsn();
     }

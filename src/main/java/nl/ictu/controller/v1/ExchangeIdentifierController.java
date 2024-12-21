@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionOneController {
+public final class ExchangeIdentifierController implements ExchangeIdentifierApi, VersionOneController {
 
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
 
