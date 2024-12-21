@@ -24,6 +24,9 @@ public final class PseudoniemenServiceProperties {
         if (!StringUtils.hasText(tokenPrivateKey)) {
             throw new TokenPrivateKeyException("Please set a private token key");
         }
+        if (!StringUtils.hasText(identifierPrivateKey)) {
+            throw new RuntimeException("Please set a private identifier key");
+        }
     }
 }
 

@@ -29,6 +29,4 @@ public class IdentifierConverterImpl implements IdentifierConverter {
     public Identifier decode(final String encodedIdentifier) throws JsonProcessingException {
         return objectMapper.readValue(encodedIdentifier, Identifier.class);
     }
-
-
 }

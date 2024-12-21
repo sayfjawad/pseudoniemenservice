@@ -1,18 +1,19 @@
 package nl.ictu.service;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
-import nl.ictu.Identifier;
-import nl.ictu.configuration.PseudoniemenServiceProperties;
-import org.junit.jupiter.api.Test;
-import org.springframework.test.context.ActiveProfiles;
+import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import lombok.extern.slf4j.Slf4j;
+import nl.ictu.Identifier;
+import nl.ictu.configuration.PseudoniemenServiceProperties;
+import nl.ictu.utils.Base64Wrapper;
+import nl.ictu.utils.MessageDigestUtil;
+import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Class for tesing {@link AesGcmCryptographerImpl}
@@ -23,11 +24,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestAesGcmSivCryptographer {
 
     private final AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographerImpl(
-        new PseudoniemenServiceProperties().setIdentifierPrivateKey("QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="),
-        new IdentifierConverterImpl(new ObjectMapper())
+            new PseudoniemenServiceProperties().setIdentifierPrivateKey(
+                    "QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="),
+            new MessageDigestUtil(),
+            new IdentifierConverterImpl(new ObjectMapper()),
+            new Base64Wrapper()
     );
 
-    private final Set<String> testStrings = new HashSet<>(Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo", "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
+    private final Set<String> testStrings = new HashSet<>(
+            Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo",
+                    "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
     @Test
     public void testEncyptDecryptForDifferentStringLengths() {
@@ -38,8 +44,10 @@ public class TestAesGcmSivCryptographer {
                 final Identifier identifier = new Identifier();
                 identifier.setBsn(plain);
 
-                final String crypted = aesGcmSivCryptographer.encrypt(identifier, "helloHowAreyo12345678");
-                final Identifier actual = aesGcmSivCryptographer.decrypt(crypted, "helloHowAreyo12345678");
+                final String crypted = aesGcmSivCryptographer.encrypt(identifier,
+                        "helloHowAreyo12345678");
+                final Identifier actual = aesGcmSivCryptographer.decrypt(crypted,
+                        "helloHowAreyo12345678");
                 assertThat(actual.getBsn()).isEqualTo(plain);
             } catch (final Exception e) {
                 throw new RuntimeException(e);

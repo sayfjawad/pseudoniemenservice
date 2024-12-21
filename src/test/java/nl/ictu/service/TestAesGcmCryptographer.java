@@ -22,10 +22,11 @@ import org.springframework.test.context.ActiveProfiles;
 public class TestAesGcmCryptographer {
 
     private final AesGcmCryptographer aesGcmCryptographer = new AesGcmCryptographerImpl(
-            new PseudoniemenServiceProperties().setTokenPrivateKey(
-                    "bFUyS1FRTVpON0pCSFFRRGdtSllSeUQ1MlRna2txVmI="),
             new Base64Wrapper(),
-            new MessageDigestUtil()
+            new MessageDigestUtil(),
+            new PseudoniemenServiceProperties().setTokenPrivateKey(
+                    "bFUyS1FRTVpON0pCSFFRRGdtSllSeUQ1MlRna2txVmI=")
+
     );
     private final Set<String> testStrings = new HashSet<>(
             Arrays.asList("a", "bb", "dsv", "ghad", "dhaht", "uDg5Av", "d93fdvv", "dj83hzHo",
