@@ -73,6 +73,5 @@ public class AesGcmCryptographerImpl implements AesGcmCryptographer {
         cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
         final var decryptedText = cipher.doFinal(ciphertext);
         return new String(decryptedText, StandardCharsets.UTF_8);
-
     }
 }
