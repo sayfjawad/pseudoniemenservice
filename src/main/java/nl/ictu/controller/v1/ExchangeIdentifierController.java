@@ -21,18 +21,18 @@ public final class ExchangeIdentifierController implements ExchangeIdentifierApi
     /**
      * Exchanges an identifier based on the provided caller OIN and request data.
      *
-     * @param callerOIN The OIN of the caller initiating the request.
-     * @param wsExchangeIdentifierForIdentifierRequest The request object containing the identifier and additional data for the exchange process.
-     * @return A ResponseEntity containing a WsExchangeIdentifierResponse if the exchange is successful,
-     *         or a ResponseEntity with HTTP status UNPROCESSABLE_ENTITY if the exchange fails.
+     * @param callerOIN         The OIN of the caller initiating the request.
+     * @param wsExchangeRequest The request object containing the identifier and additional data for
+     *                          the exchange process.
+     * @return A ResponseEntity containing a WsExchangeIdentifierResponse if the exchange is
+     * successful, or a ResponseEntity with HTTP status UNPROCESSABLE_ENTITY if the exchange fails.
      */
     @Override
     @SneakyThrows
     public ResponseEntity<WsExchangeIdentifierResponse> exchangeIdentifier(final String callerOIN,
-            final WsExchangeIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
+            final WsExchangeIdentifierRequest wsExchangeRequest) {
 
-        final var identifier = service.exchangeIdentifier(callerOIN,
-                wsExchangeIdentifierForIdentifierRequest);
+        final var identifier = service.exchangeIdentifier(callerOIN, wsExchangeRequest);
         if (identifier != null) {
             return ResponseEntity.ok(identifier);
         }
