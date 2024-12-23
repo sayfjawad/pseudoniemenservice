@@ -24,7 +24,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 @Slf4j
 @ActiveProfiles("test")
-public class TestAesGcmSivCryptographer {
+class TestAesGcmSivCryptographer {
 
     private final AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographer(
             new PseudoniemenServiceProperties().setIdentifierPrivateKey(
@@ -39,7 +39,7 @@ public class TestAesGcmSivCryptographer {
                     "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
     @Test
-    public void testEncyptDecryptForDifferentStringLengths() {
+    void testEncyptDecryptForDifferentStringLengths() {
 
         testStrings.forEach(plain -> {
 
@@ -62,7 +62,7 @@ public class TestAesGcmSivCryptographer {
 
     // Test to ensure ciphertext is different for the same plaintext due to IV randomness
     @Test
-    public void testCiphertextIsTheSameForSamePlaintext() throws Exception {
+    void testCiphertextIsTheSameForSamePlaintext() throws Exception {
 
         // The same plaintext message
         String plaintext = "This is a test message to ensure ciphertext is different!";
