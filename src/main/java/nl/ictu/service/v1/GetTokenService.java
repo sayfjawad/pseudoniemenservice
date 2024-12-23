@@ -16,7 +16,7 @@ import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.v1.crypto.AesGcmCryptographer;
-import nl.ictu.service.v1.crypto.TokenConverter;
+import nl.ictu.service.v1.crypto.TokenCoder;
 import nl.ictu.service.v1.map.EncryptedBsnMapper;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +26,7 @@ public final class GetTokenService {
 
     public static final String V_1 = "v1";
     private final AesGcmCryptographer aesGcmCryptographer;
-    private final TokenConverter tokenConverter;
+    private final TokenCoder tokenCoder;
     private final EncryptedBsnMapper encryptedBsnMapper;
 
     /**
@@ -69,7 +69,7 @@ public final class GetTokenService {
             final String recipientOIN)
             throws IOException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
-        final var plainTextToken = tokenConverter.encode(Token.builder()
+        final var plainTextToken = tokenCoder.encode(Token.builder()
                 .version(V_1)
                 .bsn(bsn)
                 .creationDate(creationDate)

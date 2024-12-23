@@ -13,13 +13,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @RegisterReflectionForBinding({Token.class})
-public class TokenConverter {
+public class TokenCoder {
 
     private final ObjectMapper objectMapper;
 
     public String encode(final Token token) throws IOException {
 
-        final StringWriter stringWriter = new StringWriter();
+        final var stringWriter = new StringWriter();
         objectMapper.writeValue(stringWriter, token);
         return stringWriter.toString();
     }
