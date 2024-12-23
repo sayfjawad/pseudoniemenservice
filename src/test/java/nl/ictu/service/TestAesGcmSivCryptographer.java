@@ -10,28 +10,27 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import nl.ictu.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
-import nl.ictu.service.v1.crypto.AesGcmCryptographerImpl;
+import nl.ictu.service.v1.crypto.AesGcmCryptographer;
 import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
-import nl.ictu.service.v1.crypto.AesGcmSivCryptographerImpl;
-import nl.ictu.service.v1.crypto.IdentifierConverterImpl;
+import nl.ictu.service.v1.crypto.IdentifierConverter;
 import nl.ictu.utils.Base64Wrapper;
 import nl.ictu.utils.MessageDigestUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Class for tesing {@link AesGcmCryptographerImpl}
+ * Class for tesing {@link AesGcmCryptographer}
  */
 
 @Slf4j
 @ActiveProfiles("test")
 public class TestAesGcmSivCryptographer {
 
-    private final AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographerImpl(
+    private final AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographer(
             new PseudoniemenServiceProperties().setIdentifierPrivateKey(
                     "QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="),
             new MessageDigestUtil(),
-            new IdentifierConverterImpl(new ObjectMapper()),
+            new IdentifierConverter(new ObjectMapper()),
             new Base64Wrapper()
     );
 

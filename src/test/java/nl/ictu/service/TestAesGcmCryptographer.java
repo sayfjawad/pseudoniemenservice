@@ -9,21 +9,20 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.service.v1.crypto.AesGcmCryptographer;
-import nl.ictu.service.v1.crypto.AesGcmCryptographerImpl;
 import nl.ictu.utils.Base64Wrapper;
 import nl.ictu.utils.MessageDigestUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Class for tesing {@link AesGcmCryptographerImpl}
+ * Class for tesing {@link AesGcmCryptographer}
  */
 
 @Slf4j
 @ActiveProfiles("test")
 public class TestAesGcmCryptographer {
 
-    private final AesGcmCryptographer aesGcmCryptographer = new AesGcmCryptographerImpl(
+    private final AesGcmCryptographer aesGcmCryptographer = new AesGcmCryptographer(
             new Base64Wrapper(),
             new MessageDigestUtil(),
             new PseudoniemenServiceProperties().setTokenPrivateKey(
