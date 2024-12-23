@@ -1,10 +1,9 @@
 package nl.ictu.service.v1.crypto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import java.io.IOException;
 import nl.ictu.Identifier;
 import org.bouncycastle.crypto.InvalidCipherTextException;
-
-import java.io.IOException;
 
 public interface AesGcmSivCryptographer {
 

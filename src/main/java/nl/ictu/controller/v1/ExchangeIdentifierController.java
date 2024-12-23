@@ -31,63 +31,44 @@ public final class ExchangeIdentifierController implements ExchangeIdentifierApi
         final var wsIdentifierRequest = wsExchangeIdentifierForIdentifierRequest.getIdentifier();
         final var recipientOIN = wsExchangeIdentifierForIdentifierRequest.getRecipientOIN();
         final var recipientIdentifierType = wsExchangeIdentifierForIdentifierRequest.getRecipientIdentifierType();
-
         if (BSN.equals(wsIdentifierRequest.getType()) && ORGANISATION_PSEUDO.equals(
                 recipientIdentifierType)) {
             // from BSN to Org Pseudo
             return ResponseEntity.ok(
                     convertBsnToPseudo(wsIdentifierRequest.getValue(), recipientOIN));
-
         } else if (ORGANISATION_PSEUDO.equals(wsIdentifierRequest.getType()) && BSN.equals(
                 recipientIdentifierType)) {
             // from BSN to Org Pseudo
             return ResponseEntity.ok(
                     convertPseudoToBEsn(wsIdentifierRequest.getValue(), recipientOIN));
-
         } else {
             return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
         }
-
-
     }
 
     private WsExchangeIdentifierResponse convertBsnToPseudo(final String bsn, final String oin)
             throws IOException, InvalidCipherTextException {
 
         final Identifier identifier = new Identifier();
-
         identifier.setBsn(bsn);
-
         final String oinNencyptedIdentifier = aesGcmSivCryptographer.encrypt(identifier, oin);
-
         final WsExchangeIdentifierResponse wsExchangeTokenForIdentifier200Response = new WsExchangeIdentifierResponse();
-
         final WsIdentifier wsIdentifierResponse = new WsIdentifier();
-
         wsIdentifierResponse.setType(ORGANISATION_PSEUDO);
         wsIdentifierResponse.setValue(oinNencyptedIdentifier);
-
         wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifierResponse);
-
         return wsExchangeTokenForIdentifier200Response;
-
     }
 
     private WsExchangeIdentifierResponse convertPseudoToBEsn(final String pseudo, final String oin)
             throws IOException, InvalidCipherTextException {
 
         final Identifier identifier = aesGcmSivCryptographer.decrypt(pseudo, oin);
-
         final WsExchangeIdentifierResponse wsExchangeTokenForIdentifier200Response = new WsExchangeIdentifierResponse();
-
         final WsIdentifier wsIdentifierResponse = new WsIdentifier();
-
         wsIdentifierResponse.setType(BSN);
         wsIdentifierResponse.setValue(identifier.getBsn());
-
         wsExchangeTokenForIdentifier200Response.setIdentifier(wsIdentifierResponse);
-
         return wsExchangeTokenForIdentifier200Response;
-
     }
 }

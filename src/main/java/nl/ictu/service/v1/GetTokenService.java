@@ -14,7 +14,6 @@ import javax.crypto.NoSuchPaddingException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import nl.ictu.Token;
-import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.v1.crypto.AesGcmCryptographer;
@@ -32,16 +31,13 @@ public final class GetTokenService {
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
     private final TokenConverter tokenConverter;
 
-
-    public WsGetTokenResponse getWsGetTokenResponse(
-            final WsGetTokenRequest wsGetTokenRequest)
-            throws IOException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+    @SneakyThrows
+    public WsGetTokenResponse getWsGetTokenResponse(final String recipientOIN, final WsIdentifier identifier) {
 
         final var creationDate = System.currentTimeMillis();
-        final var recipientOIN = wsGetTokenRequest.getRecipientOIN();
-        final var identifier = wsGetTokenRequest.getIdentifier();
+
         // check is callerOIN allowed to communicatie with sinkOIN
-        if (identifier != null && identifier.getValue() != null && identifier.getType() != null) {
+        if (identifier != null) {
 
             final String bsn = mapBsn(identifier, recipientOIN);
             if (bsn != null) {

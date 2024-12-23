@@ -23,14 +23,12 @@ public final class GetTokenController implements GetTokenApi, VersionOneControll
     public ResponseEntity<WsGetTokenResponse> getToken(final String callerOIN,
             final WsGetTokenRequest wsGetTokenRequest) {
 
-
-        final var wsGetToken200Response = getTokenService.getWsGetTokenResponse(wsGetTokenRequest);
+        final var recipientOIN = wsGetTokenRequest.getRecipientOIN();
+        final var identifier = wsGetTokenRequest.getIdentifier();
+        final var wsGetToken200Response = getTokenService.getWsGetTokenResponse(recipientOIN, identifier);
         if (wsGetToken200Response != null) {
             return ResponseEntity.ok(wsGetToken200Response);
         }
         return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
-
     }
-
-
 }
