@@ -46,7 +46,6 @@ class TestAesGcmSivCryptographer {
             try {
                 final Identifier identifier = new Identifier();
                 identifier.setBsn(plain);
-
                 final String crypted = aesGcmSivCryptographer.encrypt(identifier,
                         "helloHowAreyo12345678");
                 final Identifier actual = aesGcmSivCryptographer.decrypt(crypted,

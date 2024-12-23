@@ -3,6 +3,7 @@ package nl.ictu.configuration;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import nl.ictu.service.exception.IdentifierPrivateKeyException;
 import nl.ictu.service.exception.TokenPrivateKeyException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public final class PseudoniemenServiceProperties {
             throw new TokenPrivateKeyException("Please set a private token key");
         }
         if (!StringUtils.hasText(identifierPrivateKey)) {
-            throw new RuntimeException("Please set a private identifier key");
+            throw new IdentifierPrivateKeyException("Please set a private identifier key");
         }
     }
 }

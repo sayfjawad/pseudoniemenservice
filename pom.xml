@@ -104,6 +104,9 @@
 
                                 <!-- Indien je daarnaast ook algemene Lombok-annotaties als @Getter/@Setter wilt genereren -->
                                 <useLombokAnnotations>true</useLombokAnnotations>
+                                <additionalModelTypeAnnotations>@lombok.Builder @lombok.NoArgsConstructor
+                                    @lombok.AllArgsConstructor
+                                </additionalModelTypeAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>
