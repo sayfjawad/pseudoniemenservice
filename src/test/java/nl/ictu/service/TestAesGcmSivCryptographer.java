@@ -44,9 +44,9 @@ class TestAesGcmSivCryptographer {
         testStrings.forEach(plain -> {
 
             try {
-                final Identifier identifier = new Identifier();
-                identifier.setBsn(plain);
-                final String crypted = aesGcmSivCryptographer.encrypt(identifier,
+                final String crypted = aesGcmSivCryptographer.encrypt(Identifier.builder()
+                                .bsn(plain)
+                                .build(),
                         "helloHowAreyo12345678");
                 final Identifier actual = aesGcmSivCryptographer.decrypt(crypted,
                         "helloHowAreyo12345678");
@@ -64,13 +64,11 @@ class TestAesGcmSivCryptographer {
     void testCiphertextIsTheSameForSamePlaintext() throws Exception {
 
         // The same plaintext message
-        String plaintext = "This is a test message to ensure ciphertext is different!";
+        final var plaintext = "This is a test message to ensure ciphertext is different!";
+        final var identifier = Identifier.builder().bsn(plaintext).build();
 
-        final Identifier identifier = new Identifier();
-        identifier.setBsn(plaintext);
-
-        String encryptedMessage1 = aesGcmSivCryptographer.encrypt(identifier, "aniceSaltGorYu");
-        String encryptedMessage2 = aesGcmSivCryptographer.encrypt(identifier, "aniceSaltGorYu");
+        final var encryptedMessage1 = aesGcmSivCryptographer.encrypt(identifier, "aniceSaltGorYu");
+        final var encryptedMessage2 = aesGcmSivCryptographer.encrypt(identifier, "aniceSaltGorYu");
 
         // Assert that the two ciphertexts are different
         assertThat(encryptedMessage1).isEqualTo(encryptedMessage2);

@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public final class ExchangeTokenService {
 
+    public static final String V_1 = "v1";
     private final AesGcmCryptographer aesGcmCryptographer;
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
     private final TokenConverter tokenConverter;
@@ -45,9 +46,10 @@ public final class ExchangeTokenService {
                 wsIdentifier.setValue(token.getBsn());
             }
             case ORGANISATION_PSEUDO -> {
-                final Identifier identifier = new Identifier();
-                identifier.setBsn(token.getBsn());
-                final String encrypt = aesGcmSivCryptographer.encrypt(identifier, callerOIN);
+                final String encrypt = aesGcmSivCryptographer.encrypt(Identifier.builder()
+                        .version(V_1)
+                        .bsn(token.getBsn())
+                        .build(), callerOIN);
                 wsIdentifier.setType(ORGANISATION_PSEUDO);
                 wsIdentifier.setValue(encrypt);
             }

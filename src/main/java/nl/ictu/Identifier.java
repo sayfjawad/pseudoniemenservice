@@ -1,14 +1,17 @@
 package nl.ictu;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Setter
-public final class Identifier {
 
-    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("SS_SHOULD_BE_STATIC")
-    private String version = "v1";
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Identifier {
+
+    private String version;
     private String bsn;
-
 }
