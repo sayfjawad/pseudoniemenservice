@@ -9,9 +9,9 @@ import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
-import nl.ictu.service.AesGcmCryptographer;
-import nl.ictu.service.AesGcmSivCryptographer;
-import nl.ictu.service.TokenConverter;
+import nl.ictu.service.v1.crypto.AesGcmCryptographer;
+import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
+import nl.ictu.service.v1.crypto.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 

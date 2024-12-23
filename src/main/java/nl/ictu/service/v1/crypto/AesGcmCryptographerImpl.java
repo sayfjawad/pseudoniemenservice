@@ -1,4 +1,4 @@
-package nl.ictu.service;
+package nl.ictu.service.v1.crypto;
 
 import static nl.ictu.utils.AESHelper.IV_LENGTH;
 

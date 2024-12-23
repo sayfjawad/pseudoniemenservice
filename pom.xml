@@ -98,12 +98,18 @@
                                 <openApiNullable>false</openApiNullable>
                                 <useOptional>true</useOptional>
                                 <documentationProvider>none</documentationProvider>
-                                <annotationLibrary>none</annotationLibrary>
+
+                                <!-- Builder-annotaties in de gegenereerde modelklassen -->
+                                <modelLombokBuilder>true</modelLombokBuilder>
+
+                                <!-- Indien je daarnaast ook algemene Lombok-annotaties als @Getter/@Setter wilt genereren -->
+                                <useLombokAnnotations>true</useLombokAnnotations>
                             </configOptions>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>

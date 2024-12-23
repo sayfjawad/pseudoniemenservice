@@ -1,4 +1,4 @@
-package nl.ictu.service;
+package nl.ictu.service.v1.crypto;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

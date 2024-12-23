@@ -12,7 +12,7 @@ import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeIdentifierApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
-import nl.ictu.service.AesGcmSivCryptographer;
+import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,4 +1,4 @@
-package nl.ictu.service;
+package nl.ictu.service.v1.crypto;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.ictu.Identifier;
