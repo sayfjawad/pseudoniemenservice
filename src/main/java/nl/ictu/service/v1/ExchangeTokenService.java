@@ -29,6 +29,15 @@ public final class ExchangeTokenService {
     private final TokenConverter tokenConverter;
     private final OINValidator oinValidator;
 
+    /**
+     * Exchanges a token for an identifier based on the provided request and caller OIN.
+     *
+     * @param callerOIN the originating organization's identification number used for validation
+     * @param wsExchangeTokenForIdentifierRequest the request containing the token and identifier type
+     * @return a WsExchangeTokenResponse containing the generated or resolved identifier
+     * @throws InvalidOINException if the caller OIN is not valid or does not match the token
+     * @throws InvalidWsIdentifierTokenException if the identifier type in the request is invalid or cannot be processed
+     */
     @SneakyThrows
     public WsExchangeTokenResponse exchangeToken(final String callerOIN,
             final WsExchangeTokenRequest wsExchangeTokenForIdentifierRequest) {

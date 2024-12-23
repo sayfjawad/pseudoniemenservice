@@ -19,6 +19,15 @@ public final class ExchangeTokenController implements ExchangeTokenApi, VersionO
 
     private final ExchangeTokenService exchangeTokenService;
 
+    /**
+     * Handles the exchange of a token and returns the corresponding identifier in a response.
+     * This method validates the caller's OIN, processes the incoming token using
+     * the specified identifier type, and constructs a response accordingly.
+     *
+     * @param callerOIN The identifier of the requesting organization (OIN).
+     * @param wsExchangeTokenForIdentifierRequest The request containing the token and identifier type details.
+     * @return A response entity containing the converted identifier or a status indicating failure.
+     */
     @Override
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenResponse> exchangeToken(final String callerOIN,

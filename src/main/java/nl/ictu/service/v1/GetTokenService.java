@@ -29,6 +29,15 @@ public final class GetTokenService {
     private final TokenConverter tokenConverter;
     private final EncryptedBsnMapper encryptedBsnMapper;
 
+    /**
+     * Generates an encrypted token response based on the given recipient OIN and identifier.
+     * Validates the identifier type and maps it to the corresponding BSN before
+     * creating the encrypted token.
+     *
+     * @param recipientOIN the recipient's organizational identification number
+     * @param identifier the identifier containing value and type information
+     * @return a {@link WsGetTokenResponse} containing the encrypted token, or null if the identifier is invalid or BSN mapping fails
+     */
     @SneakyThrows
     public WsGetTokenResponse getWsGetTokenResponse(final String recipientOIN, final WsIdentifier identifier) {
 
