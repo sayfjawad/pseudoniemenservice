@@ -32,7 +32,6 @@ public final class ExchangeTokenController implements ExchangeTokenApi, VersionO
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenResponse> exchangeToken(final String callerOIN,
             final WsExchangeTokenRequest wsExchangeTokenForIdentifierRequest) {
-
         try {
             final var wsExchangeTokenResponse = exchangeTokenService.exchangeToken(callerOIN, wsExchangeTokenForIdentifierRequest);
             return ResponseEntity.ok(wsExchangeTokenResponse);
