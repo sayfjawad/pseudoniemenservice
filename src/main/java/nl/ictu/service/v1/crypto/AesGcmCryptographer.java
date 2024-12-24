@@ -19,14 +19,12 @@ import nl.ictu.utils.AESHelper;
 import nl.ictu.utils.Base64Wrapper;
 import nl.ictu.utils.ByteArrayUtils;
 import nl.ictu.utils.MessageDigestUtil;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Advanced Encryption Standard  Galois/Counter Mode (AES-GCM).
  */
-
-@SuppressWarnings("DesignForExtension")
-@Service
+@Component
 @RequiredArgsConstructor
 public class AesGcmCryptographer {
 
@@ -34,6 +32,24 @@ public class AesGcmCryptographer {
     private final MessageDigestUtil messageDigestUtil;
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
+    /**
+     * Encrypts the given plaintext using the Advanced Encryption Standard in Galois/Counter Mode
+     * (AES-GCM) and a provided salt. The resulting ciphertext is Base64 encoded and includes the IV
+     * used during encryption, concatenated with the encrypted data.
+     *
+     * @param plaintext the plaintext message to be encrypted
+     * @param salt      the salt value used to derive the encryption key
+     * @return the Base64 encoded ciphertext, including the IV
+     * @throws IllegalBlockSizeException          if the block size is invalid during the encryption
+     *                                            process
+     * @throws BadPaddingException                if there are issues with padding during
+     *                                            encryption
+     * @throws InvalidAlgorithmParameterException if the provided algorithm parameters are invalid
+     * @throws InvalidKeyException                if the encryption key is invalid
+     * @throws NoSuchAlgorithmException           if the requested encryption algorithm is not
+     *                                            available
+     * @throws NoSuchPaddingException             if the requested padding scheme is not available
+     */
     public String encrypt(final String plaintext, final String salt)
             throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
@@ -47,6 +63,14 @@ public class AesGcmCryptographer {
         return base64Wrapper.encodeToString(encryptedWithIV);
     }
 
+    /**
+     * Creates a secret encryption key by combining a base64-decoded private key with a given salt,
+     * and hashing the result using SHA-256.
+     *
+     * @param salt the salt value used to modify the private key and derive the final encryption
+     *             key
+     * @return a SecretKey instance derived from the combined and hashed input
+     */
     private SecretKey createSecretKey(final String salt) {
 
         final var keyBytes = base64Wrapper.decode(
@@ -55,9 +79,26 @@ public class AesGcmCryptographer {
         final var salterSecretBytes = ByteArrayUtils.concat(keyBytes, saltBytes);
         final var key = messageDigestUtil.getMessageDigestSha256().digest(salterSecretBytes);
         return new SecretKeySpec(key, "AES");
-
     }
 
+    /**
+     * Decrypts the given Base64 encoded ciphertext, which includes the initialization vector (IV),
+     * using the Advanced Encryption Standard in Galois/Counter Mode (AES-GCM) with a provided
+     * salt.
+     *
+     * @param ciphertextWithIv the Base64 encoded encrypted data, including the IV
+     * @param salt             the salt value used to derive the decryption key
+     * @return the decrypted plaintext as a UTF-8 string
+     * @throws NoSuchPaddingException             if the requested padding scheme is not available
+     * @throws NoSuchAlgorithmException           if the requested encryption algorithm is not
+     *                                            available
+     * @throws InvalidAlgorithmParameterException if the provided algorithm parameters are invalid
+     * @throws InvalidKeyException                if the decryption key is invalid
+     * @throws IllegalBlockSizeException          if the block size is invalid during the decryption
+     *                                            process
+     * @throws BadPaddingException                if there are issues with padding during
+     *                                            decryption
+     */
     public String decrypt(final String ciphertextWithIv, final String salt)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 

@@ -6,8 +6,8 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import nl.ictu.model.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
+import nl.ictu.model.Identifier;
 import nl.ictu.utils.AESHelper;
 import nl.ictu.utils.Base64Wrapper;
 import nl.ictu.utils.MessageDigestUtil;
@@ -15,26 +15,30 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.modes.GCMSIVBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
 import org.bouncycastle.crypto.params.KeyParameter;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Advanced Encryption Standard Galois/Counter Mode synthetic initialization vector.
  */
-
 @Slf4j
-@SuppressWarnings("DesignForExtension")
-@Service
+@Component
 @RequiredArgsConstructor
 public class AesGcmSivCryptographer {
 
     public static final int MAC_SIZE = 128;
     private static final int NONCE_LENTH = 12;
-
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
     private final MessageDigestUtil messageDigestUtil;
     private final IdentifierConverter identifierConverter;
     private final Base64Wrapper base64Wrapper;
 
+    /**
+     * Creates AEADParameters using the given salt to generate a nonce and a private key for the
+     * encryption process.
+     *
+     * @param salt the salt used to derive the nonce for the encryption process
+     * @return AEADParameters containing the key, MAC size, and nonce for encryption
+     */
     private AEADParameters createSecretKey(final String salt) {
 
         final var nonce16 = messageDigestUtil.getMessageDigestSha256()
@@ -44,9 +48,19 @@ public class AesGcmSivCryptographer {
         final KeyParameter keyParameter = new KeyParameter(
                 base64Wrapper.decode(identifierPrivateKey));
         return new AEADParameters(keyParameter, MAC_SIZE, nonce12);
-
     }
 
+    /**
+     * Encrypts the given {@code Identifier} using a salt and returns the resulting Base64-encoded
+     * ciphertext. This method leverages AES-GCM-SIV encryption for secure and authenticated
+     * encryption.
+     *
+     * @param identifier the identifier object to be encrypted
+     * @param salt       a string used to derive a nonce and key for encryption
+     * @return the Base64-encoded string representation of the ciphertext
+     * @throws InvalidCipherTextException if encryption process fails
+     * @throws IOException                if an I/O error occurs during encryption
+     */
     public String encrypt(final Identifier identifier, final String salt)
             throws InvalidCipherTextException, IOException {
 
@@ -60,9 +74,17 @@ public class AesGcmSivCryptographer {
         cipher.doFinal(ciphertext, outputLength);
         cipher.reset();
         return base64Wrapper.encodeToString(ciphertext);
-
     }
 
+    /**
+     * Decrypts the given Base64-encoded ciphertext string using the provided salt. This method uses
+     * AES-GCM-SIV decryption to securely retrieve the original plaintext.
+     *
+     * @param ciphertextString the Base64-encoded string containing the ciphertext to be decrypted
+     * @param salt             a string used to derive the nonce and key for decryption
+     * @return the decrypted {@code Identifier} object
+     * @throws InvalidCipherTextException if decryption fails or the ciphertext is invalid
+     */
     @SneakyThrows
     public Identifier decrypt(final String ciphertextString, final String salt) {
 
