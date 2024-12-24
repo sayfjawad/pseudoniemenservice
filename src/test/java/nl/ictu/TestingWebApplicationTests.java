@@ -32,11 +32,6 @@ class TestingWebApplicationTests {
     private TestRestTemplate restTemplate;
 
     @Test
-    void contextLoads() {
-
-    }
-
-    @Test
     void testActuatorHealthEndpoint() {
 
         final int actuatorPort = environment.getProperty("local.management.port", Integer.class);
@@ -50,7 +45,7 @@ class TestingWebApplicationTests {
         // get a token
 
         final var getTokenBody = Map.of("recipientOIN", "54321543215432154321", "identifier", Map.of("type", "BSN", "value", "012345679"));
-        final var httpEntityGetToken = new HttpEntity(getTokenBody,
+        final var httpEntityGetToken = new HttpEntity<>(getTokenBody,
                 new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("0912345012345012345012345")))));
         final var tokenExchange = restTemplate.exchange("/v1/getToken", HttpMethod.POST, httpEntityGetToken, Map.class);
         assertThat(tokenExchange.getStatusCode()).isEqualTo(HttpStatus.OK);

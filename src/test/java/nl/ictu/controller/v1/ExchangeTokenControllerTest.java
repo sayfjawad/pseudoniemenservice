@@ -25,7 +25,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ExchangeTokenController.class)
-public class ExchangeTokenControllerTest {
+class ExchangeTokenControllerTest {
 
     @Autowired
     private MockMvc mockMvc;

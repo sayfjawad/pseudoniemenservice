@@ -43,7 +43,7 @@ class GlobalExceptionHandlerTest {
 
     @Test
     @DisplayName("exchangeToken() -> 422 UNPROCESSABLE_ENTITY on exception")
-    void exchangeToken_ShouldReturnUnprocessableEntity() throws Exception {
+    void exchangeToken_ShouldReturnUnprocessableEntity() {
         // GIVEN: a stubbed controller and service
         // WHEN: the service throws an exception
         final var exceptions = List.of(
