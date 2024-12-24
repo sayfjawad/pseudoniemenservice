@@ -3,7 +3,6 @@ package nl.ictu.controller.v1;
 import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenRequest;
@@ -20,23 +19,23 @@ public final class ExchangeTokenController implements ExchangeTokenApi, VersionO
     private final ExchangeTokenService exchangeTokenService;
 
     /**
-     * Handles the exchange of a token and returns the corresponding identifier in a response.
-     * This method validates the caller's OIN, processes the incoming token using
-     * the specified identifier type, and constructs a response accordingly.
+     * Handles the exchange of a token and returns the corresponding identifier in a response. This method validates the caller's OIN, processes the
+     * incoming token using the specified identifier type, and constructs a response accordingly.
      *
-     * @param callerOIN The identifier of the requesting organization (OIN).
+     * @param callerOIN                           The identifier of the requesting organization (OIN).
      * @param wsExchangeTokenForIdentifierRequest The request containing the token and identifier type details.
      * @return A response entity containing the converted identifier or a status indicating failure.
      */
     @Override
-    @SneakyThrows
     public ResponseEntity<WsExchangeTokenResponse> exchangeToken(final String callerOIN,
             final WsExchangeTokenRequest wsExchangeTokenForIdentifierRequest) {
+
         try {
             final var wsExchangeTokenResponse = exchangeTokenService.exchangeToken(callerOIN, wsExchangeTokenForIdentifierRequest);
             return ResponseEntity.ok(wsExchangeTokenResponse);
         } catch (Exception ex) {
-            return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
+            log.warn(ex.getMessage());
         }
+        return ResponseEntity.status(UNPROCESSABLE_ENTITY).build();
     }
 }

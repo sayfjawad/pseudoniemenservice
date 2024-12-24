@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
+import nl.ictu.service.exception.InvalidWsIdentifierRequestTypeException;
 import nl.ictu.service.v1.map.BsnPseudoMapper;
 import nl.ictu.service.v1.map.PseudoBsnMapper;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,6 @@ public final class ExchangeIdentifierService {
                 recipientIdentifierType)) {
             return pseudoBsnMapper.map(wsIdentifierRequest.getValue(), recipientOIN);
         }
-        return null;
+        throw new InvalidWsIdentifierRequestTypeException("Invalid WsIdentifierRequest type cannot be processed.");
     }
 }

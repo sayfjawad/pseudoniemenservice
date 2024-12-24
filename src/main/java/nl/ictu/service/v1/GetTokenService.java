@@ -12,14 +12,17 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import nl.ictu.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
+import nl.ictu.service.exception.WsGetTokenProcessingException;
 import nl.ictu.service.v1.crypto.AesGcmCryptographer;
 import nl.ictu.service.v1.crypto.TokenCoder;
 import nl.ictu.service.v1.map.EncryptedBsnMapper;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public final class GetTokenService {
@@ -30,12 +33,11 @@ public final class GetTokenService {
     private final EncryptedBsnMapper encryptedBsnMapper;
 
     /**
-     * Generates an encrypted token response based on the given recipient OIN and identifier.
-     * Validates the identifier type and maps it to the corresponding BSN before
-     * creating the encrypted token.
+     * Generates an encrypted token response based on the given recipient OIN and identifier. Validates the identifier type and maps it to the
+     * corresponding BSN before creating the encrypted token.
      *
      * @param recipientOIN the recipient's organizational identification number
-     * @param identifier the identifier containing value and type information
+     * @param identifier   the identifier containing value and type information
      * @return a {@link WsGetTokenResponse} containing the encrypted token, or null if the identifier is invalid or BSN mapping fails
      */
     @SneakyThrows
@@ -44,16 +46,16 @@ public final class GetTokenService {
         final var creationDate = System.currentTimeMillis();
 
         // check is callerOIN allowed to communicatie with sinkOIN
-        if (identifier != null) {
+        try {
             final String bsn = mapBsn(identifier, recipientOIN);
-            if (bsn != null) {
-                return createEncryptedToken(bsn, creationDate, recipientOIN);
-            }
+            return createEncryptedToken(bsn, creationDate, recipientOIN);
+        } catch (Exception ex) {
+            final var exceptionMessage = ex.getMessage();
+            log.warn(exceptionMessage);
+            throw new WsGetTokenProcessingException(exceptionMessage);
         }
-        return null;
     }
 
-    @SneakyThrows
     private String mapBsn(final WsIdentifier identifier, final String recipientOIN) {
 
         final String bsnValue = identifier.getValue();

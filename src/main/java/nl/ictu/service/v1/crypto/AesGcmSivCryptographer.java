@@ -1,10 +1,10 @@
 package nl.ictu.service.v1.crypto;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.ictu.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
@@ -63,8 +63,8 @@ public class AesGcmSivCryptographer {
 
     }
 
-    public Identifier decrypt(final String ciphertextString, final String salt)
-            throws InvalidCipherTextException, JsonProcessingException {
+    @SneakyThrows
+    public Identifier decrypt(final String ciphertextString, final String salt) {
 
         final var cipher = new GCMSIVBlockCipher(AESHelper.getAESEngine());
         cipher.init(false, createSecretKey(salt));
