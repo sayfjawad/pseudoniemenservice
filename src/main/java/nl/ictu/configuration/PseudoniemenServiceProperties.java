@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 public class PseudoniemenServiceProperties {
 
     private String tokenPrivateKey;
-
     private String identifierPrivateKey;
-
 }
 

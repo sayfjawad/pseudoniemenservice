@@ -13,5 +13,4 @@ public final class Token {
     private String bsn;
     private String recipientOIN;
     private Long creationDate;
-
 }
