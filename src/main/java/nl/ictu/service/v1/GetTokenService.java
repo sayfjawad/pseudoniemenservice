@@ -13,7 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import nl.ictu.Token;
+import nl.ictu.model.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.exception.WsGetTokenProcessingException;

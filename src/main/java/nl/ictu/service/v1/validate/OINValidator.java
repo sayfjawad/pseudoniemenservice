@@ -1,7 +1,7 @@
 package nl.ictu.service.v1.validate;
 
 import lombok.RequiredArgsConstructor;
-import nl.ictu.Token;
+import nl.ictu.model.Token;
 import org.springframework.stereotype.Component;
 
 @Component

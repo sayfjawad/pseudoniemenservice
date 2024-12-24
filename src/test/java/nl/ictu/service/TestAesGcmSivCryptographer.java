@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
-import nl.ictu.Identifier;
+import nl.ictu.model.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.service.v1.crypto.AesGcmCryptographer;
 import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;

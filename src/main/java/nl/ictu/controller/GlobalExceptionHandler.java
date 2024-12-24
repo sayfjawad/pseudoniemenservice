@@ -19,11 +19,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionHandler {
 
     /**
-     * Catch-all for any unhandled exceptions.
+     * Handles generic exceptions and returns an appropriate HTTP response with an error message.
+     *
+     * @param ex the Exception to be handled
+     * @return a ResponseEntity containing a generic error message and an INTERNAL_SERVER_ERROR
+     * (500) status
      */
     @ExceptionHandler(Exception.class)
     @ResponseBody
-    public ResponseEntity<String> handleGenericException(Exception ex) {
+    public ResponseEntity<String> handleGenericException(final Exception ex) {
 
         log.error("Unexpected error occurred", ex);
         return new ResponseEntity<>(
@@ -43,7 +47,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IdentifierPrivateKeyException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
-    public String handleIdentifierPrivateKeyException(IdentifierPrivateKeyException ex) {
+    public String handleIdentifierPrivateKeyException(final IdentifierPrivateKeyException ex) {
 
         return ex.getMessage();
     }
@@ -59,7 +63,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
     public String handleInvalidWsIdentifierRequestTypeException(
-            InvalidWsIdentifierRequestTypeException ex) {
+            final InvalidWsIdentifierRequestTypeException ex) {
 
         return ex.getMessage();
     }
@@ -75,7 +79,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
     public String handleInvalidWsIdentifierTokenException(
-            InvalidWsIdentifierTokenException ex) {
+            final InvalidWsIdentifierTokenException ex) {
 
         return ex.getMessage();
     }
@@ -90,8 +94,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TokenPrivateKeyException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
-    public String handleTokenPrivateKeyException(
-            TokenPrivateKeyException ex) {
+    public String handleTokenPrivateKeyException(final TokenPrivateKeyException ex) {
 
         return ex.getMessage();
     }
@@ -106,15 +109,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(WsGetTokenProcessingException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
-    public String handleWsGetTokenProcessingException(
-            WsGetTokenProcessingException ex) {
+    public String handleWsGetTokenProcessingException(final WsGetTokenProcessingException ex) {
 
         return ex.getMessage();
     }
 
     /**
-     * Handles exceptions of type InvalidOINException and returns the exception message.
-     * This handler sets the HTTP response status to UNPROCESSABLE_ENTITY (422).
+     * Handles exceptions of type InvalidOINException and returns the exception message. This
+     * handler sets the HTTP response status to UNPROCESSABLE_ENTITY (422).
      *
      * @param ex the InvalidOINException to be handled
      * @return the exception message as a String
@@ -122,8 +124,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidOINException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ResponseBody
-    public String handleInvalidOINException(
-            InvalidOINException ex) {
+    public String handleInvalidOINException(final InvalidOINException ex) {
 
         return ex.getMessage();
     }

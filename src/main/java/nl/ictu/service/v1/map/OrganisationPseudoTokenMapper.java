@@ -4,8 +4,8 @@ import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTyp
 
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import nl.ictu.Identifier;
-import nl.ictu.Token;
+import nl.ictu.model.Identifier;
+import nl.ictu.model.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;

@@ -6,7 +6,7 @@ import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import nl.ictu.Identifier;
+import nl.ictu.model.Identifier;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.utils.AESHelper;
 import nl.ictu.utils.Base64Wrapper;

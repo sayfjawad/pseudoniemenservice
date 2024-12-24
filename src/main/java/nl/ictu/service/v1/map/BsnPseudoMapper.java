@@ -4,7 +4,7 @@ import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTyp
 
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import nl.ictu.Identifier;
+import nl.ictu.model.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;

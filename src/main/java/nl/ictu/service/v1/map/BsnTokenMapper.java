@@ -3,7 +3,7 @@ package nl.ictu.service.v1.map;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 
 import lombok.RequiredArgsConstructor;
-import nl.ictu.Token;
+import nl.ictu.model.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import org.springframework.stereotype.Component;

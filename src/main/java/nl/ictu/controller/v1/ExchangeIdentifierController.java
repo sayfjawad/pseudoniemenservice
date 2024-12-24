@@ -1,7 +1,6 @@
 package nl.ictu.controller.v1;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeIdentifierApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRequest;

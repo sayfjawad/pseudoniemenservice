@@ -11,7 +11,7 @@ import org.bouncycastle.crypto.engines.AESEngine;
 public final class AESHelper {
 
     public static final int IV_LENGTH = 12;
-    private static final int TAG_LENGTH = 128;
+    public static final int TAG_LENGTH = 128;
     private static final String CIPHER = "AES/GCM/NoPadding";
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 

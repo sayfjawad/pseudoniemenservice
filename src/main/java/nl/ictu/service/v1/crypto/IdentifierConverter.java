@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.StringWriter;
 import lombok.RequiredArgsConstructor;
-import nl.ictu.Identifier;
+import nl.ictu.model.Identifier;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Service;
 
