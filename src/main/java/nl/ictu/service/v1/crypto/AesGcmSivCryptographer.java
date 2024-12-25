@@ -8,9 +8,9 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.model.Identifier;
-import nl.ictu.utils.AESHelper;
+import nl.ictu.utils.AesUtility;
 import nl.ictu.utils.Base64Wrapper;
-import nl.ictu.utils.MessageDigestUtil;
+import nl.ictu.utils.MessageDigestWrapper;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.bouncycastle.crypto.modes.GCMSIVBlockCipher;
 import org.bouncycastle.crypto.params.AEADParameters;
@@ -28,7 +28,7 @@ public class AesGcmSivCryptographer {
     public static final int MAC_SIZE = 128;
     private static final int NONCE_LENTH = 12;
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
-    private final MessageDigestUtil messageDigestUtil;
+    private final MessageDigestWrapper messageDigestWrapper;
     private final IdentifierConverter identifierConverter;
     private final Base64Wrapper base64Wrapper;
 
@@ -41,7 +41,7 @@ public class AesGcmSivCryptographer {
      */
     private AEADParameters createSecretKey(final String salt) {
 
-        final var nonce16 = messageDigestUtil.getMessageDigestSha256()
+        final var nonce16 = messageDigestWrapper.getMessageDigestInstance()
                 .digest(salt.getBytes(StandardCharsets.UTF_8));
         final var nonce12 = Arrays.copyOf(nonce16, NONCE_LENTH);
         final String identifierPrivateKey = pseudoniemenServiceProperties.getIdentifierPrivateKey();
@@ -65,7 +65,7 @@ public class AesGcmSivCryptographer {
             throws InvalidCipherTextException, IOException {
 
         final var plaintext = identifierConverter.encode(identifier);
-        final var cipher = new GCMSIVBlockCipher(AESHelper.getAESEngine());
+        final var cipher = new GCMSIVBlockCipher(AesUtility.getAESEngine());
         cipher.init(true, createSecretKey(salt));
         final var plainTextBytes = plaintext.getBytes(StandardCharsets.UTF_8);
         final var ciphertext = new byte[cipher.getOutputSize(plainTextBytes.length)];
@@ -88,7 +88,7 @@ public class AesGcmSivCryptographer {
     @SneakyThrows
     public Identifier decrypt(final String ciphertextString, final String salt) {
 
-        final var cipher = new GCMSIVBlockCipher(AESHelper.getAESEngine());
+        final var cipher = new GCMSIVBlockCipher(AesUtility.getAESEngine());
         cipher.init(false, createSecretKey(salt));
         final var ciphertext = base64Wrapper.decode(ciphertextString);
         final var plaintext = new byte[cipher.getOutputSize(ciphertext.length)];

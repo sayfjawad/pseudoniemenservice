@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.service.v1.crypto.AesGcmCryptographer;
 import nl.ictu.utils.Base64Wrapper;
-import nl.ictu.utils.MessageDigestUtil;
+import nl.ictu.utils.MessageDigestWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -24,7 +24,7 @@ class TestAesGcmCryptographer {
 
     private final AesGcmCryptographer aesGcmCryptographer = new AesGcmCryptographer(
             new Base64Wrapper(),
-            new MessageDigestUtil(),
+            new MessageDigestWrapper(),
             new PseudoniemenServiceProperties().setTokenPrivateKey(
                     "bFUyS1FRTVpON0pCSFFRRGdtSllSeUQ1MlRna2txVmI=")
 

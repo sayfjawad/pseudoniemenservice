@@ -16,7 +16,7 @@ class ByteArrayUtilsTest {
         byte[] expected = {1, 2, 3, 4, 5, 6};
 
         // WHEN
-        byte[] result = ByteArrayUtils.concat(a, b);
+        byte[] result = ByteArrayUtil.concat(a, b);
 
         // THEN
         assertArrayEquals(expected, result);
@@ -31,7 +31,7 @@ class ByteArrayUtilsTest {
         byte[] expected = {};
 
         // WHEN
-        byte[] result = ByteArrayUtils.concat(a, b);
+        byte[] result = ByteArrayUtil.concat(a, b);
 
         // THEN
         assertArrayEquals(expected, result);
@@ -46,7 +46,7 @@ class ByteArrayUtilsTest {
         byte[] expected1 = {1, 2, 3};
 
         // WHEN
-        byte[] result1 = ByteArrayUtils.concat(a, b);
+        byte[] result1 = ByteArrayUtil.concat(a, b);
 
         // THEN
         assertArrayEquals(expected1, result1);
@@ -57,7 +57,7 @@ class ByteArrayUtilsTest {
         byte[] expected2 = {4, 5, 6};
 
         // WHEN
-        byte[] result2 = ByteArrayUtils.concat(c, d);
+        byte[] result2 = ByteArrayUtil.concat(c, d);
 
         // THEN
         assertArrayEquals(expected2, result2);

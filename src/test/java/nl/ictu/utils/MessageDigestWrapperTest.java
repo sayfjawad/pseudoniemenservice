@@ -7,19 +7,19 @@ import java.security.MessageDigest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class MessageDigestUtilTest {
+class MessageDigestWrapperTest {
 
-    private MessageDigestUtil messageDigestUtil;
+    private MessageDigestWrapper messageDigestWrapper;
 
     @BeforeEach
     void setUp() {
-        messageDigestUtil = new MessageDigestUtil();
+        messageDigestWrapper = new MessageDigestWrapper();
     }
 
     @Test
     void getMessageDigestSha256_ShouldReturnSha256Digest() {
         // WHEN
-        MessageDigest digest = messageDigestUtil.getMessageDigestSha256();
+        MessageDigest digest = messageDigestWrapper.getMessageDigestInstance();
 
         // THEN
         assertNotNull(digest, "MessageDigest should not be null");

@@ -1,6 +1,6 @@
 package nl.ictu.service.v1.crypto;
 
-import static nl.ictu.utils.AESHelper.IV_LENGTH;
+import static nl.ictu.utils.AesUtility.IV_LENGTH;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
@@ -15,10 +15,10 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.RequiredArgsConstructor;
 import nl.ictu.configuration.PseudoniemenServiceProperties;
-import nl.ictu.utils.AESHelper;
+import nl.ictu.utils.AesUtility;
 import nl.ictu.utils.Base64Wrapper;
-import nl.ictu.utils.ByteArrayUtils;
-import nl.ictu.utils.MessageDigestUtil;
+import nl.ictu.utils.ByteArrayUtil;
+import nl.ictu.utils.MessageDigestWrapper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -29,7 +29,7 @@ import org.springframework.stereotype.Component;
 public class AesGcmCryptographer {
 
     private final Base64Wrapper base64Wrapper;
-    private final MessageDigestUtil messageDigestUtil;
+    private final MessageDigestWrapper messageDigestWrapper;
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
     /**
@@ -53,13 +53,13 @@ public class AesGcmCryptographer {
     public String encrypt(final String plaintext, final String salt)
             throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
 
-        final var cipher = AESHelper.createCipher();
-        final var gcmParameterSpec = AESHelper.generateIV();
+        final var cipher = AesUtility.createCipher();
+        final var gcmParameterSpec = AesUtility.generateIV();
         final var secretKey = createSecretKey(salt);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey, gcmParameterSpec);
         final var ciphertext = cipher.doFinal(plaintext.getBytes(StandardCharsets.UTF_8));
         final var gcmIV = gcmParameterSpec.getIV();
-        final var encryptedWithIV = ByteArrayUtils.concat(gcmIV, ciphertext);
+        final var encryptedWithIV = ByteArrayUtil.concat(gcmIV, ciphertext);
         return base64Wrapper.encodeToString(encryptedWithIV);
     }
 
@@ -76,8 +76,8 @@ public class AesGcmCryptographer {
         final var keyBytes = base64Wrapper.decode(
                 pseudoniemenServiceProperties.getTokenPrivateKey());
         final var saltBytes = salt.getBytes(StandardCharsets.UTF_8);
-        final var salterSecretBytes = ByteArrayUtils.concat(keyBytes, saltBytes);
-        final var key = messageDigestUtil.getMessageDigestSha256().digest(salterSecretBytes);
+        final var salterSecretBytes = ByteArrayUtil.concat(keyBytes, saltBytes);
+        final var key = messageDigestWrapper.getMessageDigestInstance().digest(salterSecretBytes);
         return new SecretKeySpec(key, "AES");
     }
 
@@ -102,12 +102,12 @@ public class AesGcmCryptographer {
     public String decrypt(final String ciphertextWithIv, final String salt)
             throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
 
-        final var cipher = AESHelper.createCipher();
+        final var cipher = AesUtility.createCipher();
         final var encryptedWithIV = base64Wrapper.decode(ciphertextWithIv);
         final var iv = Arrays.copyOfRange(encryptedWithIV, 0, IV_LENGTH);
         final var ciphertext = Arrays.copyOfRange(encryptedWithIV, IV_LENGTH,
                 encryptedWithIV.length);
-        final var gcmParameterSpec = AESHelper.createIVfromValues(iv);
+        final var gcmParameterSpec = AesUtility.createIVfromValues(iv);
         final var secretKey = createSecretKey(salt);
         cipher.init(Cipher.DECRYPT_MODE, secretKey, gcmParameterSpec);
         final var decryptedText = cipher.doFinal(ciphertext);

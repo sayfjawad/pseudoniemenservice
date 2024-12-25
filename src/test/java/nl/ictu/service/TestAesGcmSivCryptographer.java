@@ -14,7 +14,7 @@ import nl.ictu.service.v1.crypto.AesGcmCryptographer;
 import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
 import nl.ictu.service.v1.crypto.IdentifierConverter;
 import nl.ictu.utils.Base64Wrapper;
-import nl.ictu.utils.MessageDigestUtil;
+import nl.ictu.utils.MessageDigestWrapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -29,7 +29,7 @@ class TestAesGcmSivCryptographer {
     private final AesGcmSivCryptographer aesGcmSivCryptographer = new AesGcmSivCryptographer(
             new PseudoniemenServiceProperties().setIdentifierPrivateKey(
                     "QTBtVEhLN3EwMHJ3QXN1ZUFqNzVrT3hDQTBIWWNIZTU="),
-            new MessageDigestUtil(),
+            new MessageDigestWrapper(),
             new IdentifierConverter(new ObjectMapper()),
             new Base64Wrapper()
     );
