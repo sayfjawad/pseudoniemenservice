@@ -32,6 +32,11 @@ class GlobalExceptionHandlerTest {
 
     // Test for handleGenericException
     @Test
+    @DisplayName("""
+            Given an invalid endpoint
+            When a GET request is made
+            Then an internal server error is returned with an appropriate message
+            """)
     void handleGenericException_ShouldReturnInternalServerErrorWithMessage() throws Exception {
 
         mockMvc.perform(get("/non-existent-endpoint")) // Assuming no controller is mapped to this
@@ -42,7 +47,11 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    @DisplayName("exchangeToken() -> 422 UNPROCESSABLE_ENTITY on exception")
+    @DisplayName("""
+            Given a stubbed controller and service
+            When the service throws various exceptions
+            Then the system responds with UNPROCESSABLE_ENTITY and the exception message
+            """)
     void exchangeToken_ShouldReturnUnprocessableEntity() {
         // GIVEN: a stubbed controller and service
         // WHEN: the service throws an exception

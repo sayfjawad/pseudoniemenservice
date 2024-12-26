@@ -13,6 +13,7 @@ import nl.ictu.model.Identifier;
 import nl.ictu.model.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,44 +32,60 @@ class OrganisationPseudoTokenMapperTest {
     private OrganisationPseudoTokenMapper organisationPseudoTokenMapper;
 
     @Test
-    void map_ShouldReturnEncryptedTokenResponse_WhenEncryptionSucceeds() throws Exception {
+    @DisplayName("""
+            Given a valid token and caller OIN
+            When encryption succeeds
+            Then the response should contain the encrypted identifier
+            """)
+    void map_WhenEncryptionSucceeds_ShouldReturnEncryptedTokenResponse() throws Exception {
         // GIVEN
-        String callerOIN = "TEST_OIN";
-        Token token = Token.builder().bsn("123456789").build();
-        String encryptedValue = "encryptedBSN";
-        // We mock the cryptographer to return a known "encrypted" value
+        final String callerOIN = "TEST_OIN";
+        final Token token = Token.builder().bsn("123456789").build();
+        final String encryptedValue = "encryptedBSN";
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(callerOIN)))
                 .thenReturn(encryptedValue);
         // WHEN
         WsExchangeTokenResponse response = organisationPseudoTokenMapper.map(callerOIN, token);
         // THEN
-        assertEquals(ORGANISATION_PSEUDO, response.getIdentifier().getType());
-        assertEquals(encryptedValue, response.getIdentifier().getValue());
+        assertEquals(ORGANISATION_PSEUDO, response.getIdentifier().getType(),
+                "The identifier type should be ORGANISATION_PSEUDO");
+        assertEquals(encryptedValue, response.getIdentifier().getValue(),
+                "The identifier value should match the encrypted BSN");
     }
 
     @Test
-    void map_ShouldThrowInvalidCipherTextException_WhenEncryptionFails() throws Exception {
+    @DisplayName("""
+            Given a valid token and caller OIN
+            When encryption fails with InvalidCipherTextException
+            Then an InvalidCipherTextException should be thrown
+            """)
+    void map_WhenEncryptionFails_ShouldThrowInvalidCipherTextException() throws Exception {
         // GIVEN
-        String callerOIN = "FAILING_OIN";
-        Token token = Token.builder().bsn("987654321").build();
-        // We mock an InvalidCipherTextException
+        final String callerOIN = "FAILING_OIN";
+        final Token token = Token.builder().bsn("987654321").build();
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(callerOIN)))
                 .thenThrow(new InvalidCipherTextException("Simulated cipher error"));
         // WHEN & THEN
         assertThrows(InvalidCipherTextException.class,
-                () -> organisationPseudoTokenMapper.map(callerOIN, token));
+                () -> organisationPseudoTokenMapper.map(callerOIN, token),
+                "Expected InvalidCipherTextException to be thrown");
     }
 
     @Test
-    void map_ShouldThrowIOException_WhenEncryptionThrowsIOException() throws Exception {
+    @DisplayName("""
+            Given a valid token and caller OIN
+            When encryption fails with IOException
+            Then an IOException should be thrown
+            """)
+    void map_WhenEncryptionThrowsIOException_ShouldThrowIOException() throws Exception {
         // GIVEN
-        String callerOIN = "IO_EXCEPTION_OIN";
-        Token token = Token.builder().bsn("555555555").build();
-        // We mock an IOException
+        final String callerOIN = "IO_EXCEPTION_OIN";
+        final Token token = Token.builder().bsn("555555555").build();
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(callerOIN)))
                 .thenThrow(new IOException("Simulated I/O error"));
         // WHEN & THEN
         assertThrows(IOException.class,
-                () -> organisationPseudoTokenMapper.map(callerOIN, token));
+                () -> organisationPseudoTokenMapper.map(callerOIN, token),
+                "Expected IOException to be thrown");
     }
 }

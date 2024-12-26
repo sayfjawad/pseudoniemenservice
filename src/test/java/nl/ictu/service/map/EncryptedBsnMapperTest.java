@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 
 import nl.ictu.crypto.AesGcmSivCryptographer;
 import nl.ictu.model.Identifier;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,19 +21,25 @@ class EncryptedBsnMapperTest {
     private EncryptedBsnMapper encryptedBsnMapper;
 
     @Test
-    void map_ShouldReturnDecryptedBsn_WhenDecryptSucceeds() {
+    @DisplayName("""
+            Given an encrypted BSN and a recipient OIN
+            When decryption succeeds
+            Then the decrypted BSN is returned
+            """)
+    void map_WhenDecryptSucceeds_ShouldReturnDecryptedBsn() {
         // GIVEN
-        String encryptedBsn = "someEncryptedValue";
-        String recipientOin = "testOIN";
-        // Suppose decrypt returns an Identifier with "123456789" as BSN
-        Identifier decryptedIdentifier = Identifier.builder()
-                .bsn("123456789")
+        final String encryptedBsn = "someEncryptedValue";
+        final String recipientOin = "testOIN";
+        final String expectedBsn = "123456789";
+        final var decryptedIdentifier = Identifier.builder()
+                .bsn(expectedBsn)
                 .build();
         when(aesGcmSivCryptographer.decrypt(encryptedBsn, recipientOin))
                 .thenReturn(decryptedIdentifier);
         // WHEN
         String result = encryptedBsnMapper.map(encryptedBsn, recipientOin);
         // THEN
-        assertEquals("123456789", result);
+        assertEquals(expectedBsn, result,
+                "The decrypted BSN should match the expected value");
     }
 }

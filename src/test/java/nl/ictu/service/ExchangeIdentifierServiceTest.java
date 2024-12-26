@@ -32,7 +32,11 @@ class ExchangeIdentifierServiceTest {
     private ExchangeIdentifierService exchangeIdentifierService;
 
     @Test
-    @DisplayName("exchangeIdentifier() -> BSN -> ORGANISATION_PSEUDO path")
+    @DisplayName("""
+            Given a BSN identifier and recipientIdentifierType ORGANISATION_PSEUDO
+            When exchangeIdentifier() is called
+            Then it should return a response with ORGANISATION_PSEUDO type and encrypted value
+            """)
     void testExchangeIdentifier_BsnToOrgPseudo() throws Exception {
         // GIVEN
         var request = new WsExchangeIdentifierRequest()
@@ -48,7 +52,6 @@ class ExchangeIdentifierServiceTest {
         WsExchangeIdentifierResponse actualResponse =
                 exchangeIdentifierService.exchangeIdentifier(request);
         // THEN
-        // Verify the returned response is what the mapper gave back
         org.junit.jupiter.api.Assertions.assertNotNull(actualResponse);
         org.junit.jupiter.api.Assertions.assertNotNull(actualResponse.getIdentifier());
         org.junit.jupiter.api.Assertions.assertEquals(ORGANISATION_PSEUDO,
@@ -58,7 +61,11 @@ class ExchangeIdentifierServiceTest {
     }
 
     @Test
-    @DisplayName("exchangeIdentifier() -> ORGANISATION_PSEUDO -> BSN path")
+    @DisplayName("""
+            Given an ORGANISATION_PSEUDO identifier and recipientIdentifierType BSN
+            When exchangeIdentifier() is called
+            Then it should return a response with BSN type and decrypted value
+            """)
     void testExchangeIdentifier_OrgPseudoToBsn() throws Exception {
         // GIVEN
         var request = new WsExchangeIdentifierRequest()
@@ -82,7 +89,11 @@ class ExchangeIdentifierServiceTest {
     }
 
     @Test
-    @DisplayName("exchangeIdentifier() -> throws InvalidWsIdentifierRequestTypeException for unsupported mappings")
+    @DisplayName("""
+            Given a request with unsupported identifier mapping (BSN -> BSN or ORG_PSEUDO -> ORG_PSEUDO)
+            When exchangeIdentifier() is called
+            Then it should throw InvalidWsIdentifierRequestTypeException
+            """)
     void testExchangeIdentifier_UnsupportedMapping_ThrowsException() {
         // GIVEN
         var request = new WsExchangeIdentifierRequest()

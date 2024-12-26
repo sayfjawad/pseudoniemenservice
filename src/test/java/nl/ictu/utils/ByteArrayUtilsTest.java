@@ -8,7 +8,11 @@ import org.junit.jupiter.api.Test;
 class ByteArrayUtilsTest {
 
     @Test
-    @DisplayName("concat() -> should concatenate two non-empty arrays")
+    @DisplayName("""
+            Given two non-empty byte arrays [1, 2, 3] and [4, 5, 6]
+            When concatenating the arrays using ByteArrayUtil.concat()
+            Then the result should be a single byte array [1, 2, 3, 4, 5, 6]
+            """)
     void concat_ShouldConcatenateTwoArrays() {
         // GIVEN
         byte[] a = {1, 2, 3};
@@ -21,7 +25,11 @@ class ByteArrayUtilsTest {
     }
 
     @Test
-    @DisplayName("concat() -> should return empty array if both inputs are empty")
+    @DisplayName("""
+            Given two empty byte arrays
+            When concatenating the arrays using ByteArrayUtil.concat()
+            Then the result should be an empty byte array
+            """)
     void concat_ShouldHandleTwoEmptyArrays() {
         // GIVEN
         byte[] a = {};
@@ -34,7 +42,11 @@ class ByteArrayUtilsTest {
     }
 
     @Test
-    @DisplayName("concat() -> should handle empty array on either side")
+    @DisplayName("""
+            Given one empty byte array and one non-empty byte array
+            When concatenating the arrays using ByteArrayUtil.concat()
+            Then the result should be the non-empty array
+            """)
     void concat_ShouldHandleOneEmptyArray() {
         // GIVEN
         byte[] a = {1, 2, 3};

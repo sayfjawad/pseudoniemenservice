@@ -5,11 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nl.ictu.service.exception.IdentifierPrivateKeyException;
 import nl.ictu.service.exception.TokenPrivateKeyException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class PseudoniemenServicePropertiesTest {
 
     @Test
+    @DisplayName("""
+                    Given an empty token private key
+                    When validating
+                    When TokenPrivateKeyException is thrown
+            """)
     void validate_WhenTokenPrivateKeyIsEmpty_ThrowsTokenPrivateKeyException() {
         // GIVEN
         PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
@@ -20,6 +26,10 @@ class PseudoniemenServicePropertiesTest {
     }
 
     @Test
+    @DisplayName("""
+            Given an empty identifier private key
+            When validating, then IdentifierPrivateKeyException is thrown
+            """)
     void validate_WhenIdentifierPrivateKeyIsEmpty_ThrowsIdentifierPrivateKeyException() {
         // GIVEN
         PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
@@ -30,6 +40,10 @@ class PseudoniemenServicePropertiesTest {
     }
 
     @Test
+    @DisplayName("""
+            Given both keys are set when validating
+            Then no exception is thrown
+            """)
     void validate_WhenBothKeysAreSet_NoExceptionIsThrown() {
         // GIVEN
         PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()

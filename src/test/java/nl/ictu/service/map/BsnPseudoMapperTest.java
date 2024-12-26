@@ -13,6 +13,7 @@ import nl.ictu.crypto.AesGcmSivCryptographer;
 import nl.ictu.model.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import org.bouncycastle.crypto.InvalidCipherTextException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,12 +29,16 @@ class BsnPseudoMapperTest {
     private BsnPseudoMapper bsnPseudoMapper;
 
     @Test
-    void map_ShouldReturnWsExchangeIdentifierResponse_WhenEncryptionSucceeds() throws Exception {
+    @DisplayName("""
+            Given a valid BSN and OIN
+            When encryption succeeds
+            Then a valid WsExchangeIdentifierResponse is returned
+            """)
+    void map_WhenEncryptionSucceeds_ShouldReturnWsExchangeIdentifierResponse() throws Exception {
         // GIVEN
         String bsn = "123456789";
         String oin = "OIN_X";
         String encryptedValue = "encryptedBsn123";
-        // Mock the cryptographer to return a known "encrypted" value
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(oin)))
                 .thenReturn(encryptedValue);
         // WHEN
@@ -46,7 +51,12 @@ class BsnPseudoMapperTest {
     }
 
     @Test
-    void map_ShouldThrowIOException_WhenEncryptThrowsIOException() throws Exception {
+    @DisplayName("""
+            Given a BSN and OIN
+            When encryption throws IOException
+            Then an IOException is thrown
+            """)
+    void map_WhenEncryptThrowsIOException_ShouldThrowIOException() throws Exception {
         // GIVEN
         String bsn = "987654321";
         String oin = "OIN_IO";
@@ -57,7 +67,12 @@ class BsnPseudoMapperTest {
     }
 
     @Test
-    void map_ShouldThrowInvalidCipherTextException_WhenEncryptThrowsInvalidCipherTextException()
+    @DisplayName("""
+            Given a BSN and OIN
+            When encryption throws InvalidCipherTextException
+            Then an InvalidCipherTextException is thrown
+            """)
+    void map_WhenEncryptThrowsInvalidCipherTextException_ShouldThrowInvalidCipherTextException()
             throws Exception {
         // GIVEN
         String bsn = "111222333";

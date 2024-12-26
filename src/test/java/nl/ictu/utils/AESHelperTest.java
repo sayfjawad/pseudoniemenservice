@@ -11,11 +11,17 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.GCMParameterSpec;
 import org.bouncycastle.crypto.MultiBlockCipher;
 import org.bouncycastle.crypto.engines.AESEngine;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class AESHelperTest {
 
     @Test
+    @DisplayName("""
+            Given no input
+            When generating an IV using AesUtility.generateIV()
+            Then a non-null GCMParameterSpec should be returned with the correct IV length and tag length
+            """)
     void generateIV_ShouldReturnGCMParameterSpec_WithNonNullIV() {
         // WHEN
         GCMParameterSpec gcmParameterSpec = AesUtility.generateIV();
@@ -31,6 +37,11 @@ class AESHelperTest {
     }
 
     @Test
+    @DisplayName("""
+            Given a byte array of IV values
+            When creating a GCMParameterSpec using AesUtility.createIVfromValues()
+            Then the resulting GCMParameterSpec should match the input IV values
+            """)
     void createIVfromValues_ShouldReturnGCMParameterSpec_FromGivenIV() {
         // GIVEN
         byte[] ivSource = new byte[AesUtility.IV_LENGTH];
@@ -49,6 +60,11 @@ class AESHelperTest {
     }
 
     @Test
+    @DisplayName("""
+            Given no input
+            When creating a Cipher instance using AesUtility.createCipher()
+            Then the resulting Cipher should be of type AES/GCM/NoPadding
+            """)
     void createCipher_ShouldReturnAesGcmNoPaddingCipher()
             throws NoSuchPaddingException, NoSuchAlgorithmException {
         // WHEN
@@ -62,6 +78,11 @@ class AESHelperTest {
     }
 
     @Test
+    @DisplayName("""
+            Given no input
+            When retrieving the AES engine using AesUtility.getAESEngine()
+            Then the resulting engine should be an instance of AESEngine
+            """)
     void getAESEngine_ShouldReturnNonNullAESEngineInstance() {
         // WHEN
         MultiBlockCipher engine = AesUtility.getAESEngine();

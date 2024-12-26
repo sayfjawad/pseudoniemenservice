@@ -25,7 +25,11 @@ class ExchangeIdentifierControllerTest {
     private ExchangeIdentifierController controller;
 
     @Test
-    @DisplayName("exchangeIdentifier() -> Returns 200 OK with response on success")
+    @DisplayName("""
+            Given a valid request and service response
+            When calling exchangeIdentifier()
+            Then it returns 200 OK with the expected response
+            """)
     void testExchangeIdentifier_Success() {
         // GIVEN
         String callerOIN = "123456789";
@@ -41,7 +45,11 @@ class ExchangeIdentifierControllerTest {
     }
 
     @Test
-    @DisplayName("exchangeIdentifier() -> Throws exception when service fails")
+    @DisplayName("""
+            Given a valid request and service throws an exception
+            When calling exchangeIdentifier()
+            Then it throws the same exception with the correct message
+            """)
     void testExchangeIdentifier_ServiceThrowsException() {
         // GIVEN
         String callerOIN = "123456789";

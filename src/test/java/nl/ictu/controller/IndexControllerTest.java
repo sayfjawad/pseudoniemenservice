@@ -15,7 +15,11 @@ class IndexControllerTest {
     private final MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
     @Test
-    @DisplayName("GET / -> Redirects to Swagger UI")
+    @DisplayName("""
+            Given a request to the root endpoint
+            When performing a GET request
+            Then the response redirects to Swagger UI
+            """)
     void testRedirectToSwaggerUi() throws Exception {
         // WHEN & THEN
         mockMvc.perform(

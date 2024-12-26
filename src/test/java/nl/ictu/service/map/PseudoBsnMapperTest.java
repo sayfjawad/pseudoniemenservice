@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import nl.ictu.crypto.AesGcmSivCryptographer;
 import nl.ictu.model.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +27,12 @@ class PseudoBsnMapperTest {
     private PseudoBsnMapper pseudoBsnMapper;
 
     @Test
-    void map_ShouldReturnDecryptedBsn_WhenDecryptionSucceeds() throws Exception {
+    @DisplayName("""
+            Given a valid pseudo and OIN
+            When decryption succeeds
+            Then the response should contain the decrypted BSN
+            """)
+    void map_WhenDecryptionSucceeds_ShouldReturnDecryptedBsn() throws Exception {
         // GIVEN
         String pseudo = "someEncryptedString";
         String oin = "TEST_OIN";

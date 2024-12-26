@@ -17,7 +17,11 @@ import org.junit.jupiter.api.Test;
 class AesUtilityTest {
 
     @Test
-    @DisplayName("generateIV() -> should return GCMParameterSpec with correct IV & tag length")
+    @DisplayName("""
+            Given no input
+            When generating an IV using AesUtility.generateIV()
+            Then a non-null GCMParameterSpec should be returned with the correct IV length and tag length
+            """)
     void generateIV_ShouldReturnGCMParameterSpec() {
         // WHEN
         GCMParameterSpec spec = AesUtility.generateIV();
@@ -31,7 +35,11 @@ class AesUtilityTest {
     }
 
     @Test
-    @DisplayName("createIVfromValues() -> should build GCMParameterSpec from provided IV")
+    @DisplayName("""
+            Given a byte array of IV values
+            When creating a GCMParameterSpec using AesUtility.createIVfromValues()
+            Then the resulting GCMParameterSpec should match the input IV values
+            """)
     void createIVfromValues_ShouldReturnGCMParameterSpecFromGivenIV() {
         // GIVEN: a deterministic IV of length 12
         byte[] ivBytes = new byte[AesUtility.IV_LENGTH];
@@ -49,7 +57,11 @@ class AesUtilityTest {
     }
 
     @Test
-    @DisplayName("createCipher() -> should return Cipher for AES/GCM/NoPadding")
+    @DisplayName("""
+            Given no input
+            When creating a Cipher instance using AesUtility.createCipher()
+            Then the resulting Cipher should be of type AES/GCM/NoPadding
+            """)
     void createCipher_ShouldReturnAesGcmNoPadding()
             throws NoSuchPaddingException, NoSuchAlgorithmException {
         // WHEN
@@ -61,7 +73,11 @@ class AesUtilityTest {
     }
 
     @Test
-    @DisplayName("getAESEngine() -> should return instance of AESEngine")
+    @DisplayName("""
+            Given no input
+            When retrieving the AES engine using AesUtility.getAESEngine()
+            Then the resulting engine should be an instance of AESEngine
+            """)
     void getAESEngine_ShouldReturnAesEngine() {
         // WHEN
         MultiBlockCipher engine = AesUtility.getAESEngine();

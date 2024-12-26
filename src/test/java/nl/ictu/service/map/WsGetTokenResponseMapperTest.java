@@ -25,17 +25,23 @@ class WsGetTokenResponseMapperTest {
     private final long creationDate = System.currentTimeMillis();
     private final String recipientOIN = "123456789";
     private final String encodedToken = "encoded-token";
+
     @Mock
     private AesGcmCryptographer aesGcmCryptographer;
+
     @Mock
     private TokenCoder tokenCoder;
+
     @InjectMocks
     private WsGetTokenResponseMapper wsGetTokenResponseMapper;
 
     @Test
-    @DisplayName("map() -> Successfully maps parameters to WsGetTokenResponse")
+    @DisplayName("""
+            Given a valid bsn, creation date, and recipient OIN
+            When token encoding and encryption succeed
+            Then the response should contain the encrypted token
+            """)
     void testMap_Success() throws Exception {
-
         final var encryptedToken = "encrypted-token";
         // GIVEN
         Token token = Token.builder()
@@ -55,7 +61,11 @@ class WsGetTokenResponseMapperTest {
     }
 
     @Test
-    @DisplayName("map() -> Fails due to IOException during token encoding")
+    @DisplayName("""
+            Given a valid bsn, creation date, and recipient OIN
+            When token encoding fails with IOException
+            Then an IOException should be thrown
+            """)
     void testMap_EncodingIOException() throws Exception {
         // GIVEN
         Token token = Token.builder()
@@ -73,7 +83,11 @@ class WsGetTokenResponseMapperTest {
     }
 
     @Test
-    @DisplayName("map() -> Fails due to encryption errors")
+    @DisplayName("""
+            Given a valid bsn, creation date, and recipient OIN
+            When encryption fails with InvalidKeyException
+            Then an InvalidKeyException should be thrown
+            """)
     void testMap_EncryptionError() throws Exception {
         // GIVEN
         Token token = Token.builder()
@@ -93,7 +107,11 @@ class WsGetTokenResponseMapperTest {
     }
 
     @Test
-    @DisplayName("map() -> Fails due to unexpected runtime exceptions")
+    @DisplayName("""
+            Given a valid bsn, creation date, and recipient OIN
+            When encryption fails with a runtime exception
+            Then a RuntimeException should be thrown
+            """)
     void testMap_UnexpectedError() throws Exception {
         // GIVEN
         Token token = Token.builder()

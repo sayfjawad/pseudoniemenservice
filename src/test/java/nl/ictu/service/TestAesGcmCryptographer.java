@@ -10,11 +10,12 @@ import nl.ictu.configuration.PseudoniemenServiceProperties;
 import nl.ictu.crypto.AesGcmCryptographer;
 import nl.ictu.utils.Base64Wrapper;
 import nl.ictu.utils.MessageDigestWrapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Class for tesing {@link AesGcmCryptographer}
+ * Class for testing {@link AesGcmCryptographer}
  */
 @Slf4j
 @ActiveProfiles("test")
@@ -31,12 +32,20 @@ class TestAesGcmCryptographer {
                     "38iKawKv9", "dk(gkzm)Mh", "gjk)s3$g9cQ"));
 
     @Test
+    @DisplayName("""
+            Given a set of test strings
+            When encrypting and decrypting each string with a specific key
+            Then the decrypted string should be equal to the original plain string
+            """)
     void testEncyptDecryptForDifferentStringLengths() {
 
         testStrings.forEach(plain -> {
             try {
+                // GIVEN
                 final String crypted = aesGcmCryptographer.encrypt(plain, "helloHowAreyo12345678");
+                // WHEN
                 final String actual = aesGcmCryptographer.decrypt(crypted, "helloHowAreyo12345678");
+                // THEN
                 assertThat(actual).isEqualTo(plain);
             } catch (final Exception e) {
                 throw new RuntimeException(e);
@@ -44,13 +53,19 @@ class TestAesGcmCryptographer {
         });
     }
 
-    // Test to ensure ciphertext is different for the same plaintext due to IV randomness
     @Test
+    @DisplayName("""
+            Given the same plaintext message and encryption key
+            When encrypting the message twice
+            Then the resulting ciphertexts should be different due to IV randomness
+            """)
     void testCiphertextIsDifferentForSamePlaintext() throws Exception {
-        // The same plaintext message
+        // GIVEN
         String plaintext = "This is a test message to ensure ciphertext is different!";
+        // WHEN
         String encryptedMessage1 = aesGcmCryptographer.encrypt(plaintext, "aniceSaltGorYu");
         String encryptedMessage2 = aesGcmCryptographer.encrypt(plaintext, "aniceSaltGorYu");
+        // THEN
         // Assert that the two ciphertexts are different
         assertThat(encryptedMessage1).isNotEqualTo(encryptedMessage2);
     }

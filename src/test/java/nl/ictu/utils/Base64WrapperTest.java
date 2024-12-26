@@ -14,12 +14,15 @@ class Base64WrapperTest {
 
     @BeforeEach
     void setUp() {
-
         base64Wrapper = new Base64Wrapper();
     }
 
     @Test
-    @DisplayName("encode() -> Should encode bytes to Base64 bytes")
+    @DisplayName("""
+            Given a byte array of the string "Hello"
+            When encoding the byte array using Base64Wrapper.encode()
+            Then the result should be the Base64-encoded string "SGVsbG8="
+            """)
     void encode_ShouldEncodeBytesToBase64Bytes() {
         // GIVEN
         byte[] input = "Hello".getBytes(StandardCharsets.UTF_8);
@@ -32,7 +35,11 @@ class Base64WrapperTest {
     }
 
     @Test
-    @DisplayName("encodeToString() -> Should encode bytes to Base64 string")
+    @DisplayName("""
+            Given a byte array of the string "Hello"
+            When encoding the byte array using Base64Wrapper.encodeToString()
+            Then the result should be the Base64-encoded string "SGVsbG8="
+            """)
     void encodeToString_ShouldEncodeBytesToBase64String() {
         // GIVEN
         byte[] input = "Hello".getBytes(StandardCharsets.UTF_8);
@@ -44,7 +51,11 @@ class Base64WrapperTest {
     }
 
     @Test
-    @DisplayName("decode() -> Should decode Base64 string to bytes")
+    @DisplayName("""
+            Given a Base64-encoded string "SGVsbG8="
+            When decoding the string using Base64Wrapper.decode()
+            Then the result should be the decoded byte array representing "Hello"
+            """)
     void decode_ShouldDecodeBase64StringToBytes() {
         // GIVEN
         String base64String = "SGVsbG8=";
@@ -57,12 +68,15 @@ class Base64WrapperTest {
     }
 
     @Test
-    @DisplayName("decode() -> Should throw IllegalArgumentException on invalid Base64")
+    @DisplayName("""
+            Given an invalid Base64 string "Not valid base64!!!"
+            When attempting to decode using Base64Wrapper.decode()
+            Then an IllegalArgumentException should be thrown
+            """)
     void decode_ShouldThrowException_WhenInvalidBase64String() {
         // GIVEN
         String invalidBase64 = "Not valid base64!!!";
         // WHEN & THEN
-        // Base64.getDecoder().decode(...) throws IllegalArgumentException on invalid input
         assertThrows(IllegalArgumentException.class,
                 () -> base64Wrapper.decode(invalidBase64),
                 "Expected decode() to throw IllegalArgumentException for invalid Base64 string");

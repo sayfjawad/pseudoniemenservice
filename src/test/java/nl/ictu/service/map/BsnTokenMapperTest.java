@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import nl.ictu.model.Token;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class BsnTokenMapperTest {
@@ -21,11 +22,16 @@ class BsnTokenMapperTest {
     }
 
     @Test
-    void map_ShouldReturnResponseWithBsnIdentifier() {
+    @DisplayName("""
+            Given a token with a valid BSN
+            When mapped
+            Then the response contains an identifier with the correct BSN type and value
+            """)
+    void map_WhenTokenHasValidBsn_ShouldReturnResponseWithBsnIdentifier() {
         // GIVEN
         final var token = Token.builder()
                 .bsn("123456789")
-                .build(); // Suppose your Token class has setBsn(...) method
+                .build();
         // WHEN
         WsExchangeTokenResponse response = bsnTokenMapper.map(token);
         // THEN
@@ -37,7 +43,12 @@ class BsnTokenMapperTest {
     }
 
     @Test
-    void map_ShouldHandleNullBsnGracefully() {
+    @DisplayName("""
+            Given a token without a BSN
+            When mapped
+            Then the response contains an identifier with BSN type but a null value
+            """)
+    void map_WhenTokenHasNoBsn_ShouldHandleNullBsnGracefully() {
         // GIVEN
         final var token = Token.builder().build(); // No BSN set
         // WHEN
@@ -47,7 +58,6 @@ class BsnTokenMapperTest {
         assertNotNull(response.getIdentifier(), "Identifier should not be null");
         assertEquals(BSN, response.getIdentifier().getType(),
                 "Identifier type should still be BSN");
-        // Since token.getBsn() is null, we expect null in the identifier's value
         assertNull(response.getIdentifier().getValue(),
                 "Value should be null if token’s BSN is null");
     }

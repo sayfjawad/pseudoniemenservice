@@ -20,11 +20,16 @@ class WsIdentifierOinBsnMapperTest {
 
     @Mock
     private EncryptedBsnMapper encryptedBsnMapper;
+
     @InjectMocks
     private WsIdentifierOinBsnMapper wsIdentifierOinBsnMapper;
 
     @Test
-    @DisplayName("map() -> Returns BSN value directly for BSN type")
+    @DisplayName("""
+            Given a WsIdentifier of type BSN with a BSN value
+            When the map() method is called
+            Then the BSN value should be returned directly
+            """)
     void testMap_BsnType() {
         // GIVEN
         String bsnValue = "987654321";
@@ -37,7 +42,11 @@ class WsIdentifierOinBsnMapperTest {
     }
 
     @Test
-    @DisplayName("map() -> Returns encrypted value for ORGANISATION_PSEUDO type")
+    @DisplayName("""
+            Given a WsIdentifier of type ORGANISATION_PSEUDO with a BSN value
+            When the map() method is called
+            Then the encrypted value should be returned
+            """)
     void testMap_OrganisationPseudoType() {
         // GIVEN
         String bsnValue = "987654321";
@@ -51,7 +60,6 @@ class WsIdentifierOinBsnMapperTest {
         String result = wsIdentifierOinBsnMapper.map(identifier, recipientOIN);
         // THEN
         assertEquals(encryptedValue, result);
-        verify(encryptedBsnMapper).map(bsnValue,
-                recipientOIN); // Ensure EncryptedBsnMapper is called
+        verify(encryptedBsnMapper).map(bsnValue, recipientOIN); // Ensure EncryptedBsnMapper is called
     }
 }

@@ -30,6 +30,7 @@ class ExchangeTokenServiceTest {
     private final String callerOIN = "123456789";
     private final String encryptedToken = "encryptedTokenValue";
     private final String decodedToken = "decodedTokenValue";
+
     @Mock
     private AesGcmCryptographer aesGcmCryptographer;
     @Mock
@@ -42,18 +43,22 @@ class ExchangeTokenServiceTest {
     private BsnTokenMapper bsnTokenMapper;
     @InjectMocks
     private ExchangeTokenService exchangeTokenService;
+
     private Token mockToken;
 
     @BeforeEach
     void setUp() {
-        // Setup mock token object
         mockToken = Token.builder().build();
         mockToken.setRecipientOIN(callerOIN);
         mockToken.setBsn("987654321");
     }
 
     @Test
-    @DisplayName("exchangeToken() -> BSN identifier")
+    @DisplayName("""
+            Given a BSN identifier
+            When exchangeToken() is called
+            Then it should return a valid response mapped by BsnTokenMapper
+            """)
     void testExchangeToken_BsnIdentifier() throws Exception {
         // GIVEN
         var request = new WsExchangeTokenRequest().token(encryptedToken).identifierType(BSN);
@@ -64,8 +69,7 @@ class ExchangeTokenServiceTest {
         var expectedResponse = new WsExchangeTokenResponse();
         when(bsnTokenMapper.map(mockToken)).thenReturn(expectedResponse);
         // WHEN
-        WsExchangeTokenResponse actualResponse =
-                exchangeTokenService.exchangeToken(callerOIN, request);
+        WsExchangeTokenResponse actualResponse = exchangeTokenService.exchangeToken(callerOIN, request);
         // THEN
         verify(aesGcmCryptographer).decrypt(encryptedToken, callerOIN);
         verify(tokenCoder).decode(decodedToken);
@@ -75,12 +79,14 @@ class ExchangeTokenServiceTest {
     }
 
     @Test
-    @DisplayName("exchangeToken() -> ORGANISATION_PSEUDO identifier")
+    @DisplayName("""
+            Given an ORGANISATION_PSEUDO identifier
+            When exchangeToken() is called
+            Then it should return a valid response mapped by OrganisationPseudoTokenMapper
+            """)
     void testExchangeToken_OrganisationPseudoIdentifier() throws Exception {
         // GIVEN
-        var request =
-                new WsExchangeTokenRequest().token(encryptedToken)
-                        .identifierType(ORGANISATION_PSEUDO);
+        var request = new WsExchangeTokenRequest().token(encryptedToken).identifierType(ORGANISATION_PSEUDO);
         // Stubbing dependencies
         when(aesGcmCryptographer.decrypt(encryptedToken, callerOIN)).thenReturn(decodedToken);
         when(tokenCoder.decode(decodedToken)).thenReturn(mockToken);
@@ -88,8 +94,7 @@ class ExchangeTokenServiceTest {
         var expectedResponse = new WsExchangeTokenResponse();
         when(organisationPseudoTokenMapper.map(callerOIN, mockToken)).thenReturn(expectedResponse);
         // WHEN
-        WsExchangeTokenResponse actualResponse =
-                exchangeTokenService.exchangeToken(callerOIN, request);
+        WsExchangeTokenResponse actualResponse = exchangeTokenService.exchangeToken(callerOIN, request);
         // THEN
         verify(aesGcmCryptographer).decrypt(encryptedToken, callerOIN);
         verify(tokenCoder).decode(decodedToken);
@@ -99,7 +104,11 @@ class ExchangeTokenServiceTest {
     }
 
     @Test
-    @DisplayName("exchangeToken() -> Invalid OIN")
+    @DisplayName("""
+            Given an invalid OIN
+            When exchangeToken() is called
+            Then it should throw InvalidOINException
+            """)
     void testExchangeToken_InvalidOIN() throws Exception {
         // GIVEN
         var request = new WsExchangeTokenRequest().token(encryptedToken).identifierType(BSN);
@@ -108,8 +117,7 @@ class ExchangeTokenServiceTest {
         when(tokenCoder.decode(decodedToken)).thenReturn(mockToken);
         when(oinValidator.isValid(callerOIN, mockToken)).thenReturn(false); // Invalid OIN
         // WHEN & THEN
-        assertThrows(InvalidOINException.class,
-                () -> exchangeTokenService.exchangeToken(callerOIN, request));
+        assertThrows(InvalidOINException.class, () -> exchangeTokenService.exchangeToken(callerOIN, request));
         verify(aesGcmCryptographer).decrypt(encryptedToken, callerOIN);
         verify(tokenCoder).decode(decodedToken);
         verify(oinValidator).isValid(callerOIN, mockToken);

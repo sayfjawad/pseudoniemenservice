@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.security.MessageDigest;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class MessageDigestWrapperTest {
@@ -13,11 +14,15 @@ class MessageDigestWrapperTest {
 
     @BeforeEach
     void setUp() {
-
         messageDigestWrapper = new MessageDigestWrapper();
     }
 
     @Test
+    @DisplayName("""
+            Given a MessageDigestWrapper instance
+            When calling getMessageDigestInstance()
+            Then the resulting MessageDigest should be SHA-256
+            """)
     void getMessageDigestSha256_ShouldReturnSha256Digest() {
         // WHEN
         MessageDigest digest = messageDigestWrapper.getMessageDigestInstance();

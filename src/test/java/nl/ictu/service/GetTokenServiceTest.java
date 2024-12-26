@@ -26,20 +26,27 @@ class GetTokenServiceTest {
 
     private final String recipientOIN = "123456789";
     private final String bsn = "987654321";
+
     @Mock
     private WsIdentifierOinBsnMapper wsIdentifierOinBsnMapper;
+
     @Mock
     private WsGetTokenResponseMapper wsGetTokenResponseMapper;
+
     @InjectMocks
     private GetTokenService getTokenService;
 
     @BeforeEach
     void setUp() {
-        // This section can be used to initialize common test data if needed
+        // Initialize common test data if needed
     }
 
     @Test
-    @DisplayName("getWsGetTokenResponse() -> Valid input")
+    @DisplayName("""
+            Given a valid identifier of type BSN
+            When getWsGetTokenResponse() is called
+            Then it should return a valid response
+            """)
     void testGetWsGetTokenResponse_ValidInput() throws Exception {
         // GIVEN
         var identifier = WsIdentifier.builder()
@@ -47,13 +54,14 @@ class GetTokenServiceTest {
                 .value(bsn)
                 .build();
         var expectedResponse = new WsGetTokenResponse();
+
         // Stubbing dependencies
         when(wsIdentifierOinBsnMapper.map(identifier, recipientOIN)).thenReturn(bsn);
-        when(wsGetTokenResponseMapper.map(eq(bsn), anyLong(), eq(recipientOIN))).thenReturn(
-                expectedResponse);
+        when(wsGetTokenResponseMapper.map(eq(bsn), anyLong(), eq(recipientOIN))).thenReturn(expectedResponse);
+
         // WHEN
-        WsGetTokenResponse actualResponse =
-                getTokenService.getWsGetTokenResponse(recipientOIN, identifier);
+        WsGetTokenResponse actualResponse = getTokenService.getWsGetTokenResponse(recipientOIN, identifier);
+
         // THEN
         verify(wsIdentifierOinBsnMapper).map(identifier, recipientOIN);
         verify(wsGetTokenResponseMapper).map(eq(bsn), anyLong(), eq(recipientOIN));
@@ -61,7 +69,11 @@ class GetTokenServiceTest {
     }
 
     @Test
-    @DisplayName("getWsGetTokenResponse() -> Unexpected error during processing")
+    @DisplayName("""
+            Given an unexpected error during processing
+            When getWsGetTokenResponse() is called
+            Then it should throw WsGetTokenProcessingException with the correct message
+            """)
     void testGetWsGetTokenResponse_UnexpectedError() {
         // GIVEN
         var identifier = WsIdentifier.builder()
@@ -69,12 +81,14 @@ class GetTokenServiceTest {
                 .value(bsn)
                 .build();
         var exceptionMessage = "Unexpected processing error";
+
         // Stubbing dependencies
-        when(wsIdentifierOinBsnMapper.map(identifier, recipientOIN)).thenThrow(
-                new RuntimeException(exceptionMessage));
+        when(wsIdentifierOinBsnMapper.map(identifier, recipientOIN)).thenThrow(new RuntimeException(exceptionMessage));
+
         // WHEN & THEN
         Exception exception = assertThrows(WsGetTokenProcessingException.class,
                 () -> getTokenService.getWsGetTokenResponse(recipientOIN, identifier));
+
         // Assert exception message
         org.junit.jupiter.api.Assertions.assertEquals(exceptionMessage, exception.getMessage());
         verify(wsIdentifierOinBsnMapper).map(identifier, recipientOIN);

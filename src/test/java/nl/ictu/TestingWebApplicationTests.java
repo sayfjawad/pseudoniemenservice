@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,8 +32,12 @@ class TestingWebApplicationTests {
     private TestRestTemplate restTemplate;
 
     @Test
+    @DisplayName("""
+            Given the Spring Boot application is running with actuator enabled
+            When accessing the /actuator/health endpoint
+            Then the response should contain a status of 'UP'
+            """)
     void testActuatorHealthEndpoint() {
-
         final int actuatorPort = environment.getProperty("local.management.port", Integer.class);
         assertThat(
                 restTemplate.getForObject("http://localhost:" + actuatorPort + "/actuator/health",
@@ -41,6 +46,12 @@ class TestingWebApplicationTests {
     }
 
     @Test
+    @DisplayName("""
+            Given a request to get a token with a BSN identifier
+            When sending the request to /v1/getToken
+            Then the response should include a token
+            And the token can be used to exchange for the identifier type BSN
+            """)
     void testGetAtokenExchangeForBSN() {
         // get a token
         final var getTokenBody = Map.of("recipientOIN", "54321543215432154321", "identifier",
@@ -55,6 +66,7 @@ class TestingWebApplicationTests {
                 .extracting("body")
                 .asInstanceOf(InstanceOfAssertFactories.map(String.class, Void.class))
                 .containsKey("token");
+
         // change token for identifier
         final var token = (String) tokenExchange.getBody().get("token");
         final var exchangeTokenBody = Map.of("token", token, "identifierType", "BSN");

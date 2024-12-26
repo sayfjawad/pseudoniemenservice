@@ -35,7 +35,11 @@ class ExchangeTokenControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    @DisplayName("exchangeToken() -> 200 OK on success")
+    @DisplayName("""
+            Given a valid token and identifier type
+            When calling exchangeToken()
+            Then it returns 200 OK with the expected identifier in the response
+            """)
     void exchangeToken_ShouldReturnOk() throws Exception {
         // GIVEN: a request payload
         WsExchangeTokenRequest requestPayload = new WsExchangeTokenRequest();
@@ -64,7 +68,11 @@ class ExchangeTokenControllerTest {
     }
 
     @Test
-    @DisplayName("exchangeToken() -> 422 UNPROCESSABLE_ENTITY on exception")
+    @DisplayName("""
+            Given an invalid token and identifier type
+            When calling exchangeToken()
+            Then it returns 422 UNPROCESSABLE_ENTITY with the appropriate error
+            """)
     void exchangeToken_ShouldReturnUnprocessableEntity() throws Exception {
         // GIVEN: a request payload
         WsExchangeTokenRequest requestPayload = new WsExchangeTokenRequest();
