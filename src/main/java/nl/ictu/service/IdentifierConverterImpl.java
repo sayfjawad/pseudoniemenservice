@@ -9,6 +9,9 @@ import nl.ictu.Identifier;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Service;
 
+/**
+ * Regels die overal genegeerd worden kunnen beter uitgezet of opgelost worden!
+ */
 @SuppressWarnings("DesignForExtension")
 @Service
 @RequiredArgsConstructor

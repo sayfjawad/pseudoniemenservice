@@ -10,6 +10,9 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Service;
 
 @SuppressWarnings("DesignForExtension")
+/**
+ * Regels die overal genegeerd worden kunnen uitgezet of opgelost worden!
+ */
 @Service
 @RequiredArgsConstructor
 @RegisterReflectionForBinding({Token.class})

@@ -18,6 +18,9 @@ import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Een naam van een class hoort aan te geven wat de class doet! in dit geval is het een controller
+ */
 @RequiredArgsConstructor
 @RestController
 public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionOneController {
@@ -25,6 +28,11 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
     private final AesGcmSivCryptographer aesGcmSivCryptographer;
 
     @Override
+    /**
+     * Throwables hebben een waarde en een functie en door @SneakyThrows komen ze niet tot hun waarde!!!
+     *
+     * Dit kan veel beter opgelost worden door een global exception handler van Spring Boot
+     */
     @SneakyThrows
     public ResponseEntity<WsExchangeIdentifierResponse> exchangeIdentifier(final String callerOIN,
             final WsExchangeIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
@@ -32,6 +40,19 @@ public final class ExchangeIdentifier implements ExchangeIdentifierApi, VersionO
         final WsIdentifier wsIdentifierRequest = wsExchangeIdentifierForIdentifierRequest.getIdentifier();
         final String recipientOIN = wsExchangeIdentifierForIdentifierRequest.getRecipientOIN();
         final WsIdentifierTypes recipientIdentifierType = wsExchangeIdentifierForIdentifierRequest.getRecipientIdentifierType();
+        /**
+         * En controller hoort te beschrijven hoe informatie binnenkomt en of de input voldoet aan
+         * de minimale eisen.
+         *
+         * In deze controller wordt teveel gedaan;
+         * - converteren van input
+         * - cryptographie
+         * - foutafhandeling
+         * - configuratie validate!!!
+         *
+         * Dit hoort in verschillende lagen door verschillende componenten gesplitst te worden om de
+         * testbaarheid en aanpasbaarheid en analyseerbaarheid van de applicatie te bevorderen
+         */
         if (BSN.equals(wsIdentifierRequest.getType()) && ORGANISATION_PSEUDO.equals(
                 recipientIdentifierType)) {
             // from BSN to Org Pseudo

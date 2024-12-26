@@ -24,8 +24,18 @@ import org.springframework.util.StringUtils;
  * Advanced Encryption Standard Galois/Counter Mode synthetic initialization vector.
  */
 @Slf4j
+/**
+ * Advanced Encryption Standard  Galois/Counter Mode (AES-GCM).
+ */
+
+/**
+ * Regels die overal genegeerd worden kunnen uitgezet of opgelost worden!
+ */
 @SuppressWarnings("DesignForExtension")
 @Service
+/**
+ * Is dit een service? utility? converter? mapper? of all of the above?
+ */
 public class AesGcmSivCryptographerImpl implements AesGcmSivCryptographer {
 
     public static final int MAC_SIZE = 128;

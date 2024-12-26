@@ -19,6 +19,9 @@ import nl.ictu.service.TokenConverter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Een naam van een class hoort aan te geven wat de class doet! in dit geval is het een controller
+ */
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -29,10 +32,27 @@ public final class ExchangeToken implements ExchangeTokenApi, VersionOneControll
     private final TokenConverter tokenConverter;
 
     @Override
+    /**
+     * Throwables hebben een waarde en een functie en door @SneakyThrows komen ze niet tot hun waarde!!!
+     *
+     * Dit kan veel beter opgelost worden door een global exception handler van Spring Boot
+     */
     @SneakyThrows
     public ResponseEntity<WsExchangeTokenResponse> exchangeToken(final String callerOIN,
             final WsExchangeTokenRequest wsExchangeTokenForIdentifierRequest) {
-
+        /**
+         * En controller hoort te beschrijven hoe informatie binnenkomt en of de input voldoet aan
+         * de minimale eisen.
+         *
+         * In deze controller wordt teveel gedaan;
+         * - converteren van input
+         * - cryptographie
+         * - foutafhandeling
+         * - configuratie validate!!!
+         *
+         * Dit hoort in verschillende lagen door verschillende componenten gesplitst te worden om de
+         * testbaarheid en aanpasbaarheid en analyseerbaarheid van de applicatie te bevorderen
+         */
         final String encodedToken = aesGcmCryptographer.decrypt(
                 wsExchangeTokenForIdentifierRequest.getToken(), callerOIN);
         final Token token = tokenConverter.decode(encodedToken);

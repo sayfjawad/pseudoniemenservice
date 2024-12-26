@@ -6,6 +6,9 @@ import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+/**
+ * Een @Configuration is een beter amnnotatie aanduiding voor deze class
+ */
 @Component
 @ConfigurationProperties(prefix = "pseudoniemenservice")
 @Getter

@@ -7,6 +7,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+/**
+ * Wat is de toegevoegde waarde van een interface als het maar een keer geimplementeerd wordt?
+ */
 public interface AesGcmCryptographer {
 
     String encrypt(String plaintext, String salt)

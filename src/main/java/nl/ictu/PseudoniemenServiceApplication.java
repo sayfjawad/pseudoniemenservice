@@ -8,6 +8,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Regels die genegeerd worden kunnen beter uitgezet of opgelost worden
+ */
 @SuppressWarnings({"HideUtilityClassConstructor"})
 @SuppressFBWarnings(value = "EI_EXPOSE_STATIC_REP2",
         justification = "nl.ictu.PseudoniemenServiceApplication$$SpringCGLIB$$0")

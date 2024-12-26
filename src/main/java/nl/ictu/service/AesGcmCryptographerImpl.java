@@ -26,16 +26,36 @@ import org.springframework.util.StringUtils;
 /**
  * Advanced Encryption Standard  Galois/Counter Mode (AES-GCM).
  */
+
+/**
+ * Regels die overal genegeerd worden kunnen uitgezet of opgelost worden!
+ */
 @SuppressWarnings("DesignForExtension")
 @Service
+/**
+ * Is dit een service? utility? converter? mapper? of all of the above?
+ */
 public class AesGcmCryptographerImpl implements AesGcmCryptographer {
+
+    /**
+     * Instantieren en final maken van dit soort standaard utilities kunnen beter in een wrapper
+     * object gezet worden om mocking mogelijk te maken, op zijn maakt de wrapper object de
+     * testbaarheid van de code beter door de features te isoleren i.p.v. te integreren
+     */
     //private SecretKey secretKey;
     private final Base64.Encoder base64Encoder = Base64.getEncoder();
     private final Base64.Decoder base64Decoder = Base64.getDecoder();
     private final MessageDigest sha256Digest;
     private final PseudoniemenServiceProperties pseudoniemenServiceProperties;
 
+    /**
+     * Regels die overal genegeerd worden kunnen uitgezet of opgelost worden!
+     */
     @SuppressFBWarnings("CT_CONSTRUCTOR_THROW")
+    /**
+     * @SneakyThrows zoals het hier gebruikt wordt kan voor problemen zorgen omdat het elders niet
+     * goed afgevangen wordt.
+     */
     @SneakyThrows
     public AesGcmCryptographerImpl(
             final PseudoniemenServiceProperties pseudoniemenServicePropertiesArg) {
