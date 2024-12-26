@@ -1,4 +1,4 @@
-package nl.ictu.service.v1;
+package nl.ictu.service;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
@@ -8,8 +8,8 @@ import lombok.SneakyThrows;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import nl.ictu.service.exception.InvalidWsIdentifierRequestTypeException;
-import nl.ictu.service.v1.map.BsnPseudoMapper;
-import nl.ictu.service.v1.map.PseudoBsnMapper;
+import nl.ictu.service.map.BsnPseudoMapper;
+import nl.ictu.service.map.PseudoBsnMapper;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -19,21 +19,19 @@ public final class ExchangeIdentifierService {
     private final BsnPseudoMapper bsnPseudoMapper;
     private final PseudoBsnMapper pseudoBsnMapper;
 
-
     /**
      * Processes the exchange of an identifier between different types based on specific mappings
      * and returns the corresponding response.
-     *
-     * @param callerOIN The originating identification number of the caller.
-     * @param wsExchangeIdentifierForIdentifierRequest The request object containing details
-     *                                                 of the identifier to be exchanged,
-     *                                                 including its value, type, recipient OIN,
-     *                                                 and recipient identifier type.
-     * @return A {@link WsExchangeIdentifierResponse} containing the exchanged identifier.
-     *         Returns null if no appropriate mapping exists for the provided inputs.
+     *                                                 caller.
+     * @param wsExchangeIdentifierForIdentifierRequest The request object containing details of the
+     *                                                 identifier to be exchanged, including its
+     *                                                 value, type, recipient OIN, and recipient
+     *                                                 identifier type.
+     * @return A {@link WsExchangeIdentifierResponse} containing the exchanged identifier. Returns
+     * null if no appropriate mapping exists for the provided inputs.
      */
     @SneakyThrows
-    public WsExchangeIdentifierResponse exchangeIdentifier(final String callerOIN,
+    public WsExchangeIdentifierResponse exchangeIdentifier(
             final WsExchangeIdentifierRequest wsExchangeIdentifierForIdentifierRequest) {
 
         final var wsIdentifierRequest = wsExchangeIdentifierForIdentifierRequest.getIdentifier();
@@ -46,6 +44,7 @@ public final class ExchangeIdentifierService {
                 recipientIdentifierType)) {
             return pseudoBsnMapper.map(wsIdentifierRequest.getValue(), recipientOIN);
         }
-        throw new InvalidWsIdentifierRequestTypeException("Invalid WsIdentifierRequest type cannot be processed.");
+        throw new InvalidWsIdentifierRequestTypeException(
+                "Invalid WsIdentifierRequest type cannot be processed.");
     }
 }

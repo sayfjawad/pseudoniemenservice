@@ -1,4 +1,4 @@
-package nl.ictu.service.v1.validate;
+package nl.ictu.service.validate;
 
 import lombok.RequiredArgsConstructor;
 import nl.ictu.model.Token;

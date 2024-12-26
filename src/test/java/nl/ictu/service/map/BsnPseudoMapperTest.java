@@ -1,4 +1,4 @@
-package nl.ictu.service.v1.map;
+package nl.ictu.service.map;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -9,9 +9,9 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import nl.ictu.crypto.AesGcmSivCryptographer;
 import nl.ictu.model.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
-import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
 import org.bouncycastle.crypto.InvalidCipherTextException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

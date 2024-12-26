@@ -1,17 +1,17 @@
-package nl.ictu.service.v1;
+package nl.ictu.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import nl.ictu.controller.exception.InvalidOINException;
+import nl.ictu.service.exception.InvalidOINException;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.service.exception.InvalidWsIdentifierTokenException;
-import nl.ictu.service.v1.crypto.AesGcmCryptographer;
-import nl.ictu.service.v1.crypto.TokenCoder;
-import nl.ictu.service.v1.map.BsnTokenMapper;
-import nl.ictu.service.v1.map.OrganisationPseudoTokenMapper;
-import nl.ictu.service.v1.validate.OINValidator;
+import nl.ictu.crypto.AesGcmCryptographer;
+import nl.ictu.crypto.TokenCoder;
+import nl.ictu.service.map.BsnTokenMapper;
+import nl.ictu.service.map.OrganisationPseudoTokenMapper;
+import nl.ictu.service.validate.OINValidator;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -24,6 +24,7 @@ public final class ExchangeTokenService {
     private final OINValidator oinValidator;
     private final OrganisationPseudoTokenMapper organisationPseudoTokenMapper;
     private final BsnTokenMapper bsnTokenMapper;
+
 
     /**
      * Exchanges a token for an identifier based on the provided request and caller OIN.

@@ -1,7 +1,7 @@
 package nl.ictu.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import nl.ictu.controller.exception.InvalidOINException;
+import nl.ictu.service.exception.InvalidOINException;
 import nl.ictu.service.exception.IdentifierPrivateKeyException;
 import nl.ictu.service.exception.InvalidWsIdentifierRequestTypeException;
 import nl.ictu.service.exception.InvalidWsIdentifierTokenException;

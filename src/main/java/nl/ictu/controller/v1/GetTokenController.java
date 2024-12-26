@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ictu.pseudoniemenservice.generated.server.api.GetTokenApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsGetTokenResponse;
-import nl.ictu.service.v1.GetTokenService;
+import nl.ictu.service.GetTokenService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,6 +31,8 @@ public final class GetTokenController implements GetTokenApi, VersionOneControll
 
         final var recipientOIN = wsGetTokenRequest.getRecipientOIN();
         final var identifier = wsGetTokenRequest.getIdentifier();
-        return ResponseEntity.ok(getTokenService.getWsGetTokenResponse(recipientOIN, identifier));
+        final var wsGetTokenResponse = getTokenService.getWsGetTokenResponse(
+                recipientOIN, identifier);
+        return ResponseEntity.ok(wsGetTokenResponse);
     }
 }

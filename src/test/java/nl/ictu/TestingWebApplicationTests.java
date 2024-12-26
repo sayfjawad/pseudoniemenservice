@@ -27,7 +27,6 @@ class TestingWebApplicationTests {
 
     @Autowired
     private Environment environment;
-
     @Autowired
     private TestRestTemplate restTemplate;
 
@@ -35,19 +34,22 @@ class TestingWebApplicationTests {
     void testActuatorHealthEndpoint() {
 
         final int actuatorPort = environment.getProperty("local.management.port", Integer.class);
-        assertThat(restTemplate.getForObject("http://localhost:" + actuatorPort + "/actuator/health", String.class)
+        assertThat(
+                restTemplate.getForObject("http://localhost:" + actuatorPort + "/actuator/health",
+                        String.class)
         ).contains("{\"status\":\"UP\"}");
     }
 
     @Test
     void testGetAtokenExchangeForBSN() {
-
         // get a token
-
-        final var getTokenBody = Map.of("recipientOIN", "54321543215432154321", "identifier", Map.of("type", "BSN", "value", "012345679"));
+        final var getTokenBody = Map.of("recipientOIN", "54321543215432154321", "identifier",
+                Map.of("type", "BSN", "value", "012345679"));
         final var httpEntityGetToken = new HttpEntity<>(getTokenBody,
-                new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("0912345012345012345012345")))));
-        final var tokenExchange = restTemplate.exchange("/v1/getToken", HttpMethod.POST, httpEntityGetToken, Map.class);
+                new HttpHeaders(CollectionUtils.toMultiValueMap(
+                        of("callerOIN", List.of("0912345012345012345012345")))));
+        final var tokenExchange = restTemplate.exchange("/v1/getToken", HttpMethod.POST,
+                httpEntityGetToken, Map.class);
         assertThat(tokenExchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(tokenExchange)
                 .extracting("body")
@@ -56,16 +58,16 @@ class TestingWebApplicationTests {
         // change token for identifier
         final var token = (String) tokenExchange.getBody().get("token");
         final var exchangeTokenBody = Map.of("token", token, "identifierType", "BSN");
-        final var httpEntityExchangeToken = new HttpEntity(exchangeTokenBody,
-                new HttpHeaders(CollectionUtils.toMultiValueMap(of("callerOIN", List.of("54321543215432154321")))));
-        final var identifierExchange = restTemplate.exchange("/v1/exchangeToken", HttpMethod.POST, httpEntityExchangeToken,
+        final var httpEntityExchangeToken = new HttpEntity<>(exchangeTokenBody,
+                new HttpHeaders(CollectionUtils.toMultiValueMap(
+                        of("callerOIN", List.of("54321543215432154321")))));
+        final var identifierExchange = restTemplate.exchange("/v1/exchangeToken", HttpMethod.POST,
+                httpEntityExchangeToken,
                 Map.class);
         assertThat(identifierExchange.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(identifierExchange)
                 .extracting("body")
                 .asInstanceOf(InstanceOfAssertFactories.map(String.class, Map.class))
                 .containsExactly(entry("identifier", Map.of("type", "BSN", "value", "012345679")));
-
     }
-
 }

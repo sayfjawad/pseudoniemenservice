@@ -1,4 +1,4 @@
-package nl.ictu.service.v1;
+package nl.ictu.service;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
@@ -9,8 +9,8 @@ import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRe
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.service.exception.InvalidWsIdentifierRequestTypeException;
-import nl.ictu.service.v1.map.BsnPseudoMapper;
-import nl.ictu.service.v1.map.PseudoBsnMapper;
+import nl.ictu.service.map.BsnPseudoMapper;
+import nl.ictu.service.map.PseudoBsnMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +46,7 @@ class ExchangeIdentifierServiceTest {
         when(bsnPseudoMapper.map("123456789", "TEST_OIN")).thenReturn(mockedResponse);
         // WHEN
         WsExchangeIdentifierResponse actualResponse =
-                exchangeIdentifierService.exchangeIdentifier("CALLER_OIN", request);
+                exchangeIdentifierService.exchangeIdentifier(request);
         // THEN
         // Verify the returned response is what the mapper gave back
         org.junit.jupiter.api.Assertions.assertNotNull(actualResponse);
@@ -71,7 +71,7 @@ class ExchangeIdentifierServiceTest {
         when(pseudoBsnMapper.map("somePseudo", "TEST_OIN")).thenReturn(mockedResponse);
         // WHEN
         WsExchangeIdentifierResponse actualResponse =
-                exchangeIdentifierService.exchangeIdentifier("CALLER_OIN", request);
+                exchangeIdentifierService.exchangeIdentifier(request);
         // THEN
         org.junit.jupiter.api.Assertions.assertNotNull(actualResponse);
         org.junit.jupiter.api.Assertions.assertNotNull(actualResponse.getIdentifier());
@@ -93,7 +93,7 @@ class ExchangeIdentifierServiceTest {
         // WHEN & THEN
         assertThrows(
                 InvalidWsIdentifierRequestTypeException.class,
-                () -> exchangeIdentifierService.exchangeIdentifier("CALLER_OIN", request)
+                () -> exchangeIdentifierService.exchangeIdentifier(request)
         );
     }
 }

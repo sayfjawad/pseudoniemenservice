@@ -1,13 +1,13 @@
-package nl.ictu.service.v1.map;
+package nl.ictu.service.map;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
+import nl.ictu.crypto.AesGcmSivCryptographer;
 import nl.ictu.model.Identifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
-import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

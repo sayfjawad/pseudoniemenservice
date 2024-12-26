@@ -1,10 +1,11 @@
 package nl.ictu.configuration;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import nl.ictu.service.exception.IdentifierPrivateKeyException;
 import nl.ictu.service.exception.TokenPrivateKeyException;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PseudoniemenServicePropertiesTest {
 
@@ -14,7 +15,6 @@ class PseudoniemenServicePropertiesTest {
         PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
                 .setTokenPrivateKey("")
                 .setIdentifierPrivateKey("someIdentifierKey");
-
         // WHEN & THEN
         assertThrows(TokenPrivateKeyException.class, props::validate);
     }
@@ -25,7 +25,6 @@ class PseudoniemenServicePropertiesTest {
         PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
                 .setTokenPrivateKey("someTokenKey")
                 .setIdentifierPrivateKey("");
-
         // WHEN & THEN
         assertThrows(IdentifierPrivateKeyException.class, props::validate);
     }
@@ -36,7 +35,6 @@ class PseudoniemenServicePropertiesTest {
         PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
                 .setTokenPrivateKey("someTokenKey")
                 .setIdentifierPrivateKey("someIdentifierKey");
-
         // WHEN & THEN
         assertDoesNotThrow(props::validate);
     }

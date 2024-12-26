@@ -1,4 +1,4 @@
-package nl.ictu.service.v1.crypto;
+package nl.ictu.crypto;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -83,7 +83,6 @@ public class AesGcmSivCryptographer {
      * @param ciphertextString the Base64-encoded string containing the ciphertext to be decrypted
      * @param salt             a string used to derive the nonce and key for decryption
      * @return the decrypted {@code Identifier} object
-     * @throws InvalidCipherTextException if decryption fails or the ciphertext is invalid
      */
     @SneakyThrows
     public Identifier decrypt(final String ciphertextString, final String salt) {

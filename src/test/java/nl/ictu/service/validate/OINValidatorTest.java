@@ -1,4 +1,4 @@
-package nl.ictu.service.v1.validate;
+package nl.ictu.service.validate;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,6 +14,7 @@ class OINValidatorTest {
 
     @BeforeEach
     void setUp() {
+
         oinValidator = new OINValidator();
     }
 
@@ -22,11 +23,9 @@ class OINValidatorTest {
     void isValid_ReturnsTrue_WhenOINsMatch() {
         // GIVEN
         String callerOIN = "TEST_OIN_123";
-        Token token =  Token.builder().recipientOIN("TEST_OIN_123").build();
-
+        Token token = Token.builder().recipientOIN("TEST_OIN_123").build();
         // WHEN
         boolean result = oinValidator.isValid(callerOIN, token);
-
         // THEN
         assertTrue(result, "Expected isValid() to return true for matching OINs");
     }
@@ -36,11 +35,9 @@ class OINValidatorTest {
     void isValid_ReturnsFalse_WhenOINsDoNotMatch() {
         // GIVEN
         String callerOIN = "TEST_OIN_ABC";
-        Token token =  Token.builder().recipientOIN("TEST_OIN_XYZ").build();
-
+        Token token = Token.builder().recipientOIN("TEST_OIN_XYZ").build();
         // WHEN
         boolean result = oinValidator.isValid(callerOIN, token);
-
         // THEN
         assertFalse(result, "Expected isValid() to return false for non-matching OINs");
     }
@@ -52,12 +49,10 @@ class OINValidatorTest {
         // GIVEN
         String callerOIN = "NON_NULL_OIN";
         Token token = Token.builder().build();
-
         // WHEN
         // This will return false if callerOIN is not null,
         // or might throw NullPointerException if you rely on the equals contract
         boolean result = oinValidator.isValid(callerOIN, token);
-
         // THEN
         assertFalse(result, "Expected isValid() to return false if token's recipientOIN is null");
     }

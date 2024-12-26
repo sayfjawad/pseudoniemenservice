@@ -2,8 +2,8 @@ package nl.ictu.utils;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
@@ -67,7 +67,6 @@ class AesUtilityTest {
         MultiBlockCipher engine = AesUtility.getAESEngine();
         // THEN
         assertNotNull(engine, "Engine should not be null");
-        assertTrue(engine instanceof AESEngine,
-                "Engine should be an instance of AESEngine");
+        assertInstanceOf(AESEngine.class, engine, "Engine should be an instance of AESEngine");
     }
 }

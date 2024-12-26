@@ -6,10 +6,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
-import nl.ictu.controller.exception.InvalidOINException;
 import nl.ictu.controller.stub.StubController;
 import nl.ictu.controller.stub.StubService;
 import nl.ictu.service.exception.IdentifierPrivateKeyException;
+import nl.ictu.service.exception.InvalidOINException;
 import nl.ictu.service.exception.InvalidWsIdentifierRequestTypeException;
 import nl.ictu.service.exception.InvalidWsIdentifierTokenException;
 import nl.ictu.service.exception.TokenPrivateKeyException;
@@ -47,7 +47,6 @@ class GlobalExceptionHandlerTest {
         // GIVEN: a stubbed controller and service
         // WHEN: the service throws an exception
         final var exceptions = List.of(
-
                 new IdentifierPrivateKeyException(SERVICE_ERROR_MESSAGE),
                 new InvalidWsIdentifierRequestTypeException(SERVICE_ERROR_MESSAGE),
                 new InvalidWsIdentifierTokenException(SERVICE_ERROR_MESSAGE),
@@ -60,8 +59,8 @@ class GlobalExceptionHandlerTest {
 
     /**
      * Tests the behavior of exception handling by simulating a scenario where the stub service
-     * throws the given RuntimeException. This test verifies that when an exception is thrown
-     * by the service, the system responds with the appropriate HTTP status code.
+     * throws the given RuntimeException. This test verifies that when an exception is thrown by the
+     * service, the system responds with the appropriate HTTP status code.
      *
      * @param ex the RuntimeException to be thrown by the stub service during the test
      */

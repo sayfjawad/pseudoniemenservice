@@ -1,4 +1,4 @@
-package nl.ictu.service.v1.crypto;
+package nl.ictu.crypto;
 
 import static nl.ictu.utils.AesUtility.IV_LENGTH;
 
@@ -51,8 +51,19 @@ public class AesGcmCryptographer {
      * @throws NoSuchPaddingException             if the requested padding scheme is not available
      */
     public String encrypt(final String plaintext, final String salt)
-            throws IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException {
+            throws IllegalBlockSizeException,
+            BadPaddingException,
+            InvalidAlgorithmParameterException,
+            InvalidKeyException,
+            NoSuchAlgorithmException,
+            NoSuchPaddingException {
 
+        if (plaintext == null || plaintext.isEmpty()) {
+            throw new IllegalArgumentException("Plaintext cannot be null or empty");
+        }
+        if (salt == null || salt.isEmpty()) {
+            throw new IllegalArgumentException("Salt cannot be null or empty");
+        }
         final var cipher = AesUtility.createCipher();
         final var gcmParameterSpec = AesUtility.generateIV();
         final var secretKey = createSecretKey(salt);
@@ -100,7 +111,12 @@ public class AesGcmCryptographer {
      *                                            decryption
      */
     public String decrypt(final String ciphertextWithIv, final String salt)
-            throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidAlgorithmParameterException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+            throws NoSuchPaddingException,
+            NoSuchAlgorithmException,
+            InvalidAlgorithmParameterException,
+            InvalidKeyException,
+            IllegalBlockSizeException,
+            BadPaddingException {
 
         final var cipher = AesUtility.createCipher();
         final var encryptedWithIV = base64Wrapper.decode(ciphertextWithIv);

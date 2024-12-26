@@ -10,12 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.ictu.controller.exception.InvalidOINException;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeTokenResponse;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifier;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes;
-import nl.ictu.service.v1.ExchangeTokenService;
+import nl.ictu.service.ExchangeTokenService;
+import nl.ictu.service.exception.InvalidOINException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

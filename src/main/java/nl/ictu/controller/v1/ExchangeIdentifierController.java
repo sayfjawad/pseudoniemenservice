@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import nl.ictu.pseudoniemenservice.generated.server.api.ExchangeIdentifierApi;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierRequest;
 import nl.ictu.pseudoniemenservice.generated.server.model.WsExchangeIdentifierResponse;
-import nl.ictu.service.v1.ExchangeIdentifierService;
+import nl.ictu.service.ExchangeIdentifierService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,7 +30,7 @@ public final class ExchangeIdentifierController implements ExchangeIdentifierApi
     public ResponseEntity<WsExchangeIdentifierResponse> exchangeIdentifier(final String callerOIN,
             final WsExchangeIdentifierRequest wsExchangeRequest) {
 
-        final var identifier = service.exchangeIdentifier(callerOIN, wsExchangeRequest);
+        final var identifier = service.exchangeIdentifier(wsExchangeRequest);
         return ResponseEntity.ok(identifier);
     }
 }

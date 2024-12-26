@@ -13,6 +13,7 @@ class MessageDigestWrapperTest {
 
     @BeforeEach
     void setUp() {
+
         messageDigestWrapper = new MessageDigestWrapper();
     }
 
@@ -20,7 +21,6 @@ class MessageDigestWrapperTest {
     void getMessageDigestSha256_ShouldReturnSha256Digest() {
         // WHEN
         MessageDigest digest = messageDigestWrapper.getMessageDigestInstance();
-
         // THEN
         assertNotNull(digest, "MessageDigest should not be null");
         assertEquals("SHA-256", digest.getAlgorithm(),

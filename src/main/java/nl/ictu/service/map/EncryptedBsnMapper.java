@@ -1,7 +1,7 @@
-package nl.ictu.service.v1.map;
+package nl.ictu.service.map;
 
 import lombok.RequiredArgsConstructor;
-import nl.ictu.service.v1.crypto.AesGcmSivCryptographer;
+import nl.ictu.crypto.AesGcmSivCryptographer;
 import org.springframework.stereotype.Component;
 
 @Component

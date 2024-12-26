@@ -1,4 +1,4 @@
-package nl.ictu.controller.exception;
+package nl.ictu.service.exception;
 
 public class InvalidOINException extends RuntimeException {
 

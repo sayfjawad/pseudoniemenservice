@@ -1,4 +1,4 @@
-package nl.ictu.service.v1.map;
+package nl.ictu.service.map;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
