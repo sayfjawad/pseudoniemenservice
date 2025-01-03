@@ -2,6 +2,8 @@ package nl.ictu.service;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -39,24 +41,31 @@ class ExchangeIdentifierServiceTest {
             """)
     void testExchangeIdentifier_BsnToOrgPseudo() throws Exception {
         // GIVEN
-        var request = new WsExchangeIdentifierRequest()
-                .identifier(new WsIdentifier().type(BSN).value("123456789"))
+        var request = WsExchangeIdentifierRequest.builder()
+                .identifier(WsIdentifier.builder()
+                        .type(BSN)
+                        .value("123456789")
+                        .build())
                 .recipientOIN("TEST_OIN")
-                .recipientIdentifierType(ORGANISATION_PSEUDO);
+                .recipientIdentifierType(ORGANISATION_PSEUDO)
+                .build();
         // We mock BsnPseudoMapper to return a WsExchangeIdentifierResponse
-        var mockedResponse = new WsExchangeIdentifierResponse();
-        mockedResponse.setIdentifier(
-                new WsIdentifier().type(ORGANISATION_PSEUDO).value("encryptedValue"));
+        final var mockedResponse = WsExchangeIdentifierResponse.builder()
+                .identifier(WsIdentifier.builder()
+                        .type(ORGANISATION_PSEUDO)
+                        .value("encryptedValue")
+                        .build())
+                .build();
         when(bsnPseudoMapper.map("123456789", "TEST_OIN")).thenReturn(mockedResponse);
         // WHEN
         WsExchangeIdentifierResponse actualResponse =
                 exchangeIdentifierService.exchangeIdentifier(request);
         // THEN
-        org.junit.jupiter.api.Assertions.assertNotNull(actualResponse);
-        org.junit.jupiter.api.Assertions.assertNotNull(actualResponse.getIdentifier());
-        org.junit.jupiter.api.Assertions.assertEquals(ORGANISATION_PSEUDO,
+        assertNotNull(actualResponse);
+        assertNotNull(actualResponse.getIdentifier());
+        assertEquals(ORGANISATION_PSEUDO,
                 actualResponse.getIdentifier().getType());
-        org.junit.jupiter.api.Assertions.assertEquals("encryptedValue",
+        assertEquals("encryptedValue",
                 actualResponse.getIdentifier().getValue());
     }
 
@@ -68,23 +77,31 @@ class ExchangeIdentifierServiceTest {
             """)
     void testExchangeIdentifier_OrgPseudoToBsn() throws Exception {
         // GIVEN
-        var request = new WsExchangeIdentifierRequest()
-                .identifier(new WsIdentifier().type(ORGANISATION_PSEUDO).value("somePseudo"))
+        final var request = WsExchangeIdentifierRequest.builder()
+                .identifier(WsIdentifier.builder()
+                        .type(ORGANISATION_PSEUDO)
+                        .value("somePseudo")
+                        .build())
                 .recipientOIN("TEST_OIN")
-                .recipientIdentifierType(BSN);
+                .recipientIdentifierType(BSN)
+                .build();
         // We mock PseudoBsnMapper to return a WsExchangeIdentifierResponse
-        var mockedResponse = new WsExchangeIdentifierResponse();
-        mockedResponse.setIdentifier(new WsIdentifier().type(BSN).value("decryptedBsn"));
+        final var mockedResponse = WsExchangeIdentifierResponse.builder()
+                .identifier(WsIdentifier.builder()
+                        .type(BSN)
+                        .value("decryptedBsn")
+                        .build())
+                .build();
         when(pseudoBsnMapper.map("somePseudo", "TEST_OIN")).thenReturn(mockedResponse);
         // WHEN
         WsExchangeIdentifierResponse actualResponse =
                 exchangeIdentifierService.exchangeIdentifier(request);
         // THEN
-        org.junit.jupiter.api.Assertions.assertNotNull(actualResponse);
-        org.junit.jupiter.api.Assertions.assertNotNull(actualResponse.getIdentifier());
-        org.junit.jupiter.api.Assertions.assertEquals(BSN,
+        assertNotNull(actualResponse);
+        assertNotNull(actualResponse.getIdentifier());
+        assertEquals(BSN,
                 actualResponse.getIdentifier().getType());
-        org.junit.jupiter.api.Assertions.assertEquals("decryptedBsn",
+        assertEquals("decryptedBsn",
                 actualResponse.getIdentifier().getValue());
     }
 
@@ -96,11 +113,15 @@ class ExchangeIdentifierServiceTest {
             """)
     void testExchangeIdentifier_UnsupportedMapping_ThrowsException() {
         // GIVEN
-        var request = new WsExchangeIdentifierRequest()
+        final var request = WsExchangeIdentifierRequest.builder()
                 // Let's say we do something like BSN -> BSN or ORG_PSEUDO -> ORG_PSEUDO
-                .identifier(new WsIdentifier().type(BSN).value("12345"))
+                .identifier(WsIdentifier.builder()
+                        .type(BSN)
+                        .value("12345")
+                        .build())
                 .recipientOIN("TEST_OIN")
-                .recipientIdentifierType(BSN);
+                .recipientIdentifierType(BSN)
+                .build();
         // WHEN & THEN
         assertThrows(
                 InvalidWsIdentifierRequestTypeException.class,

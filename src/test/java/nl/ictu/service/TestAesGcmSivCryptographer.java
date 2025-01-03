@@ -46,12 +46,12 @@ class TestAesGcmSivCryptographer {
         testStrings.forEach(plain -> {
             try {
                 // GIVEN
-                final String crypted = aesGcmSivCryptographer.encrypt(Identifier.builder()
+                final var crypted = aesGcmSivCryptographer.encrypt(Identifier.builder()
                                 .bsn(plain)
                                 .build(),
                         "helloHowAreyo12345678");
                 // WHEN
-                final Identifier actual = aesGcmSivCryptographer.decrypt(crypted,
+                final var actual = aesGcmSivCryptographer.decrypt(crypted,
                         "helloHowAreyo12345678");
                 // THEN
                 assertThat(actual.getBsn()).isEqualTo(plain);

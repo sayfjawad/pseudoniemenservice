@@ -1,8 +1,10 @@
 package nl.ictu.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -49,23 +51,23 @@ class GetTokenServiceTest {
             """)
     void testGetWsGetTokenResponse_ValidInput() throws Exception {
         // GIVEN
-        var identifier = WsIdentifier.builder()
+        final var identifier = WsIdentifier.builder()
                 .type(WsIdentifierTypes.BSN)
                 .value(bsn)
                 .build();
-        var expectedResponse = new WsGetTokenResponse();
+        final var expectedResponse = mock(WsGetTokenResponse.class);
 
         // Stubbing dependencies
         when(wsIdentifierOinBsnMapper.map(identifier, recipientOIN)).thenReturn(bsn);
         when(wsGetTokenResponseMapper.map(eq(bsn), anyLong(), eq(recipientOIN))).thenReturn(expectedResponse);
 
         // WHEN
-        WsGetTokenResponse actualResponse = getTokenService.getWsGetTokenResponse(recipientOIN, identifier);
+        final var actualResponse = getTokenService.getWsGetTokenResponse(recipientOIN, identifier);
 
         // THEN
         verify(wsIdentifierOinBsnMapper).map(identifier, recipientOIN);
         verify(wsGetTokenResponseMapper).map(eq(bsn), anyLong(), eq(recipientOIN));
-        org.junit.jupiter.api.Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
     }
 
     @Test
@@ -76,21 +78,22 @@ class GetTokenServiceTest {
             """)
     void testGetWsGetTokenResponse_UnexpectedError() {
         // GIVEN
-        var identifier = WsIdentifier.builder()
+        final var identifier = WsIdentifier.builder()
                 .type(WsIdentifierTypes.BSN)
                 .value(bsn)
                 .build();
-        var exceptionMessage = "Unexpected processing error";
+        final var exceptionMessage = "Unexpected processing error";
 
         // Stubbing dependencies
-        when(wsIdentifierOinBsnMapper.map(identifier, recipientOIN)).thenThrow(new RuntimeException(exceptionMessage));
+        when(wsIdentifierOinBsnMapper.map(identifier, recipientOIN))
+                .thenThrow(new RuntimeException(exceptionMessage));
 
         // WHEN & THEN
-        Exception exception = assertThrows(WsGetTokenProcessingException.class,
+        final var exception = assertThrows(WsGetTokenProcessingException.class,
                 () -> getTokenService.getWsGetTokenResponse(recipientOIN, identifier));
 
         // Assert exception message
-        org.junit.jupiter.api.Assertions.assertEquals(exceptionMessage, exception.getMessage());
+        assertEquals(exceptionMessage, exception.getMessage());
         verify(wsIdentifierOinBsnMapper).map(identifier, recipientOIN);
         verifyNoInteractions(wsGetTokenResponseMapper);
     }

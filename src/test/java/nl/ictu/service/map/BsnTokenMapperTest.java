@@ -33,7 +33,7 @@ class BsnTokenMapperTest {
                 .bsn("123456789")
                 .build();
         // WHEN
-        WsExchangeTokenResponse response = bsnTokenMapper.map(token);
+        final var response = bsnTokenMapper.map(token);
         // THEN
         assertNotNull(response, "Response should not be null");
         assertNotNull(response.getIdentifier(), "Identifier should not be null");
@@ -52,7 +52,7 @@ class BsnTokenMapperTest {
         // GIVEN
         final var token = Token.builder().build(); // No BSN set
         // WHEN
-        WsExchangeTokenResponse response = bsnTokenMapper.map(token);
+        final var response = bsnTokenMapper.map(token);
         // THEN
         assertNotNull(response, "Response should not be null even if BSN is null");
         assertNotNull(response.getIdentifier(), "Identifier should not be null");

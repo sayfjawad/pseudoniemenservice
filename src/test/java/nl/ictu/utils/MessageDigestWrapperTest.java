@@ -25,7 +25,7 @@ class MessageDigestWrapperTest {
             """)
     void getMessageDigestSha256_ShouldReturnSha256Digest() {
         // WHEN
-        MessageDigest digest = messageDigestWrapper.getMessageDigestInstance();
+        final var digest = messageDigestWrapper.getMessageDigestInstance();
         // THEN
         assertNotNull(digest, "MessageDigest should not be null");
         assertEquals("SHA-256", digest.getAlgorithm(),

@@ -28,9 +28,9 @@ class EncryptedBsnMapperTest {
             """)
     void map_WhenDecryptSucceeds_ShouldReturnDecryptedBsn() {
         // GIVEN
-        final String encryptedBsn = "someEncryptedValue";
-        final String recipientOin = "testOIN";
-        final String expectedBsn = "123456789";
+        final var encryptedBsn = "someEncryptedValue";
+        final var recipientOin = "testOIN";
+        final var expectedBsn = "123456789";
         final var decryptedIdentifier = Identifier.builder()
                 .bsn(expectedBsn)
                 .build();

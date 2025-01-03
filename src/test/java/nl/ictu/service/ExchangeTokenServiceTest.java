@@ -2,7 +2,9 @@ package nl.ictu.service;
 
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.BSN;
 import static nl.ictu.pseudoniemenservice.generated.server.model.WsIdentifierTypes.ORGANISATION_PSEUDO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -48,9 +50,11 @@ class ExchangeTokenServiceTest {
 
     @BeforeEach
     void setUp() {
-        mockToken = Token.builder().build();
-        mockToken.setRecipientOIN(callerOIN);
-        mockToken.setBsn("987654321");
+
+        mockToken = Token.builder()
+                .recipientOIN(callerOIN)
+                .bsn("987654321")
+                .build();
     }
 
     @Test
@@ -61,21 +65,24 @@ class ExchangeTokenServiceTest {
             """)
     void testExchangeToken_BsnIdentifier() throws Exception {
         // GIVEN
-        var request = new WsExchangeTokenRequest().token(encryptedToken).identifierType(BSN);
+        final var request = WsExchangeTokenRequest.builder()
+                .token(encryptedToken)
+                .identifierType(BSN)
+                .build();
         // Stubbing dependencies
         when(aesGcmCryptographer.decrypt(encryptedToken, callerOIN)).thenReturn(decodedToken);
         when(tokenCoder.decode(decodedToken)).thenReturn(mockToken);
         when(oinValidator.isValid(callerOIN, mockToken)).thenReturn(true);
-        var expectedResponse = new WsExchangeTokenResponse();
+        var expectedResponse = mock(WsExchangeTokenResponse.class);
         when(bsnTokenMapper.map(mockToken)).thenReturn(expectedResponse);
         // WHEN
-        WsExchangeTokenResponse actualResponse = exchangeTokenService.exchangeToken(callerOIN, request);
+        final var actualResponse = exchangeTokenService.exchangeToken(callerOIN, request);
         // THEN
         verify(aesGcmCryptographer).decrypt(encryptedToken, callerOIN);
         verify(tokenCoder).decode(decodedToken);
         verify(oinValidator).isValid(callerOIN, mockToken);
         verify(bsnTokenMapper).map(mockToken);
-        org.junit.jupiter.api.Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
     }
 
     @Test
@@ -86,21 +93,24 @@ class ExchangeTokenServiceTest {
             """)
     void testExchangeToken_OrganisationPseudoIdentifier() throws Exception {
         // GIVEN
-        var request = new WsExchangeTokenRequest().token(encryptedToken).identifierType(ORGANISATION_PSEUDO);
+        final var request = WsExchangeTokenRequest.builder()
+                .token(encryptedToken)
+                .identifierType(ORGANISATION_PSEUDO)
+                .build();
         // Stubbing dependencies
         when(aesGcmCryptographer.decrypt(encryptedToken, callerOIN)).thenReturn(decodedToken);
         when(tokenCoder.decode(decodedToken)).thenReturn(mockToken);
         when(oinValidator.isValid(callerOIN, mockToken)).thenReturn(true);
-        var expectedResponse = new WsExchangeTokenResponse();
+        final var expectedResponse = mock(WsExchangeTokenResponse.class);
         when(organisationPseudoTokenMapper.map(callerOIN, mockToken)).thenReturn(expectedResponse);
         // WHEN
-        WsExchangeTokenResponse actualResponse = exchangeTokenService.exchangeToken(callerOIN, request);
+        final var actualResponse = exchangeTokenService.exchangeToken(callerOIN, request);
         // THEN
         verify(aesGcmCryptographer).decrypt(encryptedToken, callerOIN);
         verify(tokenCoder).decode(decodedToken);
         verify(oinValidator).isValid(callerOIN, mockToken);
         verify(organisationPseudoTokenMapper).map(callerOIN, mockToken);
-        org.junit.jupiter.api.Assertions.assertEquals(expectedResponse, actualResponse);
+        assertEquals(expectedResponse, actualResponse);
     }
 
     @Test
@@ -111,7 +121,10 @@ class ExchangeTokenServiceTest {
             """)
     void testExchangeToken_InvalidOIN() throws Exception {
         // GIVEN
-        var request = new WsExchangeTokenRequest().token(encryptedToken).identifierType(BSN);
+        final var request = WsExchangeTokenRequest.builder()
+                .token(encryptedToken)
+                .identifierType(BSN)
+                .build();
         // Stubbing dependencies
         when(aesGcmCryptographer.decrypt(encryptedToken, callerOIN)).thenReturn(decodedToken);
         when(tokenCoder.decode(decodedToken)).thenReturn(mockToken);

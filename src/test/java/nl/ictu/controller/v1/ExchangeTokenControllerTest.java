@@ -42,11 +42,12 @@ class ExchangeTokenControllerTest {
             """)
     void exchangeToken_ShouldReturnOk() throws Exception {
         // GIVEN: a request payload
-        WsExchangeTokenRequest requestPayload = new WsExchangeTokenRequest();
-        requestPayload.setToken("testToken");
-        requestPayload.setIdentifierType(WsIdentifierTypes.BSN);
+        final var requestPayload = WsExchangeTokenRequest.builder()
+                .token("testToken")
+                .identifierType(WsIdentifierTypes.BSN)
+                .build();
         // AND: a mock service response
-        WsExchangeTokenResponse responsePayload = new WsExchangeTokenResponse();
+        final var responsePayload = new WsExchangeTokenResponse();
         responsePayload.setIdentifier(WsIdentifier.builder()
                 .type(WsIdentifierTypes.BSN)
                 .value("convertedIdentifier")
@@ -55,12 +56,10 @@ class ExchangeTokenControllerTest {
         when(exchangeTokenService.exchangeToken(eq("TEST_OIN"), any(WsExchangeTokenRequest.class)))
                 .thenReturn(responsePayload);
         // THEN: perform the POST request
-        mockMvc.perform(
-                        post("/v1/exchangeToken")
+        mockMvc.perform(post("/v1/exchangeToken")
                                 .header("callerOIN", "TEST_OIN")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(requestPayload))
-                )
+                                .content(objectMapper.writeValueAsString(requestPayload)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.identifier.value").value("convertedIdentifier"))
@@ -75,20 +74,18 @@ class ExchangeTokenControllerTest {
             """)
     void exchangeToken_ShouldReturnUnprocessableEntity() throws Exception {
         // GIVEN: a request payload
-        WsExchangeTokenRequest requestPayload = new WsExchangeTokenRequest();
-        requestPayload.setToken("testToken");
-        requestPayload.setIdentifierType(WsIdentifierTypes.ORGANISATION_PSEUDO);
+        final var requestPayload = WsExchangeTokenRequest.builder()
+                .token("testToken").identifierType(WsIdentifierTypes.ORGANISATION_PSEUDO)
+                .build();
         // WHEN: the service throws an exception
         doThrow(new InvalidOINException("Service error"))
                 .when(exchangeTokenService)
                 .exchangeToken(eq("FAIL_OIN"), any(WsExchangeTokenRequest.class));
         // THEN: perform the POST request
-        mockMvc.perform(
-                        post("/v1/exchangeToken")
+        mockMvc.perform(post("/v1/exchangeToken")
                                 .header("callerOIN", "FAIL_OIN")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(requestPayload))
-                )
+                                .content(objectMapper.writeValueAsString(requestPayload)))
                 .andExpect(status().isUnprocessableEntity());
     }
 }

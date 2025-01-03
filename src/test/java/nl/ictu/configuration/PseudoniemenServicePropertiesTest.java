@@ -18,7 +18,7 @@ class PseudoniemenServicePropertiesTest {
             """)
     void validate_WhenTokenPrivateKeyIsEmpty_ThrowsTokenPrivateKeyException() {
         // GIVEN
-        PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
+        final var props = new PseudoniemenServiceProperties()
                 .setTokenPrivateKey("")
                 .setIdentifierPrivateKey("someIdentifierKey");
         // WHEN & THEN
@@ -32,7 +32,7 @@ class PseudoniemenServicePropertiesTest {
             """)
     void validate_WhenIdentifierPrivateKeyIsEmpty_ThrowsIdentifierPrivateKeyException() {
         // GIVEN
-        PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
+        final var props = new PseudoniemenServiceProperties()
                 .setTokenPrivateKey("someTokenKey")
                 .setIdentifierPrivateKey("");
         // WHEN & THEN
@@ -46,7 +46,7 @@ class PseudoniemenServicePropertiesTest {
             """)
     void validate_WhenBothKeysAreSet_NoExceptionIsThrown() {
         // GIVEN
-        PseudoniemenServiceProperties props = new PseudoniemenServiceProperties()
+        final var props = new PseudoniemenServiceProperties()
                 .setTokenPrivateKey("someTokenKey")
                 .setIdentifierPrivateKey("someIdentifierKey");
         // WHEN & THEN

@@ -42,9 +42,9 @@ class TestAesGcmCryptographer {
         testStrings.forEach(plain -> {
             try {
                 // GIVEN
-                final String crypted = aesGcmCryptographer.encrypt(plain, "helloHowAreyo12345678");
+                final var crypted = aesGcmCryptographer.encrypt(plain, "helloHowAreyo12345678");
                 // WHEN
-                final String actual = aesGcmCryptographer.decrypt(crypted, "helloHowAreyo12345678");
+                final var actual = aesGcmCryptographer.decrypt(crypted, "helloHowAreyo12345678");
                 // THEN
                 assertThat(actual).isEqualTo(plain);
             } catch (final Exception e) {
@@ -61,10 +61,10 @@ class TestAesGcmCryptographer {
             """)
     void testCiphertextIsDifferentForSamePlaintext() throws Exception {
         // GIVEN
-        String plaintext = "This is a test message to ensure ciphertext is different!";
+        final var plaintext = "This is a test message to ensure ciphertext is different!";
         // WHEN
-        String encryptedMessage1 = aesGcmCryptographer.encrypt(plaintext, "aniceSaltGorYu");
-        String encryptedMessage2 = aesGcmCryptographer.encrypt(plaintext, "aniceSaltGorYu");
+        final var encryptedMessage1 = aesGcmCryptographer.encrypt(plaintext, "aniceSaltGorYu");
+        final var encryptedMessage2 = aesGcmCryptographer.encrypt(plaintext, "aniceSaltGorYu");
         // THEN
         // Assert that the two ciphertexts are different
         assertThat(encryptedMessage1).isNotEqualTo(encryptedMessage2);

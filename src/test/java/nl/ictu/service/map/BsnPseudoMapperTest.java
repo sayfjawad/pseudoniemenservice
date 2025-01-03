@@ -36,13 +36,13 @@ class BsnPseudoMapperTest {
             """)
     void map_WhenEncryptionSucceeds_ShouldReturnWsExchangeIdentifierResponse() throws Exception {
         // GIVEN
-        String bsn = "123456789";
-        String oin = "OIN_X";
-        String encryptedValue = "encryptedBsn123";
+        final var bsn = "123456789";
+        final var oin = "OIN_X";
+        final var encryptedValue = "encryptedBsn123";
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(oin)))
                 .thenReturn(encryptedValue);
         // WHEN
-        WsExchangeIdentifierResponse response = bsnPseudoMapper.map(bsn, oin);
+        final var response = bsnPseudoMapper.map(bsn, oin);
         // THEN
         assertNotNull(response);
         assertNotNull(response.getIdentifier());
@@ -58,8 +58,8 @@ class BsnPseudoMapperTest {
             """)
     void map_WhenEncryptThrowsIOException_ShouldThrowIOException() throws Exception {
         // GIVEN
-        String bsn = "987654321";
-        String oin = "OIN_IO";
+        final var bsn = "987654321";
+        final var oin = "OIN_IO";
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(oin)))
                 .thenThrow(new IOException("Simulated I/O error"));
         // WHEN & THEN
@@ -75,8 +75,8 @@ class BsnPseudoMapperTest {
     void map_WhenEncryptThrowsInvalidCipherTextException_ShouldThrowInvalidCipherTextException()
             throws Exception {
         // GIVEN
-        String bsn = "111222333";
-        String oin = "OIN_CIPHER";
+        final var bsn = "111222333";
+        final var oin = "OIN_CIPHER";
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(oin)))
                 .thenThrow(new InvalidCipherTextException("Simulated cipher error"));
         // WHEN & THEN

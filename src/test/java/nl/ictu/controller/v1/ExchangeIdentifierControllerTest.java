@@ -32,13 +32,12 @@ class ExchangeIdentifierControllerTest {
             """)
     void testExchangeIdentifier_Success() {
         // GIVEN
-        String callerOIN = "123456789";
-        WsExchangeIdentifierRequest request = new WsExchangeIdentifierRequest();
-        WsExchangeIdentifierResponse expectedResponse = new WsExchangeIdentifierResponse();
+        final var callerOIN = "123456789";
+        final var request = new WsExchangeIdentifierRequest();
+        final var expectedResponse = new WsExchangeIdentifierResponse();
         when(service.exchangeIdentifier(request)).thenReturn(expectedResponse);
         // WHEN
-        ResponseEntity<WsExchangeIdentifierResponse> response =
-                controller.exchangeIdentifier(callerOIN, request);
+        final var response = controller.exchangeIdentifier(callerOIN, request);
         // THEN
         assertEquals(ResponseEntity.ok(expectedResponse), response);
         verify(service).exchangeIdentifier(request); // Ensure service method is called
@@ -52,13 +51,12 @@ class ExchangeIdentifierControllerTest {
             """)
     void testExchangeIdentifier_ServiceThrowsException() {
         // GIVEN
-        String callerOIN = "123456789";
-        WsExchangeIdentifierRequest request = new WsExchangeIdentifierRequest();
-        RuntimeException exception = new RuntimeException("Service error");
+        final var callerOIN = "123456789";
+        final var request = new WsExchangeIdentifierRequest();
+        final var exception = new RuntimeException("Service error");
         when(service.exchangeIdentifier(request)).thenThrow(exception);
         // WHEN & THEN
-        RuntimeException thrownException =
-                assertThrows(RuntimeException.class,
+        final var thrownException = assertThrows(RuntimeException.class,
                         () -> controller.exchangeIdentifier(callerOIN, request));
         assertEquals("Service error", thrownException.getMessage());
         verify(service).exchangeIdentifier(request); // Ensure service method is called

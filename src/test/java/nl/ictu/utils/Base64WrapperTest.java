@@ -25,11 +25,11 @@ class Base64WrapperTest {
             """)
     void encode_ShouldEncodeBytesToBase64Bytes() {
         // GIVEN
-        byte[] input = "Hello".getBytes(StandardCharsets.UTF_8);
+        final var input = "Hello".getBytes(StandardCharsets.UTF_8);
         // WHEN
-        byte[] result = base64Wrapper.encode(input);
+        final var result = base64Wrapper.encode(input);
         // THEN
-        String resultAsString = new String(result, StandardCharsets.UTF_8);
+        final var resultAsString = new String(result, StandardCharsets.UTF_8);
         assertEquals("SGVsbG8=", resultAsString,
                 "Expected Base64 encoding of 'Hello' to be 'SGVsbG8='");
     }
@@ -42,9 +42,9 @@ class Base64WrapperTest {
             """)
     void encodeToString_ShouldEncodeBytesToBase64String() {
         // GIVEN
-        byte[] input = "Hello".getBytes(StandardCharsets.UTF_8);
+        final var input = "Hello".getBytes(StandardCharsets.UTF_8);
         // WHEN
-        String base64String = base64Wrapper.encodeToString(input);
+        final var base64String = base64Wrapper.encodeToString(input);
         // THEN
         assertEquals("SGVsbG8=", base64String,
                 "Expected Base64 encoding of 'Hello' to be 'SGVsbG8='");
@@ -58,11 +58,11 @@ class Base64WrapperTest {
             """)
     void decode_ShouldDecodeBase64StringToBytes() {
         // GIVEN
-        String base64String = "SGVsbG8=";
+        final var base64String = "SGVsbG8=";
         // WHEN
-        byte[] decoded = base64Wrapper.decode(base64String);
+        final var decoded = base64Wrapper.decode(base64String);
         // THEN
-        String decodedAsString = new String(decoded, StandardCharsets.UTF_8);
+        final var decodedAsString = new String(decoded, StandardCharsets.UTF_8);
         assertEquals("Hello", decodedAsString,
                 "Expected Base64 decoding of 'SGVsbG8=' to be 'Hello'");
     }
@@ -75,7 +75,7 @@ class Base64WrapperTest {
             """)
     void decode_ShouldThrowException_WhenInvalidBase64String() {
         // GIVEN
-        String invalidBase64 = "Not valid base64!!!";
+        final var invalidBase64 = "Not valid base64!!!";
         // WHEN & THEN
         assertThrows(IllegalArgumentException.class,
                 () -> base64Wrapper.decode(invalidBase64),

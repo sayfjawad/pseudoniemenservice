@@ -44,7 +44,7 @@ class WsGetTokenResponseMapperTest {
     void testMap_Success() throws Exception {
         final var encryptedToken = "encrypted-token";
         // GIVEN
-        Token token = Token.builder()
+        final var token = Token.builder()
                 .version(WsGetTokenResponseMapper.V_1)
                 .bsn(bsn)
                 .creationDate(creationDate)
@@ -53,7 +53,7 @@ class WsGetTokenResponseMapperTest {
         when(tokenCoder.encode(token)).thenReturn(encodedToken);
         when(aesGcmCryptographer.encrypt(encodedToken, recipientOIN)).thenReturn(encryptedToken);
         // WHEN
-        WsGetTokenResponse response = wsGetTokenResponseMapper.map(bsn, creationDate, recipientOIN);
+        final var response = wsGetTokenResponseMapper.map(bsn, creationDate, recipientOIN);
         // THEN
         verify(tokenCoder).encode(token);
         verify(aesGcmCryptographer).encrypt(encodedToken, recipientOIN);
@@ -68,7 +68,7 @@ class WsGetTokenResponseMapperTest {
             """)
     void testMap_EncodingIOException() throws Exception {
         // GIVEN
-        Token token = Token.builder()
+        final var token = Token.builder()
                 .version(WsGetTokenResponseMapper.V_1)
                 .bsn(bsn)
                 .creationDate(creationDate)
@@ -90,7 +90,7 @@ class WsGetTokenResponseMapperTest {
             """)
     void testMap_EncryptionError() throws Exception {
         // GIVEN
-        Token token = Token.builder()
+        final var token = Token.builder()
                 .version(WsGetTokenResponseMapper.V_1)
                 .bsn(bsn)
                 .creationDate(creationDate)
@@ -114,7 +114,7 @@ class WsGetTokenResponseMapperTest {
             """)
     void testMap_UnexpectedError() throws Exception {
         // GIVEN
-        Token token = Token.builder()
+        final var token = Token.builder()
                 .version(WsGetTokenResponseMapper.V_1)
                 .bsn(bsn)
                 .creationDate(creationDate)

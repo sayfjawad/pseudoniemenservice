@@ -34,10 +34,10 @@ class PseudoBsnMapperTest {
             """)
     void map_WhenDecryptionSucceeds_ShouldReturnDecryptedBsn() throws Exception {
         // GIVEN
-        String pseudo = "someEncryptedString";
-        String oin = "TEST_OIN";
+        var pseudo = "someEncryptedString";
+        var oin = "TEST_OIN";
         // Suppose the decrypted Identifier has BSN "123456789"
-        Identifier decryptedIdentifier = Identifier.builder()
+        final var decryptedIdentifier = Identifier.builder()
                 .bsn("123456789")
                 .build();
         when(aesGcmSivCryptographer.decrypt(pseudo, oin))

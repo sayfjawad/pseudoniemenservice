@@ -39,13 +39,13 @@ class OrganisationPseudoTokenMapperTest {
             """)
     void map_WhenEncryptionSucceeds_ShouldReturnEncryptedTokenResponse() throws Exception {
         // GIVEN
-        final String callerOIN = "TEST_OIN";
-        final Token token = Token.builder().bsn("123456789").build();
-        final String encryptedValue = "encryptedBSN";
+        final var callerOIN = "TEST_OIN";
+        final var token = Token.builder().bsn("123456789").build();
+        final var encryptedValue = "encryptedBSN";
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(callerOIN)))
                 .thenReturn(encryptedValue);
         // WHEN
-        WsExchangeTokenResponse response = organisationPseudoTokenMapper.map(callerOIN, token);
+        final var response = organisationPseudoTokenMapper.map(callerOIN, token);
         // THEN
         assertEquals(ORGANISATION_PSEUDO, response.getIdentifier().getType(),
                 "The identifier type should be ORGANISATION_PSEUDO");
@@ -61,8 +61,8 @@ class OrganisationPseudoTokenMapperTest {
             """)
     void map_WhenEncryptionFails_ShouldThrowInvalidCipherTextException() throws Exception {
         // GIVEN
-        final String callerOIN = "FAILING_OIN";
-        final Token token = Token.builder().bsn("987654321").build();
+        final var callerOIN = "FAILING_OIN";
+        final var token = Token.builder().bsn("987654321").build();
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(callerOIN)))
                 .thenThrow(new InvalidCipherTextException("Simulated cipher error"));
         // WHEN & THEN
@@ -79,8 +79,8 @@ class OrganisationPseudoTokenMapperTest {
             """)
     void map_WhenEncryptionThrowsIOException_ShouldThrowIOException() throws Exception {
         // GIVEN
-        final String callerOIN = "IO_EXCEPTION_OIN";
-        final Token token = Token.builder().bsn("555555555").build();
+        final var callerOIN = "IO_EXCEPTION_OIN";
+        final var token = Token.builder().bsn("555555555").build();
         when(aesGcmSivCryptographer.encrypt(any(Identifier.class), eq(callerOIN)))
                 .thenThrow(new IOException("Simulated I/O error"));
         // WHEN & THEN

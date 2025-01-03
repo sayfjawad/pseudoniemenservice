@@ -44,8 +44,8 @@ public class AesGcmSivCryptographer {
         final var nonce16 = messageDigestWrapper.getMessageDigestInstance()
                 .digest(salt.getBytes(StandardCharsets.UTF_8));
         final var nonce12 = Arrays.copyOf(nonce16, NONCE_LENTH);
-        final String identifierPrivateKey = pseudoniemenServiceProperties.getIdentifierPrivateKey();
-        final KeyParameter keyParameter = new KeyParameter(
+        final var identifierPrivateKey = pseudoniemenServiceProperties.getIdentifierPrivateKey();
+        final var keyParameter = new KeyParameter(
                 base64Wrapper.decode(identifierPrivateKey));
         return new AEADParameters(keyParameter, MAC_SIZE, nonce12);
     }

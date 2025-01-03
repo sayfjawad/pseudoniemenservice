@@ -24,13 +24,13 @@ class AESHelperTest {
             """)
     void generateIV_ShouldReturnGCMParameterSpec_WithNonNullIV() {
         // WHEN
-        GCMParameterSpec gcmParameterSpec = AesUtility.generateIV();
+        final var gcmParameterSpec = AesUtility.generateIV();
         // THEN
         assertNotNull(gcmParameterSpec, "GCMParameterSpec should not be null");
         assertEquals(AesUtility.TAG_LENGTH, gcmParameterSpec.getTLen(),
                 "Tag length should be 128 (bits)");
         // The IV array is extracted from gcmParameterSpec
-        byte[] iv = gcmParameterSpec.getIV();
+        final byte[] iv = gcmParameterSpec.getIV();
         assertNotNull(iv, "IV should not be null");
         assertEquals(AesUtility.IV_LENGTH, iv.length,
                 "IV length should be " + AesUtility.IV_LENGTH);
@@ -44,13 +44,13 @@ class AESHelperTest {
             """)
     void createIVfromValues_ShouldReturnGCMParameterSpec_FromGivenIV() {
         // GIVEN
-        byte[] ivSource = new byte[AesUtility.IV_LENGTH];
+        final byte[] ivSource = new byte[AesUtility.IV_LENGTH];
         // Fill the array with deterministic data for test
         for (int i = 0; i < ivSource.length; i++) {
             ivSource[i] = (byte) i;
         }
         // WHEN
-        GCMParameterSpec spec = AesUtility.createIVfromValues(ivSource);
+        final var spec = AesUtility.createIVfromValues(ivSource);
         // THEN
         assertNotNull(spec, "GCMParameterSpec should not be null");
         assertEquals(AesUtility.TAG_LENGTH, spec.getTLen(),
@@ -68,7 +68,7 @@ class AESHelperTest {
     void createCipher_ShouldReturnAesGcmNoPaddingCipher()
             throws NoSuchPaddingException, NoSuchAlgorithmException {
         // WHEN
-        Cipher cipher = AesUtility.createCipher();
+        final var cipher = AesUtility.createCipher();
         // THEN
         assertNotNull(cipher, "Cipher should not be null");
         // Depending on the JVM/provider, the algorithm name can be uppercase or some variation,
@@ -85,7 +85,7 @@ class AESHelperTest {
             """)
     void getAESEngine_ShouldReturnNonNullAESEngineInstance() {
         // WHEN
-        MultiBlockCipher engine = AesUtility.getAESEngine();
+        final var engine = AesUtility.getAESEngine();
         // THEN
         assertNotNull(engine, "Engine should not be null");
         assertInstanceOf(AESEngine.class, engine, "Engine should be an instance of AESEngine");

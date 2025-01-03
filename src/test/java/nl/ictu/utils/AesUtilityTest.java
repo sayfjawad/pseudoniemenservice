@@ -24,7 +24,7 @@ class AesUtilityTest {
             """)
     void generateIV_ShouldReturnGCMParameterSpec() {
         // WHEN
-        GCMParameterSpec spec = AesUtility.generateIV();
+        final var spec = AesUtility.generateIV();
         // THEN
         assertNotNull(spec, "GCMParameterSpec should not be null");
         assertEquals(AesUtility.TAG_LENGTH, spec.getTLen(),
@@ -42,12 +42,12 @@ class AesUtilityTest {
             """)
     void createIVfromValues_ShouldReturnGCMParameterSpecFromGivenIV() {
         // GIVEN: a deterministic IV of length 12
-        byte[] ivBytes = new byte[AesUtility.IV_LENGTH];
+        final var ivBytes = new byte[AesUtility.IV_LENGTH];
         for (int i = 0; i < ivBytes.length; i++) {
             ivBytes[i] = (byte) i;
         }
         // WHEN
-        GCMParameterSpec spec = AesUtility.createIVfromValues(ivBytes);
+        final var spec = AesUtility.createIVfromValues(ivBytes);
         // THEN
         assertNotNull(spec, "GCMParameterSpec should not be null");
         assertEquals(AesUtility.TAG_LENGTH, spec.getTLen(),
@@ -65,7 +65,7 @@ class AesUtilityTest {
     void createCipher_ShouldReturnAesGcmNoPadding()
             throws NoSuchPaddingException, NoSuchAlgorithmException {
         // WHEN
-        Cipher cipher = AesUtility.createCipher();
+        final var cipher = AesUtility.createCipher();
         // THEN
         assertNotNull(cipher, "Cipher should not be null");
         assertEquals("AES/GCM/NoPadding", cipher.getAlgorithm(),
@@ -80,7 +80,7 @@ class AesUtilityTest {
             """)
     void getAESEngine_ShouldReturnAesEngine() {
         // WHEN
-        MultiBlockCipher engine = AesUtility.getAESEngine();
+        final var engine = AesUtility.getAESEngine();
         // THEN
         assertNotNull(engine, "Engine should not be null");
         assertInstanceOf(AESEngine.class, engine, "Engine should be an instance of AESEngine");
