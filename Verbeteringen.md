@@ -5,7 +5,7 @@ Heel lief simpel klein applicatie en nog prima in orde te maken omdat het nog ni
 
 -------------------------------
 -------------------------------
-Op basis van de ISO-25010 maintainability kwaliteiten:
+Beoordeeld op basis van de ISO-25010 maintainability kwaliteiten:
 * Modulariteit
 * Herbruikbaarheid
 * Analyseerbaarheid
@@ -15,7 +15,7 @@ Op basis van de ISO-25010 maintainability kwaliteiten:
 Het volgende:
 
 * Niet Modulair:
-    - een enkel module
+    - een enkele module
 
 * Moeilijk analyseerbaar
     - teveel verschillende verantwoordelijkheden verzameld in een plek
@@ -103,7 +103,6 @@ Models:
 OpenAPI:
 - documentatie ontbreekt
 - maak het netter met LOMBOK
-
 
 application-properties:
 - waarom is PRD logging altijd op DEBUG? 
