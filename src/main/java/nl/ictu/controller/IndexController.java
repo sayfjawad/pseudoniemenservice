@@ -12,7 +12,7 @@ public class IndexController {
 
     @GetMapping("/")
     public final String redirectToSwaggerUi() {
+
         return "redirect:/swagger-ui/index.html";
     }
-
 }

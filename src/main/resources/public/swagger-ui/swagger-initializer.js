@@ -18,3 +18,5 @@ window.onload = function () {
 
     //</editor-fold>
 };
+//De hele swagger dependency pakket kan als dependency
+//binnengehaald worden... waarom hard toevoegen???

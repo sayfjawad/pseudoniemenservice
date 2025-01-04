@@ -2,15 +2,17 @@ package nl.ictu.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.StringWriter;
 import lombok.RequiredArgsConstructor;
 import nl.ictu.Token;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.StringWriter;
-
 @SuppressWarnings("DesignForExtension")
+/**
+ * Regels die overal genegeerd worden kunnen uitgezet of opgelost worden!
+ */
 @Service
 @RequiredArgsConstructor
 @RegisterReflectionForBinding({Token.class})
@@ -20,6 +22,7 @@ public class TokenConverterImpl implements TokenConverter {
 
     @Override
     public String encode(final Token token) throws IOException {
+
         final StringWriter stringWriter = new StringWriter();
         objectMapper.writeValue(stringWriter, token);
         return stringWriter.toString();
@@ -27,7 +30,7 @@ public class TokenConverterImpl implements TokenConverter {
 
     @Override
     public Token decode(final String encodedToken) throws JsonProcessingException {
+
         return objectMapper.readValue(encodedToken, Token.class);
     }
-
 }

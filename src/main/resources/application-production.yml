@@ -5,6 +5,7 @@ server:
 logging:
   level:
     ROOT: info
+    ### waarom is debug altijd aan op productie terwijl er bijna geen logging is voor die packages?
     nl.ictu: debug
 spring:
   application:
